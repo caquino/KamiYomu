@@ -4,6 +4,7 @@ using KamiYomu.Web.Infrastructure.Services.Interfaces;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json.Nodes;
+using static SQLite.SQLite3;
 
 namespace KamiYomu.Web.Infrastructure.Services
 {
@@ -48,29 +49,19 @@ namespace KamiYomu.Web.Infrastructure.Services
 
             var packageUrl = $"{metadataUrl.TrimEnd('/')}/{packageName.ToLowerInvariant()}/index.json";
             var packageJson = await client.GetStringAsync(packageUrl);
-            var packageNode = JsonNode.Parse(packageJson)?["items"]?.AsArray()?[0]?["items"]?.AsArray()?[0]?["catalogEntry"];
+            var result = JsonNode.Parse(packageJson)?["items"]?.AsArray()?[0]?["items"]?.AsArray()?[0]?["catalogEntry"];
 
-            if (packageNode == null)
+            if (result == null)
                 return null;
 
-            var packageTypes = packageNode["packageTypes"]?.AsArray();
-            var isCrawlerAgent = packageTypes?.Any(pt =>
-                pt?["name"]?.ToString()?.Equals(Settings.Package.KamiYomuCrawlerAgentTag, StringComparison.OrdinalIgnoreCase) == true
-            ) ?? false;
+            var packageTypes = result?["tags"]?.ToString();
+            var isCrawlerAgent = packageTypes?.Contains(Settings.Package.KamiYomuCrawlerAgentTag, StringComparison.OrdinalIgnoreCase) == true;
 
             if (!isCrawlerAgent)
                 return null;
 
-            return new NugetPackageInfo
-            {
-                Id = packageNode["id"]?.ToString(),
-                Version = packageNode["version"]?.ToString(),
-                IconUrl = Uri.TryCreate(packageNode["iconUrl"]?.ToString(), UriKind.Absolute, out var icon) ? icon : null,
-                Description = packageNode["description"]?.ToString(),
-                Authors = packageNode["authors"]?.AsArray()?.Select(p => p?.ToString()).Where(p => p != null).ToArray() ?? Array.Empty<string>(),
-                RepositoryUrl = Uri.TryCreate(packageNode["projectUrl"]?.ToString(), UriKind.Absolute, out var repo) ? repo : null,
-                TotalDownloads = int.TryParse(packageNode?["totalDownloads"]?.ToString(), out var totalDownload) ? totalDownload : 0,
-            };
+            NugetPackageInfo packageInfo = ConvertToNuGetPackageInfo(result);
+            return packageInfo;
         }
 
         public async Task<IEnumerable<NugetPackageInfo>> SearchPackagesAsync(string query, Guid sourceId)
@@ -113,28 +104,41 @@ namespace KamiYomu.Web.Infrastructure.Services
             {
                 foreach (var result in searchResults)
                 {
-                    var packageTypes = result?["packageTypes"]?.AsArray();
-                    var isCrawlerAgent = packageTypes?.Any(pt =>
-                        pt?["name"]?.ToString()?.Equals(Settings.Package.KamiYomuCrawlerAgentTag, StringComparison.OrdinalIgnoreCase) == true
-                    ) ?? false;
+                    var packageTypes = result?["tags"]?.ToString();
+                    var isCrawlerAgent = packageTypes?.Contains(Settings.Package.KamiYomuCrawlerAgentTag, StringComparison.OrdinalIgnoreCase) == true;
 
-                    //if (!isCrawlerAgent)
-                    //    continue;
+                    if (!isCrawlerAgent)
+                        continue;
 
-                    packages.Add(new NugetPackageInfo
-                    {
-                        Id = result?["id"]?.ToString(),
-                        Version = result?["version"]?.ToString(),
-                        IconUrl = Uri.TryCreate(result?["iconUrl"]?.ToString(), UriKind.Absolute, out var icon) ? icon : null,
-                        Description = result?["description"]?.ToString(),
-                        Authors = result?["authors"]?.AsArray()?.Select(p => p?.ToString()).Where(p => p != null).ToArray() ?? Array.Empty<string>(),
-                        RepositoryUrl = Uri.TryCreate(result?["projectUrl"]?.ToString(), UriKind.Absolute, out var repo) ? repo : null,
-                        TotalDownloads = int.TryParse(result?["totalDownloads"]?.ToString(), out var totalDownload) ? totalDownload : 0
-                    });
+                    NugetPackageInfo packageInfo = ConvertToNuGetPackageInfo(result);
+                    packages.Add(packageInfo);
                 }
             }
 
             return packages;
+        }
+
+        private static NugetPackageInfo ConvertToNuGetPackageInfo(JsonNode? result)
+        {
+            var authorsNode = result?["authors"];
+
+            var authors = authorsNode is JsonArray array
+                ? array.Select(p => p?.ToString()).Where(p => !string.IsNullOrEmpty(p)).ToArray()
+                : authorsNode?.ToString() is string singleAuthor && !string.IsNullOrEmpty(singleAuthor)
+                    ? [singleAuthor]
+                    : Array.Empty<string>();
+
+            var packageInfo = new NugetPackageInfo
+            {
+                Id = result?["id"]?.ToString(),
+                Version = result?["version"]?.ToString(),
+                IconUrl = Uri.TryCreate(result?["iconUrl"]?.ToString(), UriKind.Absolute, out var icon) ? icon : null,
+                Description = result?["description"]?.ToString(),
+                Authors = authors,
+                RepositoryUrl = Uri.TryCreate(result?["projectUrl"]?.ToString(), UriKind.Absolute, out var repo) ? repo : null,
+                TotalDownloads = int.TryParse(result?["totalDownloads"]?.ToString(), out var totalDownload) ? totalDownload : 0
+            };
+            return packageInfo;
         }
 
         public async Task<Stream> OnGetDownloadAsync(Guid sourceId, string packageId, string packageVersion)

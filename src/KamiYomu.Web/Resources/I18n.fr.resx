@@ -447,14 +447,23 @@
   <data name="Password" xml:space="preserve">
     <value>Mot de passe</value>
   </data>
+  <data name="OfficialNuGetOrg" xml:space="preserve">
+    <value>NuGet.org officiel</value>
+  </data>
+  <data name="FromKamiYomuNuGetRepository" xml:space="preserve">
+    <value>Depuis le référentiel KamiYomu NuGet - nécessite une clé API</value>
+  </data>
+  <data name="MyGetFeed" xml:space="preserve">
+    <value>Flux MonObtenir</value>
+  </data>
+  <data name="SourceCode" xml:space="preserve">
+    <value>Code source</value>
+  </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="OfficialNuGetOrg" type="System.Resources.ResXNullRef, System.Windows.Forms">
+  <data name="CrawlerAgentSavedSuccessfully" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
   </data>
-  <data name="FromKamiYomuNuGetRepository" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="MyGetFeed" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="CrawlerAgentSavedSuccessfully" xml:space="preserve">
+    <value>L'agent Crawler a été enregistré avec succès !</value>
   </data>
 </root>
