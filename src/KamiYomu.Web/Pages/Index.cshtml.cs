@@ -47,5 +47,15 @@ namespace KamiYomu.Web.Pages
 
             return Redirect(returnUrl ?? Url.Page("/Index", new { area = "" }));
         }
+
+
+        public IActionResult OnPostFamilySafe(string returnUrl = null)
+        {
+            var userPreference = dbContext.UserPreferences.FindOne(x => true);
+            userPreference.SetFamilySafeMode(!userPreference.FamilySafeMode);
+            dbContext.UserPreferences.Upsert(userPreference);
+
+            return Redirect(returnUrl ?? Url.Page("/Index", new { area = "" }));
+        }
     }
 }
