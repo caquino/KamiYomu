@@ -1,127 +1,144 @@
-using KamiYomu.Web.Areas.Settings.Pages.CrawlerAgents;
+using KamiYomu.Web.Areas.Settings.Pages.Add_ons.ViewModels;
 using KamiYomu.Web.Entities;
 using KamiYomu.Web.Entities.Addons;
 using KamiYomu.Web.Extensions;
 using KamiYomu.Web.Infrastructure.Contexts;
-using KamiYomu.Web.Infrastructure.Services;
 using KamiYomu.Web.Infrastructure.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using Polly;
 using System.IO.Compression;
 
 namespace KamiYomu.Web.Areas.Settings.Pages.CommunityCrawlers
 {
-    public class IndexModel(ILogger<IndexModel> logger, 
-                            DbContext dbContext, 
-                            INugetService nugetService, 
+    public class IndexModel(ILogger<IndexModel> logger,
+                            DbContext dbContext,
+                            INugetService nugetService,
                             INotificationService notificationService) : PageModel
     {
-        [BindProperty]
-        public string Search { get; set; } = "";
-
-        [BindProperty]
-        public Guid SourceId { get; set; } = Guid.Empty;
-
-        public IEnumerable<NugetSource> Sources { get; set; } = [];
+        [BindProperty(SupportsGet = true)]
+        public SearchBarViewModel SearchBarViewModel { get; set; } = new();
 
         public IEnumerable<NugetPackageInfo> Packages { get; set; } = [];
 
         public PackageListViewModel PackageListViewModel { get; set; } = new();
 
+        public bool IsNugetAdded { get; set; } = false;
+
         public void OnGet()
         {
-            Sources = dbContext.NugetSources.FindAll();
+
             PackageListViewModel = new PackageListViewModel
             {
-                SourceId = SourceId,
+                SourceId = SearchBarViewModel.SourceId,
                 Packages = Packages
             };
+            SearchBarViewModel = new SearchBarViewModel
+            {
+                SourceId = SearchBarViewModel.SourceId,
+                Sources = dbContext.NugetSources.FindAll()
+            };
+
+            IsNugetAdded = SearchBarViewModel.Sources.Any(p => p.Url.ToString().StartsWith(AppOptions.Defaults.NugetFeeds.NugetFeedUrl, StringComparison.OrdinalIgnoreCase));
         }
 
-        public async Task<IActionResult> OnPostSearchAsync()
+        public async Task<IActionResult> OnPostSearchAsync(CancellationToken cancellationToken)
         {
             try
             {
-                Packages = await nugetService.SearchPackagesAsync(Search, SourceId);
+                Packages = await nugetService.SearchPackagesAsync(SearchBarViewModel.Search, SearchBarViewModel.IncludePrerelease, SearchBarViewModel.SourceId, cancellationToken);
             }
             catch (Exception ex)
             {
                 logger.LogError(ex, "Error on search packages");
-                await notificationService.PushErrorAsync("Failed to search packages from the source.");
+                notificationService.EnqueueError(I18n.FailedToSearch);
                 Packages = [];
             }
 
             return Partial("_PackageList", new PackageListViewModel
             {
-                SourceId = SourceId,
+                SourceId = SearchBarViewModel.SourceId,
                 Packages = Packages
             });
         }
 
-
-        public async Task<IActionResult> OnPostInstallAsync(Guid sourceId, string packageId, string packageVersion)
+        public async Task<IActionResult> OnPostInstallAsync(Guid sourceId, string packageId, string packageVersion, CancellationToken cancellationToken)
         {
             try
             {
-                var stream = await nugetService.OnGetDownloadAsync(sourceId, packageId, packageVersion);
+                var streams = await nugetService.OnGetDownloadAsync(sourceId, packageId, packageVersion, cancellationToken);
 
                 var tempUploadId = Guid.NewGuid();
-                var tempFileName = $"{packageId}.{packageVersion}.nupkg";
-                var tempFilePath = Path.Combine(Path.GetTempPath(), tempFileName);
+                var downloadDir = Path.Combine(Path.GetTempPath(), tempUploadId.ToString());
+                Directory.CreateDirectory(downloadDir);
 
-                dbContext.CrawlerAgentFileStorage.Upload(tempUploadId, tempFileName, stream);
+                var packageFileName = $"{packageId}.{packageVersion}.nupkg";
+                var crawlerAgentDir = CrawlerAgent.GetAgentDir(packageFileName);
 
-                var fileStorage = dbContext.CrawlerAgentFileStorage.FindById(tempUploadId);
-                fileStorage.SaveAs(tempFilePath);
+                if(Directory.Exists(crawlerAgentDir))
+                    Directory.Delete(crawlerAgentDir, recursive: true); 
 
-                var crawlerAgentDir = CrawlerAgent.GetAgentDir(tempFileName);
+                Directory.CreateDirectory(crawlerAgentDir);
 
-                ZipFile.ExtractToDirectory(tempFilePath, crawlerAgentDir, true);
+                var savedPaths = new List<string>();
+                string mainPackagePath = null;
 
-                var dllPath = Directory.EnumerateFiles(crawlerAgentDir, searchPattern: "*.dll", SearchOption.AllDirectories).FirstOrDefault();
+                for (int i = 0; i < streams.Length; i++)
+                {
+                    var fileName = i == 0
+                        ? packageFileName
+                        : $"dependency_{i}.nupkg";
+
+                    var filePath = Path.Combine(downloadDir, fileName);
+                    using var fileStream = System.IO.File.Create(filePath);
+                    await streams[i].CopyToAsync(fileStream, cancellationToken);
+
+                    savedPaths.Add(filePath);
+                    if (i == 0) mainPackagePath = filePath;
+                }
+
+                // Extract main package first into a dedicated subfolder
+                ZipFile.ExtractToDirectory(mainPackagePath, crawlerAgentDir, overwriteFiles: true);
+
+                // Scan only the main package's extracted folder for the DLL
+                var dllPath = Directory.EnumerateFiles(crawlerAgentDir, "*.dll", SearchOption.AllDirectories).FirstOrDefault();
+                if (dllPath == null)
+                    throw new FileNotFoundException("Main package DLL not found.");
+
+                // Extract dependencies into the same root directory
+                foreach (var path in savedPaths.Skip(1))
+                {
+                    ZipFile.ExtractToDirectory(path, crawlerAgentDir, overwriteFiles: true);
+                }
 
                 var assembly = CrawlerAgent.GetIsolatedAssembly(dllPath);
                 var metadata = CrawlerAgent.GetAssemblyMetadata(assembly);
                 var displayName = CrawlerAgent.GetCrawlerDisplayName(assembly);
 
-                // Register agent
-                var crawlerAgent = new CrawlerAgent(dllPath, displayName, new Dictionary<string, object>());
+                var crawlerAgent = new CrawlerAgent(dllPath, displayName, []);
                 dbContext.CrawlerAgents.Insert(crawlerAgent);
 
                 dbContext.CrawlerAgentFileStorage.Delete(tempUploadId);
 
-                return PageExtensions.RedirectToAreaPage("Settings", "/CrawlerAgents/Edit", new
-                {
-                    crawlerAgent.Id
-                });
-
+                return PageExtensions.RedirectToAreaPage("Settings", "/CrawlerAgents/Edit", new { crawlerAgent.Id });
             }
             catch (Exception ex)
             {
-                await notificationService.PushErrorAsync("Package is invalid.");
+
+                logger.LogError(ex, "Error on install package {PackageId} {PackageVersion} from source {SourceId}", packageId, packageVersion, sourceId);
+
+                notificationService.EnqueueError(I18n.NuGetPackageIsInvalid);
             }
 
             ModelState.Remove("Search");
 
-            Sources = dbContext.NugetSources.FindAll();
+            SearchBarViewModel.Sources = dbContext.NugetSources.FindAll();
             PackageListViewModel = new PackageListViewModel
             {
-                SourceId = SourceId,
+                SourceId = SearchBarViewModel.SourceId,
                 Packages = Packages
             };
 
             return Page();
         }
-
     }
-
-    public class PackageListViewModel
-    {
-        public Guid SourceId { get; set; }
-        public IEnumerable<NugetPackageInfo> Packages { get; set; } = Enumerable.Empty<NugetPackageInfo>();
-    }
-
-
 }

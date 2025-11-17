@@ -1,14 +1,12 @@
 ﻿using KamiYomu.CrawlerAgents.Core.Catalog;
 using KamiYomu.Web.Entities.Definitions;
-using KamiYomu.Web.Extensions;
-using Polly;
 
 namespace KamiYomu.Web.Entities
 {
     public class ChapterDownloadRecord
     {
         protected ChapterDownloadRecord() { }
-        public ChapterDownloadRecord(CrawlerAgent? agentCrawler, MangaDownloadRecord? mangaDownload, Chapter? chapter)
+        public ChapterDownloadRecord(CrawlerAgent agentCrawler, MangaDownloadRecord mangaDownload, Chapter chapter)
         {
             CrawlerAgent = agentCrawler;
             MangaDownload = mangaDownload;
@@ -45,6 +43,7 @@ namespace KamiYomu.Web.Entities
 
         public void Cancelled(string cancellationReason)
         {
+            BackgroundJobId = string.Empty;
             DownloadStatus = DownloadStatus.Cancelled;
             StatusUpdateAt = DateTime.UtcNow;
         }
@@ -65,18 +64,18 @@ namespace KamiYomu.Web.Entities
             return DownloadStatus == DownloadStatus.Completed;
         }
 
-        public int LastUpdatedStatusTotalHours()
+        public int LastUpdatedStatusTotalDays()
         {
             if (!StatusUpdateAt.HasValue) return int.MaxValue;
-            return (int)(DateTime.UtcNow - StatusUpdateAt.Value).TotalHours;
+            return (int)(DateTime.UtcNow - StatusUpdateAt.Value).TotalDays;
         }
 
 
 
         public Guid Id { get; private set; }
-        public CrawlerAgent? CrawlerAgent { get; private set; }
-        public MangaDownloadRecord? MangaDownload { get; private set; }
-        public Chapter? Chapter { get; private set; }
+        public CrawlerAgent CrawlerAgent { get; private set; }
+        public MangaDownloadRecord MangaDownload { get; private set; }
+        public Chapter Chapter { get; private set; }
         public string BackgroundJobId { get; private set; }
         public DateTime CreateAt { get; private set; }
         public DateTime? StatusUpdateAt { get; private set; }

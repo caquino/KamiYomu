@@ -106,6 +106,15 @@ namespace KamiYomu.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Nuget.org As Source.
+        /// </summary>
+        internal static string AddNugetOrgAsSource {
+            get {
+                return ResourceManager.GetString("AddNugetOrgAsSource", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add NuGet Sources.
         /// </summary>
         internal static string AddNuGetSources {
@@ -232,11 +241,29 @@ namespace KamiYomu.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancelled.
+        /// </summary>
+        internal static string Cancelled {
+            get {
+                return ResourceManager.GetString("Cancelled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Chapter.
         /// </summary>
         internal static string Chapter {
             get {
                 return ResourceManager.GetString("Chapter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chapter Downloaded.
+        /// </summary>
+        internal static string ChapterDownloaded {
+            get {
+                return ResourceManager.GetString("ChapterDownloaded", resourceCulture);
             }
         }
         
@@ -295,6 +322,33 @@ namespace KamiYomu.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Completed.
+        /// </summary>
+        internal static string Completed {
+            get {
+                return ResourceManager.GetString("Completed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm Add NuGet.org as Source.
+        /// </summary>
+        internal static string ConfirmAddNugetOrg {
+            get {
+                return ResourceManager.GetString("ConfirmAddNugetOrg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NuGet.org is a public package repository not maintained by KamiYomu. Any developer can publish packages there, including experimental or potentially unsafe ones. Please review each package carefully before installing it into KamiYomu to ensure it meets your security, licensing, and stability requirements..
+        /// </summary>
+        internal static string ConfirmAddNugetOrgSourceExplanation {
+            get {
+                return ResourceManager.GetString("ConfirmAddNugetOrgSourceExplanation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirm Delete.
         /// </summary>
         internal static string ConfirmDelete {
@@ -345,6 +399,15 @@ namespace KamiYomu.Web.Resources {
         internal static string CrawlerAgentDetails {
             get {
                 return ResourceManager.GetString("CrawlerAgentDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Crawler Agent Removed Successfully.
+        /// </summary>
+        internal static string CrawlerAgentRemovedSuccessfully {
+            get {
+                return ResourceManager.GetString("CrawlerAgentRemovedSuccessfully", resourceCulture);
             }
         }
         
@@ -448,11 +511,47 @@ namespace KamiYomu.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Download Activity.
+        /// </summary>
+        internal static string DownloadActivity {
+            get {
+                return ResourceManager.GetString("DownloadActivity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download Chapter Has Been Cancelled.
+        /// </summary>
+        internal static string DownloadChapterHasBeenCancelled {
+            get {
+                return ResourceManager.GetString("DownloadChapterHasBeenCancelled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download Chapter Has Been Scheduled.
+        /// </summary>
+        internal static string DownloadChapterSchedule {
+            get {
+                return ResourceManager.GetString("DownloadChapterSchedule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Downloaded.
         /// </summary>
         internal static string Downloaded {
             get {
                 return ResourceManager.GetString("Downloaded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download Status.
+        /// </summary>
+        internal static string DownloadStatus {
+            get {
+                return ResourceManager.GetString("DownloadStatus", resourceCulture);
             }
         }
         
@@ -520,6 +619,60 @@ namespace KamiYomu.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to search packages from the source..
+        /// </summary>
+        internal static string FailedToSearch {
+            get {
+                return ResourceManager.GetString("FailedToSearch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Family Safe Mode.
+        /// </summary>
+        internal static string FamilySafeMode {
+            get {
+                return ResourceManager.GetString("FamilySafeMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Family Safe Mode Disabled.
+        /// </summary>
+        internal static string FamilySafeModeDisabled {
+            get {
+                return ResourceManager.GetString("FamilySafeModeDisabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your Family Safe Mode is disabled. Content that may include mature or sensitive material will be shown..
+        /// </summary>
+        internal static string FamilySafeModeDisableMessage {
+            get {
+                return ResourceManager.GetString("FamilySafeModeDisableMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Family Safe Mode Enabled.
+        /// </summary>
+        internal static string FamilySafeModeEnabled {
+            get {
+                return ResourceManager.GetString("FamilySafeModeEnabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your Family Safe Mode is enabled. Content flagged as explicit or adult-oriented will be hidden..
+        /// </summary>
+        internal static string FamilySafeModeEnableMessage {
+            get {
+                return ResourceManager.GetString("FamilySafeModeEnableMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to File Version.
         /// </summary>
         internal static string FileVersion {
@@ -583,6 +736,24 @@ namespace KamiYomu.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Include Pre-Release Versions.
+        /// </summary>
+        internal static string IncludePreReleaseVersions {
+            get {
+                return ResourceManager.GetString("IncludePreReleaseVersions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pre-release versions include alpha, beta, and release candidate builds that may contain new features but are not yet considered stable. Use with caution..
+        /// </summary>
+        internal static string IncludePreReleaseVersionsExplanation {
+            get {
+                return ResourceManager.GetString("IncludePreReleaseVersionsExplanation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Informational Version.
         /// </summary>
         internal static string InformationalVersion {
@@ -615,6 +786,15 @@ namespace KamiYomu.Web.Resources {
         internal static string Language {
             get {
                 return ResourceManager.GetString("Language", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Last Update.
+        /// </summary>
+        internal static string LastUpdate {
+            get {
+                return ResourceManager.GetString("LastUpdate", resourceCulture);
             }
         }
         
@@ -808,6 +988,24 @@ namespace KamiYomu.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nuget.org has been added as a NuGet Source.
+        /// </summary>
+        internal static string NugetOrgHasBeenAddedAsANugetSource {
+            get {
+                return ResourceManager.GetString("NugetOrgHasBeenAddedAsANugetSource", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NuGet Package is Invalid.
+        /// </summary>
+        internal static string NuGetPackageIsInvalid {
+            get {
+                return ResourceManager.GetString("NuGetPackageIsInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Required for authenticated sources. Enter either the password for basic auth or an API key for token-based access. This will be used to fetch packages securely..
         /// </summary>
         internal static string NugetSourcePasswordExplanation {
@@ -853,6 +1051,15 @@ namespace KamiYomu.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Options.
+        /// </summary>
+        internal static string Options {
+            get {
+                return ResourceManager.GetString("Options", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Original Language.
         /// </summary>
         internal static string OriginalLanguage {
@@ -885,6 +1092,24 @@ namespace KamiYomu.Web.Resources {
         internal static string Password {
             get {
                 return ResourceManager.GetString("Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pending.
+        /// </summary>
+        internal static string Pending {
+            get {
+                return ResourceManager.GetString("Pending", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Processing.
+        /// </summary>
+        internal static string Processing {
+            get {
+                return ResourceManager.GetString("Processing", resourceCulture);
             }
         }
         
@@ -943,11 +1168,29 @@ namespace KamiYomu.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reschedule.
+        /// </summary>
+        internal static string Reschedule {
+            get {
+                return ResourceManager.GetString("Reschedule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save.
         /// </summary>
         internal static string Save {
             get {
                 return ResourceManager.GetString("Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scheduled.
+        /// </summary>
+        internal static string Scheduled {
+            get {
+                return ResourceManager.GetString("Scheduled", resourceCulture);
             }
         }
         
@@ -1024,11 +1267,29 @@ namespace KamiYomu.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Size.
+        /// </summary>
+        internal static string Size {
+            get {
+                return ResourceManager.GetString("Size", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Source Code.
         /// </summary>
         internal static string SourceCode {
             get {
                 return ResourceManager.GetString("SourceCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Source removed successfully.
+        /// </summary>
+        internal static string SourceRemovedSuccessfully {
+            get {
+                return ResourceManager.GetString("SourceRemovedSuccessfully", resourceCulture);
             }
         }
         
@@ -1101,6 +1362,15 @@ namespace KamiYomu.Web.Resources {
         internal static string TotalDownloads {
             get {
                 return ResourceManager.GetString("TotalDownloads", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User Interface Language Has Been Changed.
+        /// </summary>
+        internal static string UserInterfaceLanguageChanged {
+            get {
+                return ResourceManager.GetString("UserInterfaceLanguageChanged", resourceCulture);
             }
         }
         

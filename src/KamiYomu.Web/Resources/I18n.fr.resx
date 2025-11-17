@@ -507,25 +507,6 @@
   <data name="SeeTheLicense" xml:space="preserve">
     <value>Voir la licence</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="ProcessingCertainCrawlerAgentaRequireMoreTime" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="WaitProcessing1" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="WaitProcessing2" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="WaitProcessing3" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="WaitProcessing4" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="WaitProcessing5" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
   <data name="ProcessingCertainCrawlerAgentaRequireMoreTime" xml:space="preserve">
     <value>Traitement... Certains agents de robot d'exploration nécessitent plus de temps en fonction de la complexité de la tâche.</value>
   </data>
@@ -543,5 +524,96 @@
   </data>
   <data name="WaitProcessing5" xml:space="preserve">
     <value>Ce spinner fait de son mieux</value>
+  </data>
+  <data name="IncludePreReleaseVersions" xml:space="preserve">
+    <value>Inclure les versions préliminaires</value>
+  </data>
+  <data name="IncludePreReleaseVersionsExplanation" xml:space="preserve">
+    <value>Les versions préliminaires incluent les versions alpha, bêta et release candidate qui peuvent contenir de nouvelles fonctionnalités mais qui ne sont pas encore considérées comme stables. A utiliser avec prudence.</value>
+  </data>
+  <data name="AddNugetOrgAsSource" xml:space="preserve">
+    <value>Ajouter Nuget.org comme source</value>
+  </data>
+  <data name="ConfirmAddNugetOrg" xml:space="preserve">
+    <value>Confirmez l'ajout de NuGet.org comme source</value>
+  </data>
+  <data name="ConfirmAddNugetOrgSourceExplanation" xml:space="preserve">
+    <value>NuGet.org est un référentiel de packages public non géré par KamiYomu. Tout développeur peut y publier des packages, y compris des packages expérimentaux ou potentiellement dangereux. Veuillez examiner attentivement chaque package avant de l'installer dans KamiYomu pour vous assurer qu'il répond à vos exigences en matière de sécurité, de licence et de stabilité.</value>
+  </data>
+  <data name="FamilySafeMode" xml:space="preserve">
+    <value>Mode sans échec familial</value>
+  </data>
+  <data name="FamilySafeModeEnableMessage" xml:space="preserve">
+    <value>Votre mode sans échec familial est activé. Le contenu signalé comme explicite ou destiné aux adultes sera masqué.</value>
+  </data>
+  <data name="FamilySafeModeDisableMessage" xml:space="preserve">
+    <value>Votre mode sans échec familial est désactivé. Le contenu pouvant inclure du matériel mature ou sensible sera affiché.</value>
+  </data>
+  <data name="FamilySafeModeEnabled" xml:space="preserve">
+    <value>Mode sans échec familial activé</value>
+  </data>
+  <data name="FamilySafeModeDisabled" xml:space="preserve">
+    <value>Mode sans échec familial désactivé</value>
+  </data>
+  <data name="UserInterfaceLanguageChanged" xml:space="preserve">
+    <value>La langue de l'interface utilisateur a été modifiée</value>
+  </data>
+  <data name="SourceRemovedSuccessfully" xml:space="preserve">
+    <value>Source supprimée avec succès</value>
+  </data>
+  <data name="CrawlerAgentRemovedSuccessfully" xml:space="preserve">
+    <value>Agent du robot d'exploration supprimé avec succès</value>
+  </data>
+  <data name="NugetOrgHasBeenAddedAsANugetSource" xml:space="preserve">
+    <value>Nuget.org a été ajouté en tant que source NuGet</value>
+  </data>
+  <data name="NuGetPackageIsInvalid" xml:space="preserve">
+    <value>Le package NuGet n’est pas valide</value>
+  </data>
+  <data name="FailedToSearch" xml:space="preserve">
+    <value>Échec de la recherche des packages à partir de la source.</value>
+  </data>
+  <data name="ChapterDownloaded" xml:space="preserve">
+    <value>Chapitre téléchargé</value>
+  </data>
+  <data name="DownloadActivity" xml:space="preserve">
+    <value>Activité de téléchargement</value>
+  </data>
+  <data name="DownloadStatus" xml:space="preserve">
+    <value>Statut du téléchargement</value>
+  </data>
+  <data name="Options" xml:space="preserve">
+    <value>Possibilités</value>
+  </data>
+  <data name="LastUpdate" xml:space="preserve">
+    <value>Dernière mise à jour</value>
+  </data>
+  <data name="Pending" xml:space="preserve">
+    <value>En attente</value>
+  </data>
+  <data name="Scheduled" xml:space="preserve">
+    <value>Programmé</value>
+  </data>
+  <data name="Processing" xml:space="preserve">
+    <value>Traitement</value>
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value>Complété</value>
+  </data>
+  <data name="Cancelled" xml:space="preserve">
+    <value>Annulé</value>
+  </data>
+  <data name="Reschedule" xml:space="preserve">
+    <value>Reprogrammer</value>
+  </data>
+  <data name="DownloadChapterSchedule" xml:space="preserve">
+    <value>Le téléchargement du chapitre a été programmé</value>
+  </data>
+  <data name="DownloadChapterHasBeenCancelled" xml:space="preserve">
+    <value>Le téléchargement du chapitre a été annulé</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="Size" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
   </data>
 </root>

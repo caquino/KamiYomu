@@ -525,4 +525,94 @@
   <data name="WaitProcessing5" xml:space="preserve">
     <value>This spinner is doing its best</value>
   </data>
+  <data name="IncludePreReleaseVersions" xml:space="preserve">
+    <value>Include Pre-Release Versions</value>
+  </data>
+  <data name="IncludePreReleaseVersionsExplanation" xml:space="preserve">
+    <value>Pre-release versions include alpha, beta, and release candidate builds that may contain new features but are not yet considered stable. Use with caution.</value>
+  </data>
+  <data name="AddNugetOrgAsSource" xml:space="preserve">
+    <value>Add Nuget.org As Source</value>
+  </data>
+  <data name="ConfirmAddNugetOrg" xml:space="preserve">
+    <value>Confirm Add NuGet.org as Source</value>
+  </data>
+  <data name="ConfirmAddNugetOrgSourceExplanation" xml:space="preserve">
+    <value>NuGet.org is a public package repository not maintained by KamiYomu. Any developer can publish packages there, including experimental or potentially unsafe ones. Please review each package carefully before installing it into KamiYomu to ensure it meets your security, licensing, and stability requirements.</value>
+  </data>
+  <data name="FamilySafeMode" xml:space="preserve">
+    <value>Family Safe Mode</value>
+  </data>
+  <data name="FamilySafeModeEnableMessage" xml:space="preserve">
+    <value>Your Family Safe Mode is enabled. Content flagged as explicit or adult-oriented will be hidden.</value>
+  </data>
+  <data name="FamilySafeModeDisableMessage" xml:space="preserve">
+    <value>Your Family Safe Mode is disabled. Content that may include mature or sensitive material will be shown.</value>
+  </data>
+  <data name="FamilySafeModeEnabled" xml:space="preserve">
+    <value>Family Safe Mode Enabled</value>
+  </data>
+  <data name="FamilySafeModeDisabled" xml:space="preserve">
+    <value>Family Safe Mode Disabled</value>
+  </data>
+  <data name="UserInterfaceLanguageChanged" xml:space="preserve">
+    <value>User Interface Language Has Been Changed</value>
+  </data>
+  <data name="SourceRemovedSuccessfully" xml:space="preserve">
+    <value>Source removed successfully</value>
+  </data>
+  <data name="CrawlerAgentRemovedSuccessfully" xml:space="preserve">
+    <value>Crawler Agent Removed Successfully</value>
+  </data>
+  <data name="NugetOrgHasBeenAddedAsANugetSource" xml:space="preserve">
+    <value>Nuget.org has been added as a NuGet Source</value>
+  </data>
+  <data name="NuGetPackageIsInvalid" xml:space="preserve">
+    <value>NuGet Package is Invalid</value>
+  </data>
+  <data name="FailedToSearch" xml:space="preserve">
+    <value>Failed to search packages from the source.</value>
+  </data>
+  <data name="ChapterDownloaded" xml:space="preserve">
+    <value>Chapter Downloaded</value>
+  </data>
+  <data name="DownloadActivity" xml:space="preserve">
+    <value>Download Activity</value>
+  </data>
+  <data name="DownloadStatus" xml:space="preserve">
+    <value>Download Status</value>
+  </data>
+  <data name="Options" xml:space="preserve">
+    <value>Options</value>
+  </data>
+  <data name="LastUpdate" xml:space="preserve">
+    <value>Last Update</value>
+  </data>
+  <data name="Pending" xml:space="preserve">
+    <value>Pending</value>
+  </data>
+  <data name="Scheduled" xml:space="preserve">
+    <value>Scheduled</value>
+  </data>
+  <data name="Processing" xml:space="preserve">
+    <value>Processing</value>
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value>Completed</value>
+  </data>
+  <data name="Cancelled" xml:space="preserve">
+    <value>Cancelled</value>
+  </data>
+  <data name="Reschedule" xml:space="preserve">
+    <value>Reschedule</value>
+  </data>
+  <data name="DownloadChapterSchedule" xml:space="preserve">
+    <value>Download Chapter Has Been Scheduled</value>
+  </data>
+  <data name="DownloadChapterHasBeenCancelled" xml:space="preserve">
+    <value>Download Chapter Has Been Cancelled</value>
+  </data>
+  <data name="Size" xml:space="preserve">
+    <value>Size</value>
+  </data>
 </root>

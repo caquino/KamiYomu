@@ -1,6 +1,7 @@
 using Hangfire;
 using Hangfire.Storage.SQLite;
-using KamiYomu.Web;
+using KamiYomu.Web.AppOptions;
+using KamiYomu.Web.Entities;
 using KamiYomu.Web.Filters;
 using KamiYomu.Web.HealthCheckers;
 using KamiYomu.Web.Hubs;
@@ -13,7 +14,6 @@ using KamiYomu.Web.Middlewares;
 using KamiYomu.Web.Worker;
 using KamiYomu.Web.Worker.Interfaces;
 using Microsoft.AspNetCore.Localization;
-using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using MonkeyCache;
 using MonkeyCache.LiteDB;
@@ -23,15 +23,12 @@ using Serilog;
 using SQLite;
 using System.Globalization;
 using System.Text.Json.Serialization;
-using static KamiYomu.Web.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
-
 
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration)
     .CreateLogger();
-
 
 builder.Host.UseSerilog((context, services, configuration) =>
        configuration
@@ -41,10 +38,12 @@ builder.Host.UseSerilog((context, services, configuration) =>
    );
 
 Barrel.ApplicationId = nameof(KamiYomu);
-BarrelUtils.SetBaseCachePath(Settings.SpecialFolders.DbDir);
+BarrelUtils.SetBaseCachePath(Defaults.SpecialFolders.DbDir);
+
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddSignalR();
-builder.Services.Configure<Settings.Worker>(builder.Configuration.GetSection("Settings:Worker"));
-builder.Services.Configure<Settings.UI>(builder.Configuration.GetSection("Settings:UI"));
+builder.Services.Configure<WorkerOptions>(builder.Configuration.GetSection("Settings:Worker"));
+builder.Services.Configure<Defaults.NugetFeeds>(builder.Configuration.GetSection("Settings:UI"));
 
 builder.Services.AddSingleton<CacheContext>();
 builder.Services.AddSingleton<ImageDbContext>(_ => new ImageDbContext(builder.Configuration.GetConnectionString("ImageDb")));
@@ -59,26 +58,30 @@ builder.Services.AddHangfire(configuration => configuration.UseSimpleAssemblyNam
 
 builder.Services.AddHangfireServer((services, optionActions) =>
 {
-    var workerOptions = services.GetService<IOptions<Settings.Worker>>();
-    optionActions.ServerName = nameof(Settings.Worker.DownloadChapterQueues);
+    var workerOptions = services.GetService<IOptions<WorkerOptions>>();
+    optionActions.ServerName = nameof(Defaults.Worker.DownloadChapterQueues);
     optionActions.WorkerCount = Environment.ProcessorCount * workerOptions.Value.WorkerCount;
-    optionActions.Queues = Settings.Worker.DownloadChapterQueues;
+    optionActions.Queues = Defaults.Worker.DownloadChapterQueues;
+    optionActions.HeartbeatInterval = TimeSpan.FromSeconds(30);
+
 });
 
 builder.Services.AddHangfireServer((services, optionActions) =>
 {
-    var workerOptions = services.GetService<IOptions<Settings.Worker>>();
-    optionActions.ServerName = nameof(Settings.Worker.DiscoveryNewChapterQueues);
+    var workerOptions = services.GetService<IOptions<WorkerOptions>>();
+    optionActions.ServerName = nameof(Defaults.Worker.DiscoveryNewChapterQueues);
     optionActions.WorkerCount = Environment.ProcessorCount * workerOptions.Value.WorkerCount;
-    optionActions.Queues = [Settings.Worker.DiscoveryNewChapterQueues];
+    optionActions.Queues = [Defaults.Worker.DiscoveryNewChapterQueues];
+    optionActions.HeartbeatInterval = TimeSpan.FromSeconds(30);
 });
 
 builder.Services.AddHangfireServer((services, optionActions) =>
 {
-    var workerOptions = services.GetService<IOptions<Settings.Worker>>();
-    optionActions.ServerName = nameof(Settings.Worker.MangaDownloadSchedulerQueues);
+    var workerOptions = services.GetService<IOptions<WorkerOptions>>();
+    optionActions.ServerName = nameof(Defaults.Worker.MangaDownloadSchedulerQueues);
     optionActions.WorkerCount = Environment.ProcessorCount * workerOptions.Value.WorkerCount;
-    optionActions.Queues = Settings.Worker.MangaDownloadSchedulerQueues;
+    optionActions.Queues = Defaults.Worker.MangaDownloadSchedulerQueues;
+    optionActions.HeartbeatInterval = TimeSpan.FromSeconds(30);
 });
 
 builder.Services.AddTransient<IAgentCrawlerRepository, AgentCrawlerRepository>();
@@ -94,10 +97,32 @@ builder.Services.AddHealthChecks()
                 .AddCheck<WorkerHealthCheck>(nameof(WorkerHealthCheck), tags: ["worker"])
                 .AddCheck<CachingHealthCheck>(nameof(CachingHealthCheck), tags: ["storage"]);
 
-builder.Services.AddRazorPages().AddJsonOptions(options =>
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+
+builder.Services.Configure<RequestLocalizationOptions>(options =>
 {
-    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-}).AddViewLocalization();
+    var supportedCultures = new[]
+    {
+            new CultureInfo("en-US"),
+            new CultureInfo("pt-BR"),
+            new CultureInfo("fr")
+    };
+
+    options.DefaultRequestCulture = new RequestCulture("en-US");
+    options.SupportedCultures = supportedCultures;
+    options.SupportedUICultures = supportedCultures;
+    options.FallBackToParentCultures = true;
+    options.FallBackToParentUICultures = true;
+});
+
+
+builder.Services.AddRazorPages()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                })
+                .AddViewLocalization()
+                .AddDataAnnotationsLocalization();
 
 var retryPolicy = HttpPolicyExtensions
     .HandleTransientHttpError()
@@ -105,7 +130,7 @@ var retryPolicy = HttpPolicyExtensions
 
 var timeoutPolicy = Policy.TimeoutAsync<HttpResponseMessage>(10); // 10 seconds
 
-builder.Services.AddHttpClient(Settings.Worker.HttpClientBackground, client =>
+builder.Services.AddHttpClient(Defaults.Worker.HttpClientBackground, client =>
 {
     client.DefaultRequestHeaders.UserAgent.ParseAdd(CrawlerAgentSettings.HttpUserAgent);
 })
@@ -122,21 +147,27 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseStaticFiles();
-app.UseRouting();
 
-var uiSettings = app.Services.GetService<IOptions<Settings.UI>>();
-var supportedCultures = new[] { "en-US", "pt-BR", "fr" };
 
-var localizationOptions = new RequestLocalizationOptions
+using(var appScoped = app.Services.CreateScope())
 {
-    DefaultRequestCulture = new RequestCulture(uiSettings.Value.DefaultLanguage),
-    SupportedCultures = [.. supportedCultures.Select(c => new CultureInfo(c))],
-    SupportedUICultures = [.. supportedCultures.Select(c => new CultureInfo(c))],
-    FallBackToParentCultures = true,
-    FallBackToParentUICultures = true
-};
+    var startupOptions = appScoped.ServiceProvider.GetRequiredService<IOptions<StartupOptions>>().Value;
+    var localizationOptions = appScoped.ServiceProvider.GetRequiredService<IOptions<RequestLocalizationOptions>>();
+    var dbcontext = appScoped.ServiceProvider.GetRequiredService<DbContext>();
 
-app.UseRequestLocalization(localizationOptions);
+    var userPreference = dbcontext.UserPreferences.FindOne(p => true);
+    if (userPreference == null)
+    {
+        userPreference = new UserPreference(new CultureInfo(startupOptions.DefaultLanguage));
+        appScoped.ServiceProvider.GetService<DbContext>()!.UserPreferences.Insert(userPreference);
+    }
+
+    localizationOptions.Value.DefaultRequestCulture = new RequestCulture(userPreference!.GetCulture());
+
+    app.UseRequestLocalization(localizationOptions.Value);
+}
+
+app.UseRouting();
 
 app.UseHangfireDashboard("/worker", new DashboardOptions
 {
@@ -149,7 +180,7 @@ app.UseHangfireDashboard("/worker", new DashboardOptions
 
 var hangfireRepository = app.Services.GetService<IHangfireRepository>();
 
-ServiceLocator.Configure(() => app.Services);
+Defaults.ServiceLocator.Configure(() => app.Services);
 app.MapRazorPages();
 app.UseMiddleware<ExceptionNotificationMiddleware>();
 app.MapHub<NotificationHub>("/notificationHub");

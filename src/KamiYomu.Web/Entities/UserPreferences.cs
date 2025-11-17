@@ -21,8 +21,14 @@ namespace KamiYomu.Web.Entities
             LanguageId = culture.LCID;
         }
 
+        internal void SetFamilySafeMode(bool familySafeMode)
+        {
+            FamilySafeMode = familySafeMode;
+        }
+
         public Guid Id { get; private set; }
         public string Language { get; private set; }
         public int LanguageId { get; private set; }
+        public bool FamilySafeMode { get; private set; } = true;
     }
 }

@@ -1,39 +1,36 @@
-﻿using KamiYomu.Web.Entities.Notifications;
-using KamiYomu.Web.Infrastructure.Services;
-using KamiYomu.Web.Infrastructure.Services.Interfaces;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
+﻿using KamiYomu.Web.Infrastructure.Services.Interfaces;
 
-namespace KamiYomu.Web.Middlewares
+namespace KamiYomu.Web.Middlewares;
+public class ExceptionNotificationMiddleware
 {
-    public class ExceptionNotificationMiddleware
+    private readonly RequestDelegate _next;
+    private readonly ILogger<ExceptionNotificationMiddleware> _logger;
+    private readonly INotificationService _notificationService;
+
+    public ExceptionNotificationMiddleware(
+        RequestDelegate next,
+        ILogger<ExceptionNotificationMiddleware> logger,
+        INotificationService notificationService)
     {
-        private readonly RequestDelegate _next;
-        private readonly ILogger<ExceptionNotificationMiddleware> _logger;
-        private readonly INotificationService _notificationService;
+        _next = next;
+        _logger = logger;
+        _notificationService = notificationService;
+    }
 
-        public ExceptionNotificationMiddleware(
-            RequestDelegate next,
-            ILogger<ExceptionNotificationMiddleware> logger,
-            INotificationService notificationService)
+    public async Task InvokeAsync(HttpContext context)
+    {
+        try
         {
-            _next = next;
-            _logger = logger;
-            _notificationService = notificationService;
+            // Pass cancellation token from the request
+            await _next(context);
         }
-
-        public async Task Invoke(HttpContext context)
+        catch (Exception ex) when (!context.RequestAborted.IsCancellationRequested)
         {
-            try
-            {
-                await _next(context);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Unhandled exception occurred.");
-                await _notificationService.PushErrorAsync($"An unexpected error occurred. Please try again later. {ex.Message}");
-            }
+            _logger.LogError(ex, "Unhandled exception occurred.");
+
+            await _notificationService.PushErrorAsync(
+                $"An unexpected error occurred. Please try again later. {ex.Message}",
+                context.RequestAborted);
         }
-
-
     }
 }

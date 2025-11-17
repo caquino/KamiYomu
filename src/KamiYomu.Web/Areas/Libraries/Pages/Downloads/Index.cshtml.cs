@@ -1,19 +1,19 @@
 using Hangfire;
+using KamiYomu.Web.AppOptions;
 using KamiYomu.Web.Entities;
-using KamiYomu.Web.Entities.Notifications;
 using KamiYomu.Web.Infrastructure.Contexts;
 using KamiYomu.Web.Infrastructure.Repositories.Interfaces;
-using KamiYomu.Web.Infrastructure.Services;
 using KamiYomu.Web.Infrastructure.Services.Interfaces;
-using KamiYomu.Web.Worker;
 using KamiYomu.Web.Worker.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Options;
 
 namespace KamiYomu.Web.Areas.Libraries.Pages.Download
 {
     public class IndexModel(
         ILogger<IndexModel> logger,
+        IOptionsSnapshot<WorkerOptions> workerOptions,
         DbContext dbContext,
         IAgentCrawlerRepository agentCrawlerRepository,
         IBackgroundJobClient jobClient,
@@ -60,20 +60,20 @@ namespace KamiYomu.Web.Areas.Libraries.Pages.Download
 
             RecurringJob.AddOrUpdate<IChapterDiscoveryJob>(
             library.GetDiscovertyJobId(),
-            Web.Settings.Worker.DiscoveryNewChapterQueues,
-            (job) => job.DispatchAsync(agentCrawler.Id, library.Id, null!, CancellationToken.None),
-            Cron.Hourly());
+            Defaults.Worker.DiscoveryNewChapterQueues,
+            (job) => job.DispatchAsync(agentCrawler.Id, library.Id, null!, cancellationToken),
+            Cron.Daily());
 
             downloadRecord.Schedule(backgroundJobId);
 
             libDbContext.MangaDownloadRecords.Update(downloadRecord);
 
-            await notificationService.PushInfoAsync($"Title {library.Manga.Title} was added to your collection.");
+            await notificationService.PushInfoAsync($"Title {library.Manga.Title} was added to your collection.", cancellationToken);
 
             return Partial("_LibraryCard", library);
         }
 
-        public async Task<IActionResult> OnPostRemoveFromCollectionAsync()
+        public async Task<IActionResult> OnPostRemoveFromCollectionAsync(CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
             {
@@ -117,9 +117,9 @@ namespace KamiYomu.Web.Areas.Libraries.Pages.Download
 
             logger.LogInformation("Drop Database {database}", libDbContext.DatabaseFilePath());
 
-            await notificationService.PushWarningAsync($"Title {mangaTitle} was removed from your collection.");
+            await notificationService.PushWarningAsync($"Title {mangaTitle} was removed from your collection.", cancellationToken);
 
-            return Partial("_LibraryCard", new Entities.Library(library.AgentCrawler, library.Manga));
+            return Partial("_LibraryCard", new Library(library.AgentCrawler, library.Manga));
         }
     }
 }
