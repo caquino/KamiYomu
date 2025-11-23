@@ -20,7 +20,6 @@ namespace KamiYomu.Web.Pages
 
         }
 
-
         public IActionResult OnPostLanguageSetAsync(string? returnUrl = null, CancellationToken cancellationToken = default)
         {
             var culture = CultureInfo.GetCultureInfo(Culture);
@@ -48,11 +47,10 @@ namespace KamiYomu.Web.Pages
             CultureInfo.CurrentCulture =
             CultureInfo.CurrentUICulture = culture;
 
+            notificationService.EnqueueSuccessForNextPage(I18n.UserInterfaceLanguageChanged);
 
-            notificationService.EnqueueSuccess(I18n.UserInterfaceLanguageChanged);
             return Redirect(returnUrl ?? Url.Page("/Index", new { area = "" }));
         }
-
 
         public IActionResult OnPostFamilySafeAsync(string? returnUrl = null, CancellationToken cancellationToken = default)
         {
@@ -60,7 +58,7 @@ namespace KamiYomu.Web.Pages
             userPreference.SetFamilySafeMode(!userPreference.FamilySafeMode);
             dbContext.UserPreferences.Upsert(userPreference);
 
-            notificationService.EnqueueSuccess(userPreference.FamilySafeMode ? I18n.FamilySafeModeEnabled : I18n.FamilySafeModeDisabled);
+            notificationService.EnqueueSuccessForNextPage(userPreference.FamilySafeMode ? I18n.FamilySafeModeEnabled : I18n.FamilySafeModeDisabled);
             return Redirect(returnUrl ?? Url.Page("/Index", new { area = "" }));
         }
     }

@@ -19,12 +19,17 @@ using MonkeyCache;
 using MonkeyCache.LiteDB;
 using Polly;
 using Polly.Extensions.Http;
+using QuestPDF.Infrastructure;
 using Serilog;
 using SQLite;
 using System.Globalization;
 using System.Text.Json.Serialization;
+using static KamiYomu.Web.AppOptions.Defaults;
 
 var builder = WebApplication.CreateBuilder(args);
+
+QuestPDF.Settings.License = LicenseType.Community;
+LiteDbConfig.Configure();
 
 Log.Logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration)
@@ -84,7 +89,7 @@ builder.Services.AddHangfireServer((services, optionActions) =>
     optionActions.HeartbeatInterval = TimeSpan.FromSeconds(30);
 });
 
-builder.Services.AddTransient<IAgentCrawlerRepository, AgentCrawlerRepository>();
+builder.Services.AddTransient<ICrawlerAgentRepository, CrawlerAgentRepository>();
 builder.Services.AddTransient<IHangfireRepository, HangfireRepository>();
 builder.Services.AddTransient<IChapterDiscoveryJob, ChapterDiscoveryJob>();
 builder.Services.AddTransient<IChapterDownloaderJob, ChapterDownloaderJob>();
@@ -124,6 +129,7 @@ builder.Services.AddRazorPages()
                 .AddViewLocalization()
                 .AddDataAnnotationsLocalization();
 
+
 var retryPolicy = HttpPolicyExtensions
     .HandleTransientHttpError()
     .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
@@ -139,16 +145,13 @@ builder.Services.AddHttpClient(Defaults.Worker.HttpClientBackground, client =>
 
 
 var app = builder.Build();
-
+Defaults.ServiceLocator.Configure(() => app.Services);
 
 if (!app.Environment.IsDevelopment())
 {
+    QuestPDF.Settings.EnableDebugging = true;
     app.UseExceptionHandler("/Error");
 }
-
-app.UseStaticFiles();
-
-
 using(var appScoped = app.Services.CreateScope())
 {
     var startupOptions = appScoped.ServiceProvider.GetRequiredService<IOptions<StartupOptions>>().Value;
@@ -167,8 +170,8 @@ using(var appScoped = app.Services.CreateScope())
     app.UseRequestLocalization(localizationOptions.Value);
 }
 
+app.UseStaticFiles();
 app.UseRouting();
-
 app.UseHangfireDashboard("/worker", new DashboardOptions
 {
     DisplayStorageConnectionString = false,
@@ -178,9 +181,6 @@ app.UseHangfireDashboard("/worker", new DashboardOptions
     Authorization = [new AllowAllDashboardAuthorizationFilter()]
 });
 
-var hangfireRepository = app.Services.GetService<IHangfireRepository>();
-
-Defaults.ServiceLocator.Configure(() => app.Services);
 app.MapRazorPages();
 app.UseMiddleware<ExceptionNotificationMiddleware>();
 app.MapHub<NotificationHub>("/notificationHub");

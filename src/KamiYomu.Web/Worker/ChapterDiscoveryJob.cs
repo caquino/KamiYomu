@@ -17,15 +17,15 @@ namespace KamiYomu.Web.Worker
         private readonly ILogger<ChapterDiscoveryJob> _logger;
         private readonly WorkerOptions _workerOptions;
         private readonly IBackgroundJobClient _jobClient;
-        private readonly IAgentCrawlerRepository _agentCrawlerRepository;
+        private readonly ICrawlerAgentRepository _agentCrawlerRepository;
         private readonly IHangfireRepository _hangfireRepository;
         private readonly DbContext _dbContext;
 
         public ChapterDiscoveryJob(
             ILogger<ChapterDiscoveryJob> logger,
-            IOptionsSnapshot<WorkerOptions> workerOptions,
+            IOptions<WorkerOptions> workerOptions,
             IBackgroundJobClient jobClient,
-            IAgentCrawlerRepository agentCrawlerRepository,
+            ICrawlerAgentRepository agentCrawlerRepository,
             IHangfireRepository hangfireRepository,
             DbContext dbContext)
         {
@@ -39,18 +39,17 @@ namespace KamiYomu.Web.Worker
 
         public async Task DispatchAsync(Guid crawlerId, Guid libraryId, PerformContext context, CancellationToken cancellationToken)
         {
+            var userPreference = _dbContext.UserPreferences.FindOne(p => true);
+            var culture = userPreference?.GetCulture() ?? CultureInfo.GetCultureInfo("en-US");
+
+            Thread.CurrentThread.CurrentCulture = culture;
+            Thread.CurrentThread.CurrentUICulture = culture;
+
             if (cancellationToken.IsCancellationRequested)
             {
                 _logger.LogWarning("Dispatch cancelled {JobName}", nameof(ChapterDiscoveryJob));
                 return;
             }
-
-            var userPreference = _dbContext.UserPreferences.FindOne(p => true);
-
-            Thread.CurrentThread.CurrentCulture =
-            Thread.CurrentThread.CurrentUICulture =
-            CultureInfo.CurrentCulture =
-            CultureInfo.CurrentUICulture = userPreference?.GetCulture() ?? CultureInfo.GetCultureInfo("en-US");
 
             var library = _dbContext.Libraries.FindById(libraryId);
 

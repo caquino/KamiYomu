@@ -17,36 +17,37 @@ namespace KamiYomu.Web.Entities
 
         public void Schedule(string backgroundJobId)
         {
-            DownloadStatus = DownloadStatus.Pending;
+            StatusReason = null;
+            DownloadStatus = DownloadStatus.Scheduled;
             BackgroundJobId = backgroundJobId;
         }
 
-        public void Pending()
+        public void Pending(string statusReason = "")
         {
+            StatusReason = statusReason;
             DownloadStatus = DownloadStatus.Pending;
             StatusUpdateAt = DateTime.UtcNow;
         }
 
         public void Processing()
         {
-            DownloadStatus = DownloadStatus.Completed;
+            StatusReason = null;
+            DownloadStatus = DownloadStatus.InProgress;
             StatusUpdateAt = DateTime.UtcNow;
         }
         public void Complete()
         {
+            StatusReason = null;
             DownloadStatus = DownloadStatus.Completed;
             StatusUpdateAt = DateTime.UtcNow;
         }
 
-        public void Cancelled(string cancellationReason)
+        public void Cancelled(string statusReason)
         {
+
+            StatusReason = statusReason;
             DownloadStatus = DownloadStatus.Cancelled;
             StatusUpdateAt = DateTime.UtcNow;
-        }
-
-        public string RecurringJobIdentifier()
-        {
-            return $"{nameof(MangaDownloadRecord)}-{Id}";
         }
 
         public Guid Id { get; private set; }
@@ -55,6 +56,6 @@ namespace KamiYomu.Web.Entities
         public DateTime CreateAt { get; private set; }
         public DateTime? StatusUpdateAt { get; private set; }
         public DownloadStatus DownloadStatus { get; private set; }
-        public string CancellationReason { get; private set; }
+        public string? StatusReason { get; private set; }
     }
 }

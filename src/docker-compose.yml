@@ -16,6 +16,8 @@ services:
         retries: 3
 
 volumes:
-  kamiyomu_logs:
+  kamiyomu_agents:
   kamiyomu_database:
+  kamiyomu_logs:
+
 

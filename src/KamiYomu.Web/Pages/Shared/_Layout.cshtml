@@ -20,14 +20,18 @@
     <meta name="author" content="KamiYomu" />
     <meta name="theme-color" content="#712cf9" />
     <title>KamiYomu - @(string.IsNullOrEmpty(ViewData["Title"]?.ToString()) ? "Manga Crawler Platform" : ViewData["Title"])</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap" rel="stylesheet">
     <link rel="icon" href="~/images/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.min.css" />
     <link rel="stylesheet" href="~/KamiYomu.Web.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/dashboard.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     @await RenderSectionAsync("Styles", false)
 </head>
 <body>
+    <partial name="_Sprites" />
     <div class="dropdown position-fixed bottom-0 end-0 mb-3 me-3 bd-mode-toggle">
         <button class="btn btn-bd-primary py-2 dropdown-toggle d-flex align-items-center"
                 id="bd-theme"
@@ -76,26 +80,18 @@
         </ul>
     </div>
 
-    <header class="navbar sticky-top bg-dark flex-md-nowrap p-0 shadow"
+    <header class="navbar sticky-top bg-dark p-0 shadow d-flex justify-content-between align-items-center"
             data-bs-theme="dark">
-        <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 text-white"
+        <a class="col-lg-2 col-sm-10 navbar-brand d-flex align-items-center px-3 fs-6 text-white"
            href="/">
-            <img src="~/images/logo.svg" alt="KamiYomu" height="24" />
-            KamiYomu
+            <svg viewBox="0 0 647 232" class="me-2" style="width:50px; height:auto;">
+                <use href="#logo-owl"></use>
+            </svg>
+            <span>KamiYomu</span>
         </a>
-        <ul class="navbar-nav flex-row d-md-none">
-            <li class="nav-item text-nowrap">
-                <button class="nav-link px-3 text-white"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#navbarSearch"
-                        aria-controls="navbarSearch"
-                        aria-expanded="false"
-                        aria-label="Toggle search">
-                    <i class="bi bi-search" aria-hidden="true"></i>
-                </button>
-            </li>
-            <li class="nav-item text-nowrap">
+
+        <ul class="navbar-nav flex-row mb-0 d-lg-none  d-md-none  d-flex">
+            <li class="nav-item">
                 <button class="nav-link px-3 text-white"
                         type="button"
                         data-bs-toggle="offcanvas"
@@ -107,15 +103,9 @@
                 </button>
             </li>
         </ul>
-        <div id="navbarSearch" class="navbar-search w-100 collapse">
-            <input class="form-control w-100 rounded-0 border-0"
-                   type="text"
-                   placeholder="Search"
-                   aria-label="Search" />
-        </div>
     </header>
     <div class="container-fluid">
-        <div class="row min-vh-100">
+        <div class="row min-vh-lg-100">
             <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
                 <div class="offcanvas-md offcanvas-end bg-body-tertiary"
                      tabindex="-1"
@@ -123,7 +113,9 @@
                      aria-labelledby="sidebarMenuLabel">
                     <div class="offcanvas-header">
                         <h5 class="offcanvas-title d-flex align-items-center gap-2" id="sidebarMenuLabel">
-                            <img src="~/images/logo.svg" alt="KamiYomu" height="24" />
+                            <svg viewBox="0 0 300 232" class="me-2" style="width:50px; height:auto;">
+                                <use href="#logo-owl"></use>
+                            </svg>
                             KamiYomu
                         </h5>
 

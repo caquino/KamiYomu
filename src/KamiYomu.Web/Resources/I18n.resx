@@ -615,4 +615,91 @@
   <data name="Size" xml:space="preserve">
     <value>Size</value>
   </data>
+  <data name="YourCollectionNoLongerIncludes" xml:space="preserve">
+    <value>Your collection no longer includes</value>
+  </data>
+  <data name="NuGetPackageInstalledSuccessfully" xml:space="preserve">
+    <value>NuGet Package Installed Successfully</value>
+  </data>
+  <data name="NoDllFoundInNugetPackage" xml:space="preserve">
+    <value>No .dll found in NuGet package.</value>
+  </data>
+  <data name="OnlyDllOrNupkgSupported" xml:space="preserve">
+    <value>Only .dll or .nupkg files are supported.</value>
+  </data>
+  <data name="NoFileWasFound" xml:space="preserve">
+    <value>No file was found.</value>
+  </data>
+  <data name="FullScanStatus" xml:space="preserve">
+    <value>Full Scan Status</value>
+  </data>
+  <data name="TitleAddedToYourCollection" xml:space="preserve">
+    <value>Title added to your collection</value>
+  </data>
+  <data name="InProgress" xml:space="preserve">
+    <value>In Progress</value>
+  </data>
+  <data name="LibraryNotFound" xml:space="preserve">
+    <value>Library Not Found</value>
+  </data>
+  <data name="SearchForChaptersCompleted" xml:space="preserve">
+    <value>Search for chapters is completed</value>
+  </data>
+  <data name="Following" xml:space="preserve">
+    <value>Following</value>
+  </data>
+  <data name="Follow" xml:space="preserve">
+    <value>Follow</value>
+  </data>
+  <data name="YouAreNoLongerFollowingThisTitle" xml:space="preserve">
+    <value>You’ve stopped following this title. New chapters will no longer be checked automatically.</value>
+  </data>
+  <data name="YouStartedFollowingThisTitle" xml:space="preserve">
+    <value>You’re now following this title. We’ll automatically check for new chapters.</value>
+  </data>
+  <data name="NotStated" xml:space="preserve">
+    <value>Not Stated</value>
+  </data>
+  <data name="NotStarted" xml:space="preserve">
+    <value>Not Started</value>
+  </data>
+  <data name="SearchForChapters" xml:space="preserve">
+    <value>Search For Chapters</value>
+  </data>
+  <data name="ChapterSearchStatus" xml:space="preserve">
+    <value>Chapter Search Status</value>
+  </data>
+  <data name="InstallCrawlerAgentDescription" xml:space="preserve">
+    <value>Enhance KamiYomu by installing crawler agents that automatically track and retrieve your manga as soon as it becomes available.</value>
+  </data>
+  <data name="AreYouCertainYouWantPermanentlyDeleteThisRecord" xml:space="preserve">
+    <value>Are you certain you want to permanently delete this record?</value>
+  </data>
+  <data name="TimeoutExplanation" xml:space="preserve">
+    <value>A timeout is the maximum amount of time a client will wait for an operation to finish before giving up. (in milliseconds)</value>
+  </data>
+  <data name="UserAgentExplanation" xml:space="preserve">
+    <value>A User-Agent is a text string that a web browser or HTTP client sends along with its requests to a server.</value>
+  </data>
+  <data name="ThisValueIsRequired" xml:space="preserve">
+    <value>This Value Is Required</value>
+  </data>
+  <data name="SomethingWentWrong" xml:space="preserve">
+    <value>Something Went Wrong.</value>
+  </data>
+  <data name="PleaseCorrectHighlightedField" xml:space="preserve">
+    <value>Please correct the highlighted field.</value>
+  </data>
+  <data name="Compatible" xml:space="preserve">
+    <value>Compatible</value>
+  </data>
+  <data name="NotCompatible" xml:space="preserve">
+    <value>Not Compatible</value>
+  </data>
+  <data name="AdjustSearchTerm" xml:space="preserve">
+    <value>Adjust the search term to explore available packages.</value>
+  </data>
+  <data name="WelcomeTo" xml:space="preserve">
+    <value>Welcome To</value>
+  </data>
 </root>

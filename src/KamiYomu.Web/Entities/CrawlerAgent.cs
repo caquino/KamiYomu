@@ -57,8 +57,11 @@ namespace KamiYomu.Web.Entities
         public ICrawlerAgent GetCrawlerInstance()
         {
             if (_crawler != null) return _crawler;
+            var logger = Defaults.ServiceLocator.Instance.GetRequiredService<ILogger<CrawlerAgent>>() as ILogger;
+            var metadata = new Dictionary<string, object>(AgentMetadata);
+            metadata[CrawlerAgentSettings.DefaultInputs.KamiYomuILogger] = logger;
 
-            _crawler = GetCrawlerInstance(AssemblyPath, AgentMetadata);
+            _crawler = GetCrawlerInstance(AssemblyPath, metadata);
             return _crawler;
         }
 
@@ -116,64 +119,27 @@ namespace KamiYomu.Web.Entities
                 ?? "Agent";
         }
 
-        public IEnumerable<CrawlerSelectAttribute> GetCrawlerSelects()
+        public IEnumerable<AbstractInputAttribute> GetCrawlerInputs()
         {
             _assembly ??= GetIsolatedAssembly(AssemblyPath);
-            return GetCrawlerSelects(_assembly);
+            return GetCrawlerInputs(_assembly);
         }
 
-        public static IEnumerable<CrawlerSelectAttribute> GetCrawlerSelects(Assembly assembly)
-        {
-            var crawlerType = assembly.GetTypes()
-                    .FirstOrDefault(t => typeof(ICrawlerAgent).IsAssignableFrom(t) && t.IsClass && !t.IsAbstract)
-                    ?? throw new InvalidOperationException("No valid crawler type found.");
-
-            return crawlerType.GetCustomAttributes<CrawlerSelectAttribute>(false);
-        }
-
-        public IEnumerable<CrawlerCheckBoxAttribute> GetCrawlerCheckBoxs()
-        {
-            _assembly ??= GetIsolatedAssembly(AssemblyPath);
-            return GetCrawlerCheckBoxs(_assembly);
-        }
-
-        public static IEnumerable<CrawlerCheckBoxAttribute> GetCrawlerCheckBoxs(Assembly assembly)
+        public static IEnumerable<AbstractInputAttribute> GetCrawlerInputs(Assembly assembly)
         {
             var crawlerType = assembly.GetTypes()
                 .FirstOrDefault(t => typeof(ICrawlerAgent).IsAssignableFrom(t) && t.IsClass && !t.IsAbstract)
                 ?? throw new InvalidOperationException("No valid crawler type found.");
 
-            return crawlerType.GetCustomAttributes<CrawlerCheckBoxAttribute>(false);
-        }
+            var fields = crawlerType.GetCustomAttributes<AbstractInputAttribute>(false).ToList();
 
-        public IEnumerable<CrawlerTextAttribute> GetCrawlerTexts()
-        {
-            _assembly ??= GetIsolatedAssembly(AssemblyPath);
-            return GetCrawlerTexts(_assembly);
-        }
+            fields.AddRange(new List<AbstractInputAttribute>
+            {
+                new CrawlerTextAttribute(CrawlerAgentSettings.DefaultInputs.BrowserUserAgent, I18n.UserAgentExplanation, true, CrawlerAgentSettings.HttpUserAgent, 900),
+                new CrawlerTextAttribute(CrawlerAgentSettings.DefaultInputs.HttpClientTimeout, I18n.TimeoutExplanation, true, CrawlerAgentSettings.TimeoutMilliseconds.ToString(), 901),
+            });
 
-        public static IEnumerable<CrawlerTextAttribute> GetCrawlerTexts(Assembly assembly)
-        {
-            var crawlerType = assembly.GetTypes()
-                .FirstOrDefault(t => typeof(ICrawlerAgent).IsAssignableFrom(t) && t.IsClass && !t.IsAbstract)
-                ?? throw new InvalidOperationException("No valid crawler type found.");
-
-            return crawlerType.GetCustomAttributes<CrawlerTextAttribute>(false);
-        }
-
-        public IEnumerable<CrawlerPasswordAttribute> GetCrawlerPasswords()
-        {
-            _assembly ??= GetIsolatedAssembly(AssemblyPath);
-            return GetCrawlerPasswords(_assembly);
-        }
-
-        public static IEnumerable<CrawlerPasswordAttribute> GetCrawlerPasswords(Assembly assembly)
-        {
-            var crawlerType = assembly.GetTypes()
-                .FirstOrDefault(t => typeof(ICrawlerAgent).IsAssignableFrom(t) && t.IsClass && !t.IsAbstract)
-                ?? throw new InvalidOperationException("No valid crawler type found.");
-
-            return crawlerType.GetCustomAttributes<CrawlerPasswordAttribute>(false);
+            return fields;
         }
 
 
@@ -257,7 +223,5 @@ namespace KamiYomu.Web.Entities
             AgentMetadata = agentMetadata;
             AssemblyProperties = assemblyProperties;
         }
-
-
     }
 }
