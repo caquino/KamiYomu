@@ -6,10 +6,8 @@ using KamiYomu.Web.Entities;
 using KamiYomu.Web.Extensions;
 using KamiYomu.Web.Infrastructure.Contexts;
 using KamiYomu.Web.Infrastructure.Repositories.Interfaces;
-using KamiYomu.Web.Infrastructure.Services;
 using KamiYomu.Web.Infrastructure.Services.Interfaces;
 using KamiYomu.Web.Worker.Interfaces;
-using Microsoft.Extensions.DependencyModel;
 using Microsoft.Extensions.Options;
 using System.Globalization;
 
@@ -106,6 +104,15 @@ public class MangaDownloaderJob : IMangaDownloaderJob
                 foreach (var chapter in page.Data)
                 {
                     var record = new ChapterDownloadRecord(agentCrawler, mangaDownload, chapter);
+
+                    if(record.IsDownloadedFileExists())
+                    {
+                        record.Complete();
+                        libDbContext.ChapterDownloadRecords.Upsert(record);
+                        _logger.LogInformation("{file} was found, download chapter marked as completed.", record.Chapter.GetCbzFileName());
+                        continue;
+                    }
+
                     libDbContext.ChapterDownloadRecords.Insert(record);
 
                     var backgroundJobId = _jobClient.Create<IChapterDownloaderJob>(
