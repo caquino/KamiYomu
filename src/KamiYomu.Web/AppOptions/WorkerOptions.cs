@@ -28,6 +28,10 @@
         /// </summary>
         public int MaxWaitPeriodInMilliseconds { get; init; } = 7001;
         /// <summary>
+        /// Maximum number of retry attempts for failed jobs before giving up.
+        /// </summary>
+        public int MaxRetryAttempts { get; init; } = 10;
+        /// <summary>
         /// Queue dedicated to downloading individual chapters.
         /// </summary>
         public string[] DownloadChapterQueues { get; init; } 
@@ -47,7 +51,7 @@
         /// </summary>
         public int MaxConcurrentCrawlerInstances { get; set; } = 1;
         public IEnumerable<string> GetAllQueues() =>
-        [   
+        [   "default",
             .. DownloadChapterQueues,
             .. MangaDownloadSchedulerQueues,
             .. DiscoveryNewChapterQueues,

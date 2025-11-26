@@ -4,13 +4,15 @@
 @model KamiYomu.Web.Areas.Libraries.Pages.Mangas.Dialogs.DownloadStatusModel
 @{
     Layout = null;
-    var faviconUrl = await Model.Library.AgentCrawler.GetCrawlerInstance().GetFaviconAsync(CancellationToken.None);
+    using var crawlerInstance = Model.Library.AgentCrawler.GetCrawlerInstance();
+    var faviconUrl = await crawlerInstance.GetFaviconAsync(CancellationToken.None);
     var badgeClass = Model.Record.DownloadStatus switch
     {
-        Entities.Definitions.DownloadStatus.Completed => "bg-success",
-        Entities.Definitions.DownloadStatus.Cancelled => "bg-danger",
+        Entities.Definitions.DownloadStatus.ToBeRescheduled => "bg-warning",
         Entities.Definitions.DownloadStatus.Scheduled => "bg-primary",
         Entities.Definitions.DownloadStatus.InProgress => "bg-info",
+        Entities.Definitions.DownloadStatus.Completed => "bg-success",
+        Entities.Definitions.DownloadStatus.Cancelled => "bg-danger",
         _ => "bg-secondary"
     };
     var lastUpdateBuilder = new StringBuilder();

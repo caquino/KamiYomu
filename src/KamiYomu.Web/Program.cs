@@ -54,15 +54,6 @@ builder.Services.Configure<Defaults.NugetFeeds>(builder.Configuration.GetSection
 builder.Services.AddSingleton<CacheContext>();
 builder.Services.AddSingleton<ImageDbContext>(_ => new ImageDbContext(builder.Configuration.GetConnectionString("ImageDb")));
 builder.Services.AddScoped<DbContext>(_ => new DbContext(builder.Configuration.GetConnectionString("AgentDb")));
-builder.Services.AddHangfire(configuration => configuration.UseSimpleAssemblyNameTypeSerializer()
-                                                           .UseRecommendedSerializerSettings()
-                                                           .UseSQLiteStorage(new SQLiteDbConnectionFactory(() =>
-                                                           {
-                                                               var connectionString = new SQLiteConnectionString(builder.Configuration.GetConnectionString("WorkerDb"), SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.SharedCache, true);
-                                                               return new SQLiteConnection(connectionString);
-                                                           })));
-
-
 
 builder.Services.AddTransient<ICrawlerAgentRepository, CrawlerAgentRepository>();
 builder.Services.AddTransient<IHangfireRepository, HangfireRepository>();
@@ -118,29 +109,7 @@ builder.Services.AddHttpClient(Defaults.Worker.HttpClientBackground, client =>
     .AddPolicyHandler(retryPolicy)
     .AddPolicyHandler(timeoutPolicy);
 
-
-var workerOptions = builder.Configuration.GetSection("Worker").Get<WorkerOptions>();
-var serverNames = workerOptions.ServerAvailableNames;
-var allQueues = workerOptions.GetAllQueues().ToList();
-
-// Divide queues evenly among servers
-var queuesPerServer = allQueues
-    .Select((queue, index) => new { queue, index })
-    .GroupBy(x => x.index % serverNames.Count())
-    .Select(g => g.Select(x => x.queue).ToList())
-    .ToList();
-
-// Register each server separately
-foreach (var (serverName, queues) in serverNames.Zip(queuesPerServer))
-{
-    builder.Services.AddHangfireServer((services, options) =>
-    {
-        options.ServerName = serverName;
-        options.WorkerCount = workerOptions.WorkerCount;
-        options.Queues = [.. queues];
-        options.HeartbeatInterval = TimeSpan.FromSeconds(30);
-    });
-}
+AddHangfireConfig(builder);
 
 var app = builder.Build();
 Defaults.ServiceLocator.Configure(() => app.Services);
@@ -173,7 +142,7 @@ app.UseRouting();
 app.UseHangfireDashboard("/worker", new DashboardOptions
 {
     DisplayStorageConnectionString = false,
-    DashboardTitle = I18n.BackgroundJobs,
+    DashboardTitle = "KamiYomu",
     FaviconPath = "/images/favicon.ico",
     IgnoreAntiforgeryToken = true,
     Authorization = [new AllowAllDashboardAuthorizationFilter()]
@@ -184,3 +153,48 @@ app.UseMiddleware<ExceptionNotificationMiddleware>();
 app.MapHub<NotificationHub>("/notificationHub");
 app.MapHealthChecks("/healthz");
 app.Run();
+
+static void AddHangfireConfig(WebApplicationBuilder builder)
+{
+    var workerOptions = builder.Configuration.GetSection("Worker").Get<WorkerOptions>();
+    var serverNames = workerOptions.ServerAvailableNames;
+    var allQueues = workerOptions.GetAllQueues().ToList();
+
+    builder.Services.AddHangfire(configuration => configuration.UseSimpleAssemblyNameTypeSerializer()
+                                                           .UseRecommendedSerializerSettings()
+                                                           .UseSQLiteStorage(new SQLiteDbConnectionFactory(() =>
+                                                           {
+                                                               var connectionString = new SQLiteConnectionString(builder.Configuration.GetConnectionString("WorkerDb"), SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.SharedCache, true);
+                                                               return new SQLiteConnection(connectionString);
+                                                           }),
+                                                           new SQLiteStorageOptions
+                                                           {
+                                                                QueuePollInterval = TimeSpan.FromSeconds(15),
+                                                                JobExpirationCheckInterval = TimeSpan.FromHours(1),
+                                                                CountersAggregateInterval = TimeSpan.FromMinutes(5)
+                                                           }));
+
+    // Divide queues evenly among servers
+    var queuesPerServer = allQueues
+        .Select((queue, index) => new { queue, index })
+        .GroupBy(x => x.index % serverNames.Count())
+        .Select(g => g.Select(x => x.queue).ToList())
+        .ToList();
+
+    // Register each server separately
+    foreach (var (serverName, queues) in serverNames.Zip(queuesPerServer))
+    {
+        builder.Services.AddHangfireServer((services, options) =>
+        {
+            options.ServerName = serverName;
+            options.WorkerCount = workerOptions.WorkerCount;
+            options.Queues = [.. queues];
+            options.HeartbeatInterval = TimeSpan.FromSeconds(15);
+        });
+    }
+
+    GlobalJobFilters.Filters.Add(new AutomaticRetryAttribute { 
+        Attempts = workerOptions.MaxRetryAttempts, 
+    });
+
+}
