@@ -1,29 +1,28 @@
 using Hangfire;
 using Hangfire.Storage;
+
 using KamiYomu.Web.AppOptions;
 using KamiYomu.Web.Entities;
 using KamiYomu.Web.Entities.Definitions;
 using KamiYomu.Web.Infrastructure.Contexts;
 using KamiYomu.Web.Infrastructure.Services.Interfaces;
 using KamiYomu.Web.Worker.Interfaces;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyModel;
 using Microsoft.Extensions.Options;
 
-namespace KamiYomu.Web.Areas.Libraries.Pages.Mangas.Dialogs;
+namespace KamiYomu.Web.Areas.Libraries.Pages.Collection.Dialogs;
 
 public class DownloadStatusModel(IOptions<WorkerOptions> workerOptions,
-                                 DbContext dbContext, 
+                                 DbContext dbContext,
                                  INotificationService notificationService) : PageModel
 {
     [BindProperty]
-    public FollowButtonViewModel FollowButtonViewModel { get; set; }
-    public Entities.Library Library { get; set; }
-    public decimal Completed { get; set; } = 0;
-    public decimal Total { get; set; } = 0;
-    public decimal Progress { get; set; } = 0;
-    public MangaDownloadRecord Record { get; set; } = null;
+    public required FollowButtonViewModel FollowButtonViewModel { get; set; }
+    public required Entities.Library Library { get; set; }
+    public MangaDownloadRecord? Record { get; set; } = null;
 
 
     public void OnGet(Guid libraryId)
@@ -35,27 +34,21 @@ public class DownloadStatusModel(IOptions<WorkerOptions> workerOptions,
         };
 
         Library = dbContext.Libraries.FindOne(p => p.Id == libraryId);
-        using var libDbContext = Library.GetDbContext();
+        using LibraryDbContext libDbContext = Library.GetReadOnlyDbContext();
 
-        var downloadManga = libDbContext.MangaDownloadRecords.FindOne(p => p.Library.Id == Library.Id);
+        MangaDownloadRecord downloadManga = libDbContext.MangaDownloadRecords.FindOne(p => p.Library.Id == Library.Id);
 
-        if (downloadManga == null) return;
-        using var connection = JobStorage.Current.GetConnection();
-        var recurringJobs = connection.GetRecurringJobs();
+        if (downloadManga == null)
+        {
+            return;
+        }
+
+        using IStorageConnection connection = JobStorage.Current.GetConnection();
+        List<RecurringJobDto> recurringJobs = connection.GetRecurringJobs();
 
         Record = downloadManga;
         FollowButtonViewModel.IsFollowing = recurringJobs.Any(job => string.Equals(job.Id, Library.GetDiscovertyJobId(), StringComparison.OrdinalIgnoreCase));
-        var downloadChapters = libDbContext.ChapterDownloadRecords.Find(p => p.MangaDownload.Id == downloadManga.Id).OrderBy(p => p.Chapter.Number).ToList();
-        Completed = downloadChapters.Count(p => p.DownloadStatus == DownloadStatus.Completed);
-        Total = downloadChapters.Count;
-        if (Total > 0)
-        {
-            Progress = (Completed / Total) * 100;
-        }
-        else
-        {
-            Progress = 0;
-        }
+        List<ChapterDownloadRecord> downloadChapters = [.. libDbContext.ChapterDownloadRecords.Find(p => p.MangaDownload.Id == downloadManga.Id).OrderBy(p => p.Chapter.Number)];
     }
 
     public async Task<IActionResult> OnPostToggleFollowingAsync(CancellationToken cancellationToken)
@@ -68,7 +61,7 @@ public class DownloadStatusModel(IOptions<WorkerOptions> workerOptions,
         }
         else
         {
-            var queue = workerOptions.Value.DiscoveryNewChapterQueues.FirstOrDefault();
+            string? queue = workerOptions.Value.DiscoveryNewChapterQueues.FirstOrDefault();
             RecurringJob.AddOrUpdate<IChapterDiscoveryJob>(
             Library.GetDiscovertyJobId(),
             queue,
@@ -85,7 +78,7 @@ public class DownloadStatusModel(IOptions<WorkerOptions> workerOptions,
 
 }
 
-public class FollowButtonViewModel 
+public class FollowButtonViewModel
 {
     [BindProperty]
     public bool IsFollowing { get; set; }

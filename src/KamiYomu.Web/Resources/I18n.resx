@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -753,5 +753,71 @@ for Hangfire's &lt;code&gt;WorkerCount&lt;/code&gt; setting to control how many 
   </data>
   <data name="AddKamiYomuBaGetAsSource" xml:space="preserve">
     <value>Add KamiYomu BaGet as Source</value>
+  </data>
+  <data name="Preferences" xml:space="preserve">
+    <value>Preferences</value>
+  </data>
+  <data name="ChapterFunnyTemplate4" xml:space="preserve">
+    <value>Romance, Please Restart Me</value>
+  </data>
+  <data name="ChapterFunnyTemplate1" xml:space="preserve">
+    <value>Romance Sideways</value>
+  </data>
+  <data name="ChapterFunnyTemplate2" xml:space="preserve">
+    <value>Romance Slightly Tilted</value>
+  </data>
+  <data name="ChapterFunnyTemplate3" xml:space="preserve">
+    <value>Romance But Make It Weird</value>
+  </data>
+  <data name="FilePathFormat" xml:space="preserve">
+    <value>File Path Format</value>
+  </data>
+  <data name="TheTemplateMustProduceUniqueFileNames" xml:space="preserve">
+    <value>The template must produce unique file names for different chapters.</value>
+  </data>
+  <data name="TheTemplatePathIsMissingOrInvalid" xml:space="preserve">
+    <value>Looks like the template is missing or invalid. Please enter a valid one.</value>
+  </data>
+  <data name="YourMangaWillBeStoredFilePathFormat" xml:space="preserve">
+    <value>Your manga will be stored using the following file path format:</value>
+  </data>
+  <data name="PreviewWillAppearHere" xml:space="preserve">
+    <value>Preview will appear here</value>
+  </data>
+  <data name="PleaseFixFollowingErrors" xml:space="preserve">
+    <value>Please fix the following errors</value>
+  </data>
+  <data name="BaGetFeed" xml:space="preserve">
+    <value>KamiYomu BaGet Feed</value>
+  </data>
+  <data name="SignOut" xml:space="preserve">
+    <value>Sign out</value>
+  </data>
+  <data name="LoggingOut" xml:space="preserve">
+    <value>Logging out...</value>
+  </data>
+  <data name="AvailableTemplateVariables" xml:space="preserve">
+    <value>Available Template Variables</value>
+  </data>
+  <data name="Series" xml:space="preserve">
+    <value>Series</value>
+  </data>
+  <data name="DownloadProgress" xml:space="preserve">
+    <value>Download Progress</value>
+  </data>
+  <data name="SetUpYourDownload" xml:space="preserve">
+    <value>Set Up Your Download</value>
+  </data>
+  <data name="FilePath" xml:space="preserve">
+    <value>File Path</value>
+  </data>
+  <data name="SeriesNameFormat" xml:space="preserve">
+    <value>Series Name Format</value>
+  </data>
+  <data name="TitleFormat" xml:space="preserve">
+    <value>Title Format</value>
+  </data>
+  <data name="UpdateAvailable" xml:space="preserve">
+    <value>Update Available</value>
   </data>
 </root>

@@ -259,6 +259,15 @@ namespace KamiYomu.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Available Template Variables.
+        /// </summary>
+        internal static string AvailableTemplateVariables {
+            get {
+                return ResourceManager.GetString("AvailableTemplateVariables", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Back.
         /// </summary>
         internal static string Back {
@@ -273,6 +282,15 @@ namespace KamiYomu.Web.Resources {
         internal static string BackgroundJobs {
             get {
                 return ResourceManager.GetString("BackgroundJobs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to KamiYomu BaGet Feed.
+        /// </summary>
+        internal static string BaGetFeed {
+            get {
+                return ResourceManager.GetString("BaGetFeed", resourceCulture);
             }
         }
         
@@ -318,6 +336,42 @@ namespace KamiYomu.Web.Resources {
         internal static string ChapterDownloaded {
             get {
                 return ResourceManager.GetString("ChapterDownloaded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Romance Sideways.
+        /// </summary>
+        internal static string ChapterFunnyTemplate1 {
+            get {
+                return ResourceManager.GetString("ChapterFunnyTemplate1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Romance Slightly Tilted.
+        /// </summary>
+        internal static string ChapterFunnyTemplate2 {
+            get {
+                return ResourceManager.GetString("ChapterFunnyTemplate2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Romance But Make It Weird.
+        /// </summary>
+        internal static string ChapterFunnyTemplate3 {
+            get {
+                return ResourceManager.GetString("ChapterFunnyTemplate3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Romance, Please Restart Me.
+        /// </summary>
+        internal static string ChapterFunnyTemplate4 {
+            get {
+                return ResourceManager.GetString("ChapterFunnyTemplate4", resourceCulture);
             }
         }
         
@@ -646,6 +700,15 @@ namespace KamiYomu.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Download Progress.
+        /// </summary>
+        internal static string DownloadProgress {
+            get {
+                return ResourceManager.GetString("DownloadProgress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Download Status.
         /// </summary>
         internal static string DownloadStatus {
@@ -777,6 +840,24 @@ namespace KamiYomu.Web.Resources {
         internal static string FamilySafeModeEnableMessage {
             get {
                 return ResourceManager.GetString("FamilySafeModeEnableMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File Path.
+        /// </summary>
+        internal static string FilePath {
+            get {
+                return ResourceManager.GetString("FilePath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File Path Format.
+        /// </summary>
+        internal static string FilePathFormat {
+            get {
+                return ResourceManager.GetString("FilePathFormat", resourceCulture);
             }
         }
         
@@ -1011,6 +1092,15 @@ namespace KamiYomu.Web.Resources {
         internal static string Light {
             get {
                 return ResourceManager.GetString("Light", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Logging out....
+        /// </summary>
+        internal static string LoggingOut {
+            get {
+                return ResourceManager.GetString("LoggingOut", resourceCulture);
             }
         }
         
@@ -1366,6 +1456,33 @@ namespace KamiYomu.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please fix the following errors.
+        /// </summary>
+        internal static string PleaseFixFollowingErrors {
+            get {
+                return ResourceManager.GetString("PleaseFixFollowingErrors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Preferences.
+        /// </summary>
+        internal static string Preferences {
+            get {
+                return ResourceManager.GetString("Preferences", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Preview will appear here.
+        /// </summary>
+        internal static string PreviewWillAppearHere {
+            get {
+                return ResourceManager.GetString("PreviewWillAppearHere", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Processing.
         /// </summary>
         internal static string Processing {
@@ -1565,11 +1682,47 @@ namespace KamiYomu.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Series.
+        /// </summary>
+        internal static string Series {
+            get {
+                return ResourceManager.GetString("Series", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Series Name Format.
+        /// </summary>
+        internal static string SeriesNameFormat {
+            get {
+                return ResourceManager.GetString("SeriesNameFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Settings.
         /// </summary>
         internal static string Settings {
             get {
                 return ResourceManager.GetString("Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set Up Your Download.
+        /// </summary>
+        internal static string SetUpYourDownload {
+            get {
+                return ResourceManager.GetString("SetUpYourDownload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sign out.
+        /// </summary>
+        internal static string SignOut {
+            get {
+                return ResourceManager.GetString("SignOut", resourceCulture);
             }
         }
         
@@ -1673,6 +1826,24 @@ namespace KamiYomu.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The template must produce unique file names for different chapters..
+        /// </summary>
+        internal static string TheTemplateMustProduceUniqueFileNames {
+            get {
+                return ResourceManager.GetString("TheTemplateMustProduceUniqueFileNames", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Looks like the template is missing or invalid. Please enter a valid one..
+        /// </summary>
+        internal static string TheTemplatePathIsMissingOrInvalid {
+            get {
+                return ResourceManager.GetString("TheTemplatePathIsMissingOrInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This Value Is Required.
         /// </summary>
         internal static string ThisValueIsRequired {
@@ -1709,6 +1880,15 @@ namespace KamiYomu.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Title Format.
+        /// </summary>
+        internal static string TitleFormat {
+            get {
+                return ResourceManager.GetString("TitleFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To Be Rescheduled.
         /// </summary>
         internal static string ToBeRescheduled {
@@ -1732,6 +1912,15 @@ namespace KamiYomu.Web.Resources {
         internal static string TotalDownloads {
             get {
                 return ResourceManager.GetString("TotalDownloads", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update Available.
+        /// </summary>
+        internal static string UpdateAvailable {
+            get {
+                return ResourceManager.GetString("UpdateAvailable", resourceCulture);
             }
         }
         
@@ -1957,6 +2146,15 @@ namespace KamiYomu.Web.Resources {
         internal static string YourCollectionNoLongerIncludes {
             get {
                 return ResourceManager.GetString("YourCollectionNoLongerIncludes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your manga will be stored using the following file path format:.
+        /// </summary>
+        internal static string YourMangaWillBeStoredFilePathFormat {
+            get {
+                return ResourceManager.GetString("YourMangaWillBeStoredFilePathFormat", resourceCulture);
             }
         }
         

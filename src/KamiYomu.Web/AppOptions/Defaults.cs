@@ -1,6 +1,7 @@
-﻿using KamiYomu.CrawlerAgents.Core.Catalog.Definitions;
+using KamiYomu.CrawlerAgents.Core.Catalog.Definitions;
 using KamiYomu.Web.Entities.Definitions;
 using KamiYomu.Web.Entities.Notifications.Definitions;
+
 using LiteDB;
 
 
@@ -25,8 +26,8 @@ public partial class Defaults
     public class NugetFeeds
     {
         public const string NugetFeedUrl = "https://api.nuget.org/v3/index.json";
+        public const string BagGetFeedUrl = "https://baget.kamiyomu.com/v3/index.json";
         public const string KamiYomuFeedUrl = "https://nuget.pkg.github.com/KamiYomu/index.json";
-        public const string MyGetFeedUrl = "https://www.myget.org/F/example/api/v3/index.json";
     }
 
     public class UI
@@ -42,7 +43,7 @@ public partial class Defaults
 
     public static class Worker
     {
-        public const string HttpClientBackground = nameof(HttpClientBackground);
+        public const string HttpClientApp = nameof(HttpClientApp);
         public const int HttpTimeOutInSeconds = 60;
         public const int StaleLockTimeout = 20;
         public const int DeferredExecutionInMinutes = 5;
@@ -55,34 +56,31 @@ public partial class Defaults
     {
         public static void Configure()
         {
-            var mapper = BsonMapper.Global;
+            BsonMapper mapper = BsonMapper.Global;
 
             mapper.RegisterType<Uri>(
                 uri => uri != null ? new BsonValue(uri.ToString()) : BsonValue.Null,
                 bson =>
                 {
-                    var str = bson.AsString;
-                    if (string.IsNullOrWhiteSpace(str)) return null;
-
-                    return Uri.TryCreate(str, UriKind.RelativeOrAbsolute, out Uri? uri) ? uri : null;
+                    string str = bson.AsString;
+                    return string.IsNullOrWhiteSpace(str) ? null : Uri.TryCreate(str, UriKind.RelativeOrAbsolute, out Uri? uri) ? uri : null;
                 }
             );
 
-            mapper.RegisterType<DownloadStatus>(
+            mapper.RegisterType(
                 serialize: status => new BsonValue((int)status),
                 deserialize: bson => (DownloadStatus)bson.AsInt32
             );
 
-            mapper.RegisterType<NotificationType>(
+            mapper.RegisterType(
                 serialize: status => new BsonValue((int)status),
                 deserialize: bson => (NotificationType)bson.AsInt32
             );
 
-            mapper.RegisterType<ReleaseStatus>(
+            mapper.RegisterType(
                 serialize: status => new BsonValue((int)status),
                 deserialize: bson => (ReleaseStatus)bson.AsInt32
             );
         }
     }
-
 }

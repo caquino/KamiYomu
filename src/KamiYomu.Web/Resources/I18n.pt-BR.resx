@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -753,5 +753,72 @@ para a configuração &lt;code&gt;WorkerCount&lt;/code&gt; do Hangfire para cont
   </data>
   <data name="AddKamiYomuBaGetAsSource" xml:space="preserve">
     <value>Adicionar KamiYomu BaGet como fonte</value>
+  </data>
+  <data name="Preferences" xml:space="preserve">
+    <value>Preferências</value>
+  </data>
+  <data name="ChapterFunnyTemplate4" xml:space="preserve">
+    <value>Romance, por favor, reinicie-me</value>
+  </data>
+  <data name="ChapterFunnyTemplate1" xml:space="preserve">
+    <value>Romance lateral</value>
+  </data>
+  <data name="ChapterFunnyTemplate2" xml:space="preserve">
+    <value>Romance ligeiramente inclinado</value>
+  </data>
+  <data name="ChapterFunnyTemplate3" xml:space="preserve">
+    <value>Romance, mas torne-o estranho</value>
+  </data>
+  <data name="FilePathFormat" xml:space="preserve">
+    <value>Formato do caminho do arquivo</value>
+  </data>
+  <data name="TheTemplateMustProduceUniqueFileNames" xml:space="preserve">
+    <value>O modelo deve produzir nomes de arquivo exclusivos para capítulos diferentes.</value>
+  </data>
+  <data name="TheTemplatePathIsMissingOrInvalid" xml:space="preserve">
+    <value>Parece que o modelo está ausente ou é inválido. Por favor insira um válido.</value>
+  </data>
+  <data name="YourMangaWillBeStoredFilePathFormat" xml:space="preserve">
+    <value>Seu mangá será armazenado usando o seguinte formato de caminho de arquivo:</value>
+  </data>
+  <data name="PreviewWillAppearHere" xml:space="preserve">
+    <value>A visualização aparecerá aqui</value>
+  </data>
+  <data name="PleaseFixFollowingErrors" xml:space="preserve">
+    <value>Corrija os seguintes erros</value>
+  </data>
+  <data name="BaGetFeed" xml:space="preserve">
+    <value>KamiYomu BaGet Feed</value>
+  </data>
+  <data name="SignOut" xml:space="preserve">
+    <value>sair</value>
+  </data>
+  <data name="LoggingOut" xml:space="preserve">
+    <value>Saindo...</value>
+  </data>
+  <data name="AvailableTemplateVariables" xml:space="preserve">
+    <value>Variáveis ​​de modelo disponíveis</value>
+  </data>
+  <data name="Series" xml:space="preserve">
+    <value>Série</value>
+  </data>
+  <data name="DownloadProgress" xml:space="preserve">
+    <value>Baixar progresso</value>
+  </data>
+  <data name="SetUpYourDownload" xml:space="preserve">
+    <value>Configure seu download</value>
+  </data>
+  <data name="FilePath" xml:space="preserve">
+    <value>Caminho do arquivo</value>
+  </data>
+  <data name="SeriesNameFormat" xml:space="preserve">
+    <value>Formato do nome da série</value>
+  </data>
+  <data name="TitleFormat" xml:space="preserve">
+    <value>Formato do título</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="UpdateAvailable" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
   </data>
 </root>

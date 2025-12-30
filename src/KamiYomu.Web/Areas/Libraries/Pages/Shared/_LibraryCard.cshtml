@@ -1,4 +1,6 @@
-﻿@using KamiYomu.Web.Extensions
+﻿@using KamiYomu.Web.Entities
+@using KamiYomu.Web.Entities.Definitions
+@using KamiYomu.Web.Extensions
 @model KamiYomu.Web.Entities.Library
 
 @{
@@ -26,6 +28,11 @@
                 <span class="text-muted">@Model.CrawlerAgent.DisplayName</span>
             </div>
 
+            @if (!isNew)
+            {
+                <partial name="_DownloadProgress" model="Model" />
+            }
+
 
             <div class="mt-auto d-flex justify-content-end">
                 <div class="btn-group dropup">
@@ -49,17 +56,14 @@
                         @if (isNew)
                         {
                             <li>
-                                <form method="post"
-                                      hx-post="/Libraries/Downloads/Index?handler=AddToCollection"
-                                      hx-target="#@cardId"
-                                      hx-swap="innerHTML">
-                                    @Html.AntiForgeryToken()
-                                    <input type="hidden" name="MangaId" value="@Model.Manga.Id" />
-                                    <input type="hidden" name="CrawlerAgentId" value="@Model.CrawlerAgent.Id" />
-                                    <button type="submit" class="dropdown-item bg-success text-light">
-                                        <i class="bi bi-plus-circle me-2"></i> @I18n.AddToYourCollection
-                                    </button>
-                                </form>
+                                <button class="dropdown-item bg-success text-light"
+                                        hx-get="/Libraries/Collection/Dialogs/AddToCollection?CrawlerAgentId=@Model.CrawlerAgent.Id&MangaId=@Model.Manga.Id&RefreshElementId=@cardId"
+                                        hx-target="#modal-body"
+                                        hx-swap="innerHTML"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#modal">
+                                    <i class="bi bi-plus-circle me-2"></i> @I18n.AddToYourCollection
+                                </button>
                             </li>
                         }
                         else
