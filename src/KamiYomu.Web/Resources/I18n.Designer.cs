@@ -835,6 +835,15 @@ namespace KamiYomu.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Configure external services to receive automatic updates on new chapter downloads..
+        /// </summary>
+        public static string ExternalReadersExplanation {
+            get {
+                return ResourceManager.GetString("ExternalReadersExplanation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to connect to Kavita..
         /// </summary>
         public static string FailedConnectKavita {
@@ -1474,6 +1483,15 @@ namespace KamiYomu.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Configure external services to receive notifications for manga-related events, such as chapter scans and completed downloads..
+        /// </summary>
+        public static string NotificationProvidersExplanation {
+            get {
+                return ResourceManager.GetString("NotificationProvidersExplanation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Not Safe For Work.
         /// </summary>
         public static string NotSafeForWork {
@@ -1605,6 +1623,15 @@ namespace KamiYomu.Web.Resources {
         public static string OriginalLanguage {
             get {
                 return ResourceManager.GetString("OriginalLanguage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Packages feed.
+        /// </summary>
+        public static string PackagesFeed {
+            get {
+                return ResourceManager.GetString("PackagesFeed", resourceCulture);
             }
         }
         

@@ -940,11 +940,20 @@ voor de &lt;code&gt;WorkerCount&lt;/code&gt;-instelling van Hangfire om te bepal
   <data name="KavitaTutorialApiKey04" xml:space="preserve">
     <value>Kopieer het gegenereerde token en plak het in de bovenstaande invoer</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="HowToGetYourKavitaToken" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
   <data name="HowToGetYourKavitaToken" xml:space="preserve">
     <value>Hoe u uw Kavita Api-sleutel kunt verkrijgen</value>
+  </data>
+  <data name="NotificationProvidersExplanation" xml:space="preserve">
+    <value>Configureer externe services om meldingen te ontvangen voor manga-gerelateerde gebeurtenissen, zoals hoofdstukscans en voltooide downloads.</value>
+  </data>
+  <data name="ExternalReadersExplanation" xml:space="preserve">
+    <value>Configureer externe services om automatische updates te ontvangen over nieuwe hoofdstukdownloads.</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="PackagesFeed" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="PackagesFeed" xml:space="preserve">
+    <value>Pakketten voeden</value>
   </data>
 </root>

@@ -940,11 +940,20 @@ para a configuração &lt;code&gt;WorkerCount&lt;/code&gt; do Hangfire para cont
   <data name="KavitaTutorialApiKey04" xml:space="preserve">
     <value>Copie o token gerado e cole-o na entrada acima</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="HowToGetYourKavitaToken" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
   <data name="HowToGetYourKavitaToken" xml:space="preserve">
     <value>Como obter sua chave Kavita Api</value>
+  </data>
+  <data name="NotificationProvidersExplanation" xml:space="preserve">
+    <value>Configure serviços externos para receber notificações de eventos relacionados ao mangá, como varreduras de capítulos e downloads concluídos.</value>
+  </data>
+  <data name="ExternalReadersExplanation" xml:space="preserve">
+    <value>Configure serviços externos para receber atualizações automáticas em downloads de novos capítulos.</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="PackagesFeed" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="PackagesFeed" xml:space="preserve">
+    <value>Feed de pacotes</value>
   </data>
 </root>

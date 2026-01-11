@@ -4,7 +4,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace KamiYomu.Web.HealthCheckers;
 
-public class CachingHealthCheck(CacheContext cacheContext) : IHealthCheck
+public class CachingHealthCheck(ILogger<CachingHealthCheck> logger, CacheContext cacheContext) : IHealthCheck
 {
     public Task<HealthCheckResult> CheckHealthAsync(
         HealthCheckContext context,
@@ -14,10 +14,12 @@ public class CachingHealthCheck(CacheContext cacheContext) : IHealthCheck
         {
             cacheContext.Current.Add("health-check", "operational", TimeSpan.FromSeconds(1));
             string value = cacheContext.Current.Get<string>("health-check");
+            cacheContext.Current.Empty("health-check");
             return Task.FromResult(HealthCheckResult.Healthy($"Cache is {value}."));
         }
         catch (Exception ex)
         {
+            logger.LogError(ex, ex.Message);
             return Task.FromResult(HealthCheckResult.Unhealthy("Database is not available.", ex));
         }
     }
