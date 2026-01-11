@@ -1,4 +1,6 @@
-﻿using NuGet.Versioning;
+using NuGet.Versioning;
+
+using static KamiYomu.Web.AppOptions.Defaults;
 
 namespace KamiYomu.Web.Entities.Addons;
 
@@ -43,7 +45,7 @@ public class NugetPackageInfo
     public bool IsVersionCompatible()
     {
         string versionRangeString = GetKamiYomuCoreRangeVersion(); // e.g. "[1.1.0, )"
-        Version currentVersion = typeof(KamiYomu.CrawlerAgents.Core.ICrawlerAgent)
+        Version currentVersion = typeof(ICrawlerAgent)
             .Assembly
             .GetName()
             .Version ?? new Version(0, 0, 0);
@@ -59,5 +61,10 @@ public class NugetPackageInfo
 
         // If parsing fails, treat as incompatible
         return false;
+    }
+
+    public bool IsNsfw()
+    {
+        return Tags.Any(p => string.Equals(p, Package.NotSafeForWorkTag, StringComparison.OrdinalIgnoreCase));
     }
 }
