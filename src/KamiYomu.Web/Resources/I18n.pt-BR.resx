@@ -835,11 +835,149 @@ para a configuração &lt;code&gt;WorkerCount&lt;/code&gt; do Hangfire para cont
   <data name="SocialMedia" xml:space="preserve">
     <value>Mídias Sociais</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="Community" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
   <data name="Community" xml:space="preserve">
     <value>Comunidade</value>
+  </data>
+  <data name="System" xml:space="preserve">
+    <value>Sistema</value>
+  </data>
+  <data name="MakeThisTheDefaultSettingForFutureCollections" xml:space="preserve">
+    <value>Torne esta a configuração padrão para coleções futuras.</value>
+  </data>
+  <data name="StandardDefaultSettingsAreShownBelowExplain" xml:space="preserve">
+    <value>As configurações padrão são mostradas abaixo. Você pode modificá-los usando variáveis ​​de ambiente.</value>
+  </data>
+  <data name="NotSafeForWork" xml:space="preserve">
+    <value>Não é seguro para o trabalho</value>
+  </data>
+  <data name="Integrations" xml:space="preserve">
+    <value>Integrações</value>
+  </data>
+  <data name="PasswordApiKey" xml:space="preserve">
+    <value>Senha/chave API</value>
+  </data>
+  <data name="ServiceUriRequired" xml:space="preserve">
+    <value>Uri de serviço necessário</value>
+  </data>
+  <data name="ServiceUriInvalid" xml:space="preserve">
+    <value>Uri de serviço inválido</value>
+  </data>
+  <data name="UsernameRequired" xml:space="preserve">
+    <value>Nome de usuário obrigatório</value>
+  </data>
+  <data name="PasswordRequired" xml:space="preserve">
+    <value>Senha obrigatória</value>
+  </data>
+  <data name="KavitaIntegrationSettings" xml:space="preserve">
+    <value>Configurações de integração Kavita</value>
+  </data>
+  <data name="ConnectionSuccessfully" xml:space="preserve">
+    <value>Conexão com sucesso!</value>
+  </data>
+  <data name="FailedConnectKavita" xml:space="preserve">
+    <value>Falha ao conectar-se ao Kavita.</value>
+  </data>
+  <data name="SettingsSavedSuccessfully" xml:space="preserve">
+    <value>Configurações salvas com sucesso!</value>
+  </data>
+  <data name="TestConnection" xml:space="preserve">
+    <value>Conexão de teste</value>
+  </data>
+  <data name="PleaseFixValidationErrors" xml:space="preserve">
+    <value>Corrija os erros de validação</value>
+  </data>
+  <data name="ApiKeyOrPasswordIsRequired" xml:space="preserve">
+    <value>É necessária uma chave de API ou senha.</value>
+  </data>
+  <data name="ServiceUri" xml:space="preserve">
+    <value>Uri de serviço</value>
+  </data>
+  <data name="DeleteIntegration" xml:space="preserve">
+    <value>Excluir integração</value>
+  </data>
+  <data name="SettingsRemovedSuccessfully" xml:space="preserve">
+    <value>Configurações removidas com sucesso!</value>
+  </data>
+  <data name="TheConnectionHasFailed" xml:space="preserve">
+    <value>A conexão falhou</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="PasteYourGotifyAppTokenHere" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="HowToGetYourGotifyToken" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="GotifyTutorialApiKey01" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="GotifyTutorialApiKey02" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="GotifyTutorialApiKey03" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="GotifyTutorialApiKey04" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="NotificationProviders" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="ExternalReaders" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="SeeTheDocumentation" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="KavitaTutorialApiKey01" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="KavitaTutorialApiKey02" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="KavitaTutorialApiKey03" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="KavitaTutorialApiKey04" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="PasteYourGotifyAppTokenHere" xml:space="preserve">
+    <value>Cole seu token do aplicativo Gotify aqui.</value>
+  </data>
+  <data name="HowToGetYourGotifyToken" xml:space="preserve">
+    <value>Como obter seu token Gotify:</value>
+  </data>
+  <data name="GotifyTutorialApiKey01" xml:space="preserve">
+    <value>Abra sua instância do Gotify em um navegador.</value>
+  </data>
+  <data name="GotifyTutorialApiKey02" xml:space="preserve">
+    <value>Vá para a seção Aplicativos.</value>
+  </data>
+  <data name="GotifyTutorialApiKey03" xml:space="preserve">
+    <value>Crie um novo aplicativo e nomeie-o KamiYomu.</value>
+  </data>
+  <data name="GotifyTutorialApiKey04" xml:space="preserve">
+    <value>Copie o token gerado e cole-o na entrada acima.</value>
+  </data>
+  <data name="NotificationProviders" xml:space="preserve">
+    <value>Provedores de notificação</value>
+  </data>
+  <data name="ExternalReaders" xml:space="preserve">
+    <value>Leitores Externos</value>
+  </data>
+  <data name="SeeTheDocumentation" xml:space="preserve">
+    <value>Veja a documentação.</value>
+  </data>
+  <data name="KavitaTutorialApiKey01" xml:space="preserve">
+    <value>Acesse sua instância Kavita</value>
+  </data>
+  <data name="KavitaTutorialApiKey02" xml:space="preserve">
+    <value>Faça login em sua conta</value>
+  </data>
+  <data name="KavitaTutorialApiKey03" xml:space="preserve">
+    <value>Acesse a configuração &gt; Chave API/OPDS</value>
+  </data>
+  <data name="KavitaTutorialApiKey04" xml:space="preserve">
+    <value>Copie o token gerado e cole-o na entrada acima</value>
   </data>
 </root>

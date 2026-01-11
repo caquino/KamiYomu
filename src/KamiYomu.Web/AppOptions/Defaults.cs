@@ -26,11 +26,16 @@ public partial class Defaults
     public class NugetFeeds
     {
         public const string NugetFeedUrl = "https://api.nuget.org/v3/index.json";
-        public const string BagGetFeedUrl = "https://baget.kamiyomu.com/v3/index.json";
+        public const string GiteaFeedUrl = "https://gitea.kamiyomu.com/api/packages/kamiyomu/nuget/index.json";
         public const string KamiYomuFeedUrl = "https://nuget.pkg.github.com/KamiYomu/index.json";
     }
 
-    public class UI
+    public static class Integrations
+    {
+        public const string HttpClientApp = $"{nameof(Integrations)}.{nameof(HttpClientApp)}";
+    }
+
+    public static class UI
     {
         public const string EnqueueNotification = nameof(EnqueueNotification);
         public const string PushNotification = nameof(PushNotification);
@@ -43,12 +48,14 @@ public partial class Defaults
 
     public static class Worker
     {
-        public const string HttpClientApp = nameof(HttpClientApp);
+        public const string HttpClientApp = $"{nameof(Worker)}.{nameof(HttpClientApp)}";
         public const int HttpTimeOutInSeconds = 60;
         public const int StaleLockTimeout = 20;
         public const int DeferredExecutionInMinutes = 5;
+        public const string NotificationQueue = "notification-queue";
         public const string DeferredExecutionQueue = "deferred-execution-queue";
         public const string DefaultQueue = "default";
+        public const string NotifyKavitaJob = nameof(NotifyKavitaJob);
         public const string TempDirName = "kamiyomu-worker.tmp";
     }
 

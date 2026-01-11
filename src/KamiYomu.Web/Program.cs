@@ -72,7 +72,6 @@ builder.Services.AddSignalR();
 builder.Services.Configure<BasicAuthOptions>(builder.Configuration.GetSection("BasicAuth"));
 builder.Services.Configure<SpecialFolderOptions>(builder.Configuration.GetSection("SpecialFolders"));
 builder.Services.Configure<WorkerOptions>(builder.Configuration.GetSection("Worker"));
-builder.Services.Configure<NugetFeeds>(builder.Configuration.GetSection("UI"));
 builder.Services.Configure<GzipCompressionProviderOptions>(options =>
 {
     options.Level = System.IO.Compression.CompressionLevel.Fastest;
@@ -85,25 +84,34 @@ builder.Services.AddResponseCompression(options =>
     options.Providers.Add<GzipCompressionProvider>();
 });
 
-
-builder.Services.AddSingleton<CacheContext>();
-builder.Services.AddSingleton(_ => new ImageDbContext(builder.Configuration.GetConnectionString("ImageDb")));
 builder.Services.AddSingleton<IUserClockManager, UserClockManager>();
 builder.Services.AddSingleton<ILockManager, LockManager>();
-builder.Services.AddScoped(_ => new DbContext(builder.Configuration.GetConnectionString("AgentDb")));
 
+builder.Services.AddScoped(_ => new DbContext(builder.Configuration.GetConnectionString("AgentDb")));
+builder.Services.AddScoped<CacheContext>();
+builder.Services.AddScoped(_ => new ImageDbContext(builder.Configuration.GetConnectionString("ImageDb")));
+
+// Repositories
 builder.Services.AddTransient<ICrawlerAgentRepository, CrawlerAgentRepository>();
 builder.Services.AddTransient<IHangfireRepository, HangfireRepository>();
+
+// Worker jobs
 builder.Services.AddTransient<IChapterDiscoveryJob, ChapterDiscoveryJob>();
 builder.Services.AddTransient<IChapterDownloaderJob, ChapterDownloaderJob>();
 builder.Services.AddTransient<IMangaDownloaderJob, MangaDownloaderJob>();
 builder.Services.AddTransient<IDeferredExecutionCoordinator, DeferredExecutionCoordinator>();
+builder.Services.AddTransient<INotifyKavitaJob, NotifyKavitaJob>();
+
+// Services
 builder.Services.AddTransient<INugetService, NugetService>();
 builder.Services.AddTransient<INotificationService, NotificationService>();
 builder.Services.AddTransient<IWorkerService, WorkerService>();
 builder.Services.AddTransient<IGitHubService, GitHubService>();
 builder.Services.AddTransient<IStatsService, StatsService>();
+builder.Services.AddTransient<IKavitaService, KavitaService>();
+builder.Services.AddTransient<IGotifyService, GotifyService>();
 
+// HeathCheckers
 builder.Services.AddHealthChecks()
                 .AddCheck<DatabaseHealthCheck>(nameof(DatabaseHealthCheck), tags: ["storage"])
                 .AddCheck<WorkerHealthCheck>(nameof(WorkerHealthCheck), tags: ["worker"])
@@ -139,22 +147,9 @@ builder.Services.AddRazorPages()
                 .AddViewLocalization()
                 .AddDataAnnotationsLocalization();
 
-
-Polly.Retry.AsyncRetryPolicy<HttpResponseMessage> retryPolicy = HttpPolicyExtensions
-    .HandleTransientHttpError()
-    .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
-
-Polly.Timeout.AsyncTimeoutPolicy<HttpResponseMessage> timeoutPolicy = Policy.TimeoutAsync<HttpResponseMessage>(Worker.HttpTimeOutInSeconds);
-
-builder.Services.AddHttpClient(Worker.HttpClientApp, client =>
-{
-    client.DefaultRequestHeaders.UserAgent.ParseAdd(CrawlerAgentSettings.HttpUserAgent);
-})
-    .AddPolicyHandler(retryPolicy)
-    .AddPolicyHandler(timeoutPolicy);
+AddHttpClients(builder);
 
 AddHangfireConfig(builder);
-
 
 WebApplication app = builder.Build();
 ServiceLocator.Configure(() => app.Services);
@@ -196,7 +191,8 @@ app.UseResponseCompression();
 app.UseStaticFiles();
 app.UseRouting();
 app.UseMiddleware<BasicAuthMiddleware>();
-app.MapStatsEndpoints();
+app.MapStatsEndpoints()
+   .MapLibraryEndpoints();
 app.UseHangfireDashboard("/worker", new DashboardOptions
 {
     DisplayStorageConnectionString = false,
@@ -278,4 +274,34 @@ static void AddHangfireConfig(WebApplicationBuilder builder)
 static bool IsRunningInDocker()
 {
     return File.Exists("/.dockerenv");
+}
+
+static void AddHttpClients(WebApplicationBuilder builder)
+{
+    Polly.Retry.AsyncRetryPolicy<HttpResponseMessage> retryPolicy = HttpPolicyExtensions
+        .HandleTransientHttpError()
+        .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
+
+    Polly.Timeout.AsyncTimeoutPolicy<HttpResponseMessage> timeoutPolicy = Policy.TimeoutAsync<HttpResponseMessage>(Worker.HttpTimeOutInSeconds);
+
+    _ = builder.Services.AddHttpClient(Worker.HttpClientApp, client =>
+        {
+            client.DefaultRequestHeaders.UserAgent.ParseAdd(CrawlerAgentSettings.HttpUserAgent);
+        })
+        .AddPolicyHandler(retryPolicy)
+        .AddPolicyHandler(timeoutPolicy);
+
+    _ = builder.Services.AddHttpClient(Integrations.HttpClientApp, client =>
+    {
+        client.DefaultRequestHeaders.UserAgent.ParseAdd(CrawlerAgentSettings.HttpUserAgent);
+    })
+        .AddPolicyHandler(retryPolicy)
+        .AddPolicyHandler(timeoutPolicy)
+        .ConfigurePrimaryHttpMessageHandler(() =>
+        {
+            return new HttpClientHandler
+            {
+                AutomaticDecompression = System.Net.DecompressionMethods.GZip | System.Net.DecompressionMethods.Deflate
+            };
+        });
 }

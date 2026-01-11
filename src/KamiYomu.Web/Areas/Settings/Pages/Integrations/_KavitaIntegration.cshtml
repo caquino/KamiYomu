@@ -1,0 +1,110 @@
+@using KamiYomu.Web.Areas.Settings.Pages.Integrations
+@model KavitaIntegrationInput
+
+<div class="accordion" id="kavitaAccordion">
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingKavita">
+            <button class="accordion-button collapsed d-flex align-items-center gap-2"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#collapseKavita"
+                    aria-expanded="true"
+                    aria-controls="collapseKavita">
+
+                <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/kavita.svg"
+                     alt="Kavita logo"
+                     class="img-header img-fluid d-inline-block align-middle me-2"
+                     loading="lazy"
+                     decoding="async">
+
+                <span class="h3 text-muted">Kavita</span>
+            </button>
+        </h2>
+
+        <div id="collapseKavita" class="accordion-collapse collapse show" aria-labelledby="headingKavita" data-bs-parent="#kavitaAccordion">
+            <div class="accordion-body">
+                <form method="post" id="kavitaForm" class="small">
+                    <div class="mb-2">
+                        <label asp-for="ServiceUri" class="form-label"></label>
+                        <input name="Input.ServiceUri" asp-for="ServiceUri" class="form-control form-control-sm" />
+                        <span asp-validation-for="ServiceUri" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-2">
+                        <label asp-for="Username" class="form-label"></label>
+                        <input name="Input.Username" asp-for="Username" class="form-control form-control-sm" />
+                        <span asp-validation-for="Username" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-2">
+                        <label asp-for="Password" class="form-label"></label>
+                        <input name="Input.Password" asp-for="Password" class="form-control form-control-sm" type="password" />
+                        <span asp-validation-for="Password" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-2">
+                        <label asp-for="ApiKey" class="form-label"></label>
+                        <input name="Input.ApiKey" asp-for="ApiKey" class="form-control form-control-sm" type="password" />
+                        <span asp-validation-for="ApiKey" class="text-danger small"></span>
+
+                        <div class="alert alert-info mt-2 p-2 small">
+                            <strong>@I18n.HowToGetYourGotifyToken</strong>
+                            <ol class="mb-0 ps-3">
+                                <li>@I18n.KavitaTutorialApiKey01</li>
+                                <li>@I18n.KavitaTutorialApiKey02</li>
+                                <li>@I18n.KavitaTutorialApiKey03</li>
+                                <li>@I18n.KavitaTutorialApiKey04</li>
+                            </ol>
+                            <a href="https://wiki.kavitareader.com/getting-started/">@I18n.SeeTheDocumentation</a>
+                        </div>
+                    </div>
+
+                    <div class="form-check mb-2">
+                        <input name="Input.Enabled" asp-for="Enabled" class="form-check-input" />
+                        <label asp-for="Enabled" class="form-check-label"></label>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="button"
+                                class="btn btn-secondary btn-sm"
+                                hx-post="@Url.Page("KavitaIntegration", "TestKavitaConnection")"
+                                hx-target="closest .accordion"
+                                hx-swap="outerHTML"
+                                hx-include="#kavitaForm">
+                            <i class="bi bi-plug me-1"></i>
+                            @I18n.TestConnection
+                        </button>
+
+                        <button type="button"
+                                class="btn btn-primary btn-sm"
+                                hx-post="@Url.Page("KavitaIntegration", "SaveKavita")"
+                                hx-target="closest .accordion"
+                                hx-swap="outerHTML"
+                                hx-include="#kavitaForm">
+                            <i class="bi bi-save me-1"></i>
+                            @I18n.Save
+                        </button>
+
+                        <button type="button"
+                                class="btn btn-outline-danger btn-sm"
+                                hx-post="@Url.Page("KavitaIntegration", "DeleteKavita")"
+                                hx-target="closest .accordion"
+                                hx-swap="outerHTML"
+                                hx-include="#kavitaForm">
+                            <i class="bi bi-trash me-1"></i>
+                            @I18n.DeleteIntegration
+                        </button>
+                    </div>
+                </form>
+                <div asp-validation-summary="All" class="text-danger"></div>
+
+                @if (!string.IsNullOrWhiteSpace(Model?.SucessMessage))
+                {
+                    <partial name="_MessageSuccess" model="Model.SucessMessage" />
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+

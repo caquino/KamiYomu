@@ -835,11 +835,149 @@ voor de &lt;code&gt;WorkerCount&lt;/code&gt;-instelling van Hangfire om te bepal
   <data name="SocialMedia" xml:space="preserve">
     <value>Sociale media</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="Community" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
   <data name="Community" xml:space="preserve">
     <value>Gemeenschap</value>
+  </data>
+  <data name="System" xml:space="preserve">
+    <value>Systeem</value>
+  </data>
+  <data name="MakeThisTheDefaultSettingForFutureCollections" xml:space="preserve">
+    <value>Maak dit de standaardinstelling voor toekomstige incasso's.</value>
+  </data>
+  <data name="StandardDefaultSettingsAreShownBelowExplain" xml:space="preserve">
+    <value>Standaard standaardinstellingen worden hieronder weergegeven. U kunt deze wijzigen met behulp van omgevingsvariabelen.</value>
+  </data>
+  <data name="NotSafeForWork" xml:space="preserve">
+    <value>Niet veilig voor werk</value>
+  </data>
+  <data name="Integrations" xml:space="preserve">
+    <value>Integraties</value>
+  </data>
+  <data name="PasswordApiKey" xml:space="preserve">
+    <value>Wachtwoord / API-sleutel</value>
+  </data>
+  <data name="ServiceUriRequired" xml:space="preserve">
+    <value>Service-URI vereist</value>
+  </data>
+  <data name="ServiceUriInvalid" xml:space="preserve">
+    <value>Service-URI ongeldig</value>
+  </data>
+  <data name="UsernameRequired" xml:space="preserve">
+    <value>Gebruikersnaam vereist</value>
+  </data>
+  <data name="PasswordRequired" xml:space="preserve">
+    <value>Wachtwoord vereist</value>
+  </data>
+  <data name="KavitaIntegrationSettings" xml:space="preserve">
+    <value>Kavita-integratie-instellingen</value>
+  </data>
+  <data name="ConnectionSuccessfully" xml:space="preserve">
+    <value>Verbinding succesvol!</value>
+  </data>
+  <data name="FailedConnectKavita" xml:space="preserve">
+    <value>Kan geen verbinding maken met Kavita.</value>
+  </data>
+  <data name="SettingsSavedSuccessfully" xml:space="preserve">
+    <value>Instellingen succesvol opgeslagen!</value>
+  </data>
+  <data name="TestConnection" xml:space="preserve">
+    <value>Verbinding testen</value>
+  </data>
+  <data name="PleaseFixValidationErrors" xml:space="preserve">
+    <value>Los de validatiefouten op</value>
+  </data>
+  <data name="ApiKeyOrPasswordIsRequired" xml:space="preserve">
+    <value>API-sleutel of wachtwoord is vereist.</value>
+  </data>
+  <data name="ServiceUri" xml:space="preserve">
+    <value>Service Uri</value>
+  </data>
+  <data name="DeleteIntegration" xml:space="preserve">
+    <value>Integratie verwijderen</value>
+  </data>
+  <data name="SettingsRemovedSuccessfully" xml:space="preserve">
+    <value>Instellingen succesvol verwijderd!</value>
+  </data>
+  <data name="TheConnectionHasFailed" xml:space="preserve">
+    <value>De verbinding is mislukt</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="PasteYourGotifyAppTokenHere" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="HowToGetYourGotifyToken" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="GotifyTutorialApiKey01" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="GotifyTutorialApiKey02" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="GotifyTutorialApiKey03" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="GotifyTutorialApiKey04" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="NotificationProviders" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="ExternalReaders" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="SeeTheDocumentation" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="KavitaTutorialApiKey01" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="KavitaTutorialApiKey02" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="KavitaTutorialApiKey03" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="KavitaTutorialApiKey04" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="PasteYourGotifyAppTokenHere" xml:space="preserve">
+    <value>Plak hier uw Gotify-app-token.</value>
+  </data>
+  <data name="HowToGetYourGotifyToken" xml:space="preserve">
+    <value>Hoe u uw Gotify-token kunt verkrijgen:</value>
+  </data>
+  <data name="GotifyTutorialApiKey01" xml:space="preserve">
+    <value>Open uw Gotify-instantie in een browser.</value>
+  </data>
+  <data name="GotifyTutorialApiKey02" xml:space="preserve">
+    <value>Ga naar het gedeelte Toepassingen.</value>
+  </data>
+  <data name="GotifyTutorialApiKey03" xml:space="preserve">
+    <value>Maak een nieuwe applicatie en noem deze KamiYomu.</value>
+  </data>
+  <data name="GotifyTutorialApiKey04" xml:space="preserve">
+    <value>Kopieer het gegenereerde token en plak het in de bovenstaande invoer.</value>
+  </data>
+  <data name="NotificationProviders" xml:space="preserve">
+    <value>Meldingsaanbieders</value>
+  </data>
+  <data name="ExternalReaders" xml:space="preserve">
+    <value>Externe lezers</value>
+  </data>
+  <data name="SeeTheDocumentation" xml:space="preserve">
+    <value>Zie de documentatie.</value>
+  </data>
+  <data name="KavitaTutorialApiKey01" xml:space="preserve">
+    <value>Toegang tot uw Kavita-instantie</value>
+  </data>
+  <data name="KavitaTutorialApiKey02" xml:space="preserve">
+    <value>Log in op uw account</value>
+  </data>
+  <data name="KavitaTutorialApiKey03" xml:space="preserve">
+    <value>Ga naar de configuratie &gt; API Key / OPDS</value>
+  </data>
+  <data name="KavitaTutorialApiKey04" xml:space="preserve">
+    <value>Kopieer het gegenereerde token en plak het in de bovenstaande invoer</value>
   </data>
 </root>
