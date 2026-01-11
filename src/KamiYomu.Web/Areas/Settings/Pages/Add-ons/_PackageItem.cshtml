@@ -100,18 +100,37 @@
 
                     <!-- Actions -->
                     <div class="col-12 col-md-auto text-md-end">
-                        <form method="post"
-                              asp-page-handler="Install"
-                              asp-route-packageId="@Model.Id"
-                              asp-route-packageVersion="@Model.VersionSelected.Version"
-                              asp-route-sourceId="@Model.SourceId">
-                            @Html.AntiForgeryToken()
-                            <button type="submit" class="btn @(Model.VersionSelected.IsVersionCompatible() ? "btn-primary" : "btn-outline-secondary")" @(Model.VersionSelected.IsVersionCompatible() ? "" : "disabled")>
-                                <i class="bi bi-download me-1"></i> @I18n.Install
-                            </button>
-                        </form>
-                        <div id="download-message-@Model.VersionSelected.Id" class="mt-2"></div>
+                        <div class="d-flex flex-column gap-2">
+
+                            <form method="post"
+                                  asp-page-handler="Install"
+                                  asp-route-packageId="@Model.Id"
+                                  asp-route-packageVersion="@Model.VersionSelected.Version"
+                                  asp-route-sourceId="@Model.SourceId">
+                                @Html.AntiForgeryToken()
+
+                                <button type="submit"
+                                        class="btn btn-sm w-100 d-flex align-items-center justify-content-center gap-2
+                           @(Model.VersionSelected.IsVersionCompatible() ? "btn-primary" : "btn-outline-secondary")"
+                                        @(Model.VersionSelected.IsVersionCompatible() ? "" : "disabled")>
+                                    <i class="bi bi-download"></i>
+                                    @I18n.Install
+                                </button>
+                            </form>
+
+                            <a class="btn btn-sm w-100 d-flex align-items-center justify-content-center gap-2"
+                               href="@Url.Page("Index", values: new { handler = "Download", packageId = Model.Id, packageVersion = Model.VersionSelected.Version, sourceId = Model.SourceId })"
+                               target="_blank">
+                                <i class="bi bi-download"></i>
+                                @I18n.Download
+                                <i class="bi bi-box-seam"></i>
+                            </a>
+
+                            <div id="download-message-@Model.VersionSelected.Id"></div>
+
+                        </div>
                     </div>
+
 
                 </div>
             </div>
