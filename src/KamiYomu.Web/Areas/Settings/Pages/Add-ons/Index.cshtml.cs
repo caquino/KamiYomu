@@ -73,9 +73,11 @@ public class IndexModel(ILogger<IndexModel> logger,
     {
         try
         {
+            UserPreference preferences = dbContext.UserPreferences.Query().FirstOrDefault();
+            bool familySafeMode = preferences?.FamilySafeMode ?? true;
             string searchTerm = string.IsNullOrWhiteSpace(SearchBarViewModel.Search) ? "KamiYomu" : SearchBarViewModel.Search;
             IEnumerable<NugetPackageInfo> packages = await nugetService.SearchPackagesAsync(SearchBarViewModel.SourceId, searchTerm, SearchBarViewModel.IncludePrerelease, cancellationToken);
-            packages = packages.OrderBy(p => p.Id).ThenByDescending(p => p.Version);
+            packages = packages.Where(p => !familySafeMode || !p.IsNsfw()).OrderBy(p => p.Id).ThenByDescending(p => p.Version);
             PackageListViewModel = new PackageListViewModel
             {
                 SourceId = SearchBarViewModel.SourceId,

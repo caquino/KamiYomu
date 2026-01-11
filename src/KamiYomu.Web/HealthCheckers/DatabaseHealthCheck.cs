@@ -4,7 +4,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace KamiYomu.Web.HealthCheckers;
 
-public class DatabaseHealthCheck(DbContext dbContext) : IHealthCheck
+public class DatabaseHealthCheck(ILogger<CachingHealthCheck> logger, DbContext dbContext) : IHealthCheck
 {
     public Task<HealthCheckResult> CheckHealthAsync(
         HealthCheckContext context,

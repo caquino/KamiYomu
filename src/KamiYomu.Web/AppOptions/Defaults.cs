@@ -26,7 +26,7 @@ public partial class Defaults
     public class NugetFeeds
     {
         public const string NugetFeedUrl = "https://api.nuget.org/v3/index.json";
-        public const string GiteaFeedUrl = "https://gitea.kamiyomu.com/api/packages/kamiyomu/nuget/index.json";
+        public const string PackagesFeedUrl = "https://packages.kamiyomu.com/api/packages/kamiyomu/nuget/index.json";
         public const string KamiYomuFeedUrl = "https://nuget.pkg.github.com/KamiYomu/index.json";
     }
 
@@ -43,6 +43,7 @@ public partial class Defaults
 
     public static class Package
     {
+        public const string NotSafeForWorkTag = "nsfw";
         public const string KamiYomuCrawlerAgentTag = "kamiyomu-crawler-agents";
     }
 

@@ -21,6 +21,9 @@
                 </div>
 
                 <div class="card-body">
+                    <p class="text-muted mb-3">
+                        @I18n.NotificationProvidersExplanation
+                    </p>
                     <div class="accordion" id="notificationProviders">
 
                         <partial name="_GotifyIntegration" model="Model.GotifyIntegrationInput" />
@@ -39,6 +42,9 @@
                 </div>
 
                 <div class="card-body">
+                    <p class="text-muted mb-3">
+                        @I18n.ExternalReadersExplanation
+                    </p>
                     <div class="accordion" id="externalReaders">
                         <partial name="_KavitaIntegration" model="Model.KavitaIntegrationInput" />
                     </div>

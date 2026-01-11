@@ -901,46 +901,6 @@ pour le paramètre &lt;code&gt;WorkerCount&lt;/code&gt; de Hangfire pour contrô
   <data name="TheConnectionHasFailed" xml:space="preserve">
     <value>La connexion a échoué</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="PasteYourGotifyAppTokenHere" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="HowToGetYourGotifyToken" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="GotifyTutorialApiKey01" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="GotifyTutorialApiKey02" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="GotifyTutorialApiKey03" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="GotifyTutorialApiKey04" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="NotificationProviders" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="ExternalReaders" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="SeeTheDocumentation" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="KavitaTutorialApiKey01" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="KavitaTutorialApiKey02" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="KavitaTutorialApiKey03" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="KavitaTutorialApiKey04" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
   <data name="PasteYourGotifyAppTokenHere" xml:space="preserve">
     <value>Collez votre jeton d'application Gotify ici.</value>
   </data>
@@ -979,5 +939,21 @@ pour le paramètre &lt;code&gt;WorkerCount&lt;/code&gt; de Hangfire pour contrô
   </data>
   <data name="KavitaTutorialApiKey04" xml:space="preserve">
     <value>Copiez le jeton généré et collez-le dans l'entrée ci-dessus</value>
+  </data>
+  <data name="HowToGetYourKavitaToken" xml:space="preserve">
+    <value>Comment obtenir votre clé API Kavita</value>
+  </data>
+  <data name="NotificationProvidersExplanation" xml:space="preserve">
+    <value>Configurez des services externes pour recevoir des notifications pour les événements liés aux mangas, tels que les analyses de chapitres et les téléchargements terminés.</value>
+  </data>
+  <data name="ExternalReadersExplanation" xml:space="preserve">
+    <value>Configurez les services externes pour recevoir des mises à jour automatiques sur les téléchargements de nouveaux chapitres.</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="PackagesFeed" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="PackagesFeed" xml:space="preserve">
+    <value>Flux de packages</value>
   </data>
 </root>
