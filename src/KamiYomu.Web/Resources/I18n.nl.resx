@@ -901,46 +901,6 @@ voor de &lt;code&gt;WorkerCount&lt;/code&gt;-instelling van Hangfire om te bepal
   <data name="TheConnectionHasFailed" xml:space="preserve">
     <value>De verbinding is mislukt</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="PasteYourGotifyAppTokenHere" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="HowToGetYourGotifyToken" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="GotifyTutorialApiKey01" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="GotifyTutorialApiKey02" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="GotifyTutorialApiKey03" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="GotifyTutorialApiKey04" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="NotificationProviders" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="ExternalReaders" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="SeeTheDocumentation" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="KavitaTutorialApiKey01" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="KavitaTutorialApiKey02" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="KavitaTutorialApiKey03" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
-  <data name="KavitaTutorialApiKey04" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
   <data name="PasteYourGotifyAppTokenHere" xml:space="preserve">
     <value>Plak hier uw Gotify-app-token.</value>
   </data>
@@ -979,5 +939,12 @@ voor de &lt;code&gt;WorkerCount&lt;/code&gt;-instelling van Hangfire om te bepal
   </data>
   <data name="KavitaTutorialApiKey04" xml:space="preserve">
     <value>Kopieer het gegenereerde token en plak het in de bovenstaande invoer</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="HowToGetYourKavitaToken" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="HowToGetYourKavitaToken" xml:space="preserve">
+    <value>Hoe u uw Kavita Api-sleutel kunt verkrijgen</value>
   </data>
 </root>

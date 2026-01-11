@@ -1,5 +1,7 @@
 using KamiYomu.Web.Entities.Addons;
 
+using static KamiYomu.Web.AppOptions.Defaults;
+
 namespace KamiYomu.Web.Areas.Settings.Pages.Add_ons.ViewModels;
 
 public class PackageListViewModel
@@ -10,7 +12,6 @@ public class PackageListViewModel
 
 public class NugetPackageGroupedViewModel
 {
-    private const string NotSafeForWork = "nsfw";
     public Guid SourceId { get; set; }
     public string Id { get; set; } = string.Empty;
     public Uri? IconUrl { get; set; }
@@ -26,6 +27,6 @@ public class NugetPackageGroupedViewModel
 
     public bool IsNsfw()
     {
-        return Tags.Any(p => string.Equals(p, NotSafeForWork, StringComparison.OrdinalIgnoreCase));
+        return Tags.Any(p => string.Equals(p, Package.NotSafeForWorkTag, StringComparison.OrdinalIgnoreCase));
     }
 }

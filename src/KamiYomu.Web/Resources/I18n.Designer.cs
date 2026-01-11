@@ -1060,6 +1060,15 @@ namespace KamiYomu.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to How to get your Kavita Api Key.
+        /// </summary>
+        public static string HowToGetYourKavitaToken {
+            get {
+                return ResourceManager.GetString("HowToGetYourKavitaToken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Import Crawler Agent .
         /// </summary>
         public static string ImportCrawlerAgent {

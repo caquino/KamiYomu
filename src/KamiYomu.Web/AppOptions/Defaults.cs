@@ -43,6 +43,7 @@ public partial class Defaults
 
     public static class Package
     {
+        public const string NotSafeForWorkTag = "nsfw";
         public const string KamiYomuCrawlerAgentTag = "kamiyomu-crawler-agents";
     }
 
