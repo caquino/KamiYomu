@@ -1,4 +1,4 @@
-namespace KamiYomu.Web.Entities;
+namespace KamiYomu.Web.Entities.Integrations;
 
 public class KavitaSettings
 {
@@ -41,5 +41,15 @@ public class KavitaSettings
         Password = password;
         ApiKey = apiKey;
         Enabled = enabled;
+    }
+
+    internal void Disable()
+    {
+        Enabled = false;
+    }
+
+    internal void Enable()
+    {
+        Enabled = true;
     }
 }
