@@ -189,4 +189,69 @@ public class IndexModel(ILogger<IndexModel> logger,
 
         return Page();
     }
+
+
+    public async Task<IActionResult> OnGetDownloadAsync(
+    Guid sourceId,
+    string packageId,
+    string packageVersion,
+    CancellationToken cancellationToken)
+    {
+        if (sourceId == Guid.Empty ||
+            string.IsNullOrWhiteSpace(packageId) ||
+            string.IsNullOrWhiteSpace(packageVersion))
+        {
+            return BadRequest();
+        }
+
+        try
+        {
+            Stream[]? streams = await nugetService.OnGetDownloadAsync(
+                sourceId,
+                packageId,
+                packageVersion,
+                cancellationToken);
+
+            if (streams is null || streams.Length == 0 || streams[0] is null)
+            {
+                logger.LogWarning(
+                    "No stream returned for package {PackageId} {PackageVersion} from source {SourceId}",
+                    packageId, packageVersion, sourceId);
+
+                notificationService.EnqueueErrorForNextPage(I18n.NuGetPackageIsInvalid);
+                return NotFound();
+            }
+
+            string packageFileName = $"{packageId}.{packageVersion}.nupkg";
+
+            if (streams[0].CanSeek)
+            {
+                streams[0].Position = 0;
+            }
+
+            return File(
+                fileStream: streams[0],
+                contentType: "application/octet-stream",
+                fileDownloadName: packageFileName);
+        }
+        catch (OperationCanceledException)
+        {
+            logger.LogInformation(
+                "Download cancelled for package {PackageId} {PackageVersion} from source {SourceId}",
+                packageId, packageVersion, sourceId);
+
+            return new EmptyResult();
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(
+                ex,
+                "Error downloading package {PackageId} {PackageVersion} from source {SourceId}",
+                packageId, packageVersion, sourceId);
+
+            await notificationService.PushErrorAsync(I18n.NuGetPackageIsInvalid, cancellationToken);
+            return StatusCode(StatusCodes.Status500InternalServerError);
+        }
+    }
+
 }
