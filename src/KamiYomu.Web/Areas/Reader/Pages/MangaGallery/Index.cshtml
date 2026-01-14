@@ -6,8 +6,8 @@
 <div class="row mb-4">
     <div class="col-md-6">
         <input type="text" name="search" class="form-control" 
-               placeholder="Search manga..."
-               hx-get="/Gallery?handler=Search" 
+               placeholder="@I18n.SearchManga"
+               hx-get="/Reader/MangaGallery?handler=Search" 
                hx-target="#manga-grid" 
                hx-trigger="keyup changed delay:500ms">
     </div>

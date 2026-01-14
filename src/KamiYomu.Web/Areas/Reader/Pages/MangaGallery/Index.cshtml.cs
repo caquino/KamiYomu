@@ -19,9 +19,8 @@ public class IndexModel(DbContext dbContext) : PageModel
 
     public PartialViewResult OnGetSearch(string search)
     {
-        List<Manga> filtered = dbContext.Libraries.Query()
-                                       .Where(p => p.Manga.Title.Contains(search, StringComparison.OrdinalIgnoreCase))
-                                       .Select(p => p.Manga).ToList();
+        List<Library> filtered = dbContext.Libraries.Query()
+                                       .Where(p => p.Manga.Title.Contains(search, StringComparison.OrdinalIgnoreCase)).ToList();
 
         return Partial("_MangaGrid", filtered);
     }

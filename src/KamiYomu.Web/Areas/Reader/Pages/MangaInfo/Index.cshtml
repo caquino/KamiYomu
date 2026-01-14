@@ -1,23 +1,30 @@
-@page
+@page "{mangaId}"
 @using KamiYomu.Web.Areas.Reader.Pages.MangaInfo
 @using KamiYomu.Web.Extensions
 @model IndexModel
 @{
 }
-<div class="row">
+<header class="reader-header bg-dark text-white p-2 border-bottom border-secondary d-flex justify-content-between align-items-center">
+    <div class="d-flex align-items-center gap-2">
+        <a asp-area="Reader"
+           asp-page="/MangaGallery/Index"
+           class="btn btn-sm btn-outline-light border-0">
+            <i class="bi bi-chevron-left"></i>
+        </a>
+    </div>
+</header>
+
+
+<div class="row mt-4">
     <div class="col-lg-3 col-md-4 mb-4">
         <img src="@Model.Manga.CoverUrl.ToInternalImageUrl()" class="img-fluid rounded shadow-lg w-100" alt="@Model.Manga.Title" />
 
         <div class="mt-3 card border-0 shadow-sm">
             <div class="card-body">
                 <div class="row text-center mt-3">
-                    <div class="col-6 border-end">
+                    <div>
                         <small class="text-muted d-block">Year</small>
                         <strong>@(Model.Manga.Year?.ToString() ?? "N/A")</strong>
-                    </div>
-                    <div class="col-6">
-                        <small class="text-muted d-block">Lang</small>
-                        <strong>@Model.Manga.OriginalLanguage?.ToUpper()</strong>
                     </div>
                 </div>
             </div>
@@ -44,7 +51,7 @@
                     @string.Join(", ", Model.Manga.Authors)
                     @if (Model.Manga.Artists?.Any() == true)
                     {
-                        <span class="text-muted fs-6"> (Art by @string.Join(", ", Model.Manga.Artists))</span>
+                        <span class="text-muted fs-6"> (@I18n.ArtBy @string.Join(", ", Model.Manga.Artists))</span>
                     }
                 </p>
             </div>
@@ -54,7 +61,7 @@
 
                 @if (!Model.Manga.IsFamilySafe)
                 {
-                    <span class="badge bg-danger">18+ Content</span>
+                    <span class="badge bg-danger">@I18n.Content: 18+ </span>
                 }
             </div>
             
@@ -62,7 +69,7 @@
 
         @if (Model.Manga.AlternativeTitles?.Any() == true)
         {
-            <p class="text-muted small italic">Also known as: @string.Join(" • ", Model.Manga.AlternativeTitles.Values)</p>
+            <p class="text-muted small italic">@I18n.AlsoKnownAs: @string.Join(" • ", Model.Manga.AlternativeTitles.Values)</p>
         }
 
         <div class="mb-3 card-tags">
@@ -107,7 +114,7 @@
                     <div class="list-group-item py-3 d-flex justify-content-between align-items-center text-muted">
                         <div>
                             <span>Chapter @ch.Chapter.Number: @ch.Chapter.Title</span>
-                            <small class="ms-2">(Not Downloaded)</small>
+                            <small class="ms-2">(@I18n.NotDownloadedYet)</small>
                         </div>
                         <partial name="_BadgeChapterDownloadStatus" model="@ch" />
                     </div>

@@ -8,7 +8,7 @@
     <div class="col">
         <a asp-area="Reader"
            asp-page="/MangaInfo/Index"
-           asp-route-id="@library.Manga.Id"
+           asp-route-mangaId="@library.Manga.Id"
            class="card h-100 manga-card text-decoration-none shadow-sm">
             <img src="@library.Manga.CoverUrl.ToInternalImageUrl()" class="card-img-top" alt="@library.Manga.Title">
 
@@ -18,11 +18,11 @@
                 <p class="card-text small text-muted mb-2 text-truncate">
                     @if (library.Manga.Authors != null && library.Manga.Authors.Any())
                     {
-                        <span>By @string.Join(", ", library.Manga.Authors)</span>
+                        <span>@I18n.By @string.Join(", ", library.Manga.Authors)</span>
                     }
                     else
                     {
-                        <span>Unknown Author</span>
+                        <span>@I18n.UnknownAuthor</span>
                     }
                 </p>
 
@@ -46,7 +46,7 @@
     </div>
 }
 
-                    <style>
+<style>
     .small-badge {
         font-size: 0.65rem;
         font-weight: 500;
@@ -74,4 +74,4 @@
         border-color: #7253ed !important;
     }
 
-                    </style>
+</style>

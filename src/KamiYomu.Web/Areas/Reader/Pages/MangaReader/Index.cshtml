@@ -1,4 +1,4 @@
-@page "{libraryId:guid}/{chapterId:guid}"
+@page "{libraryId:guid}/chapter/{chapterId:guid}"
 @using KamiYomu.Web.Areas.Reader.Pages.MangaReader
 @model IndexModel
 
@@ -11,7 +11,7 @@
              id="readerSettings"
              data-bs-container="#mainViewer">
             <div class="offcanvas-header border-bottom border-secondary">
-                <h5 class="offcanvas-title">Settings</h5>
+                <h5 class="offcanvas-title">@I18n.Settings</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
             </div>
             <div class="offcanvas-body">

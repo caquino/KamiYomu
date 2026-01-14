@@ -16,11 +16,13 @@ public class IndexModel(DbContext dbContext) : PageModel
     public Guid ChapterId { get; set; }
     public ChapterDownloadRecord ChapterDownloaded { get; set; }
     public List<string> PageUrls { get; set; } = [];
+    public Guid LibraryId { get; private set; }
 
     public void OnGet(Guid libraryId, Guid chapterId)
     {
+        LibraryId = libraryId;
         Library library = dbContext.Libraries.Query()
-            .Where(x => x.Id == libraryId)
+            .Where(x => x.Id == LibraryId)
             .FirstOrDefault();
 
         using LibraryDbContext libDb = library.GetReadOnlyDbContext();
