@@ -5,6 +5,7 @@ using Hangfire;
 using Hangfire.Storage.SQLite;
 
 using KamiYomu.Web.AppOptions;
+using KamiYomu.Web.Areas.Reader.Data;
 using KamiYomu.Web.Endpoints;
 using KamiYomu.Web.Entities;
 using KamiYomu.Web.Filters;
@@ -88,9 +89,12 @@ builder.Services.AddResponseCompression(options =>
 builder.Services.AddSingleton<IUserClockManager, UserClockManager>();
 builder.Services.AddSingleton<ILockManager, LockManager>();
 
-builder.Services.AddScoped(_ => new DbContext(builder.Configuration.GetConnectionString("AgentDb")));
 builder.Services.AddScoped<CacheContext>();
-builder.Services.AddScoped(_ => new ImageDbContext(builder.Configuration.GetConnectionString("ImageDb")));
+builder.Services.AddScoped(_ => new DbContext(builder.Configuration.GetConnectionString("AgentDb"), false));
+builder.Services.AddScoped(_ => new ImageDbContext(builder.Configuration.GetConnectionString("ImageDb"), false));
+builder.Services.AddScoped(_ => new ReadingDbContext(builder.Configuration.GetConnectionString("ReadingDb"), false));
+builder.Services.AddKeyedScoped(ServiceLocator.ReadOnlyDbContext, (sp, _) => new DbContext(builder.Configuration.GetConnectionString("AgentDb"), true));
+builder.Services.AddKeyedScoped(ServiceLocator.ReadOnlyImageDbContext, (sp, _) => new DbContext(builder.Configuration.GetConnectionString("ImageDb"), true));
 
 // Repositories
 builder.Services.AddTransient<ICrawlerAgentRepository, CrawlerAgentRepository>();
