@@ -2546,6 +2546,15 @@ namespace KamiYomu.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to View All History.
+        /// </summary>
+        public static string ViewAllHistory {
+            get {
+                return ResourceManager.GetString("ViewAllHistory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to View Library.
         /// </summary>
         public static string ViewLibrary {

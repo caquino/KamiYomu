@@ -1010,4 +1010,23 @@ voor de &lt;code&gt;WorkerCount&lt;/code&gt;-instelling van Hangfire om te bepal
   <data name="Page" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
   </data>
+  <data name="ViewAllHistory" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="WelcomeToKamiYomuDescription" xml:space="preserve">
+    <value>Een volledig zelfgehoste mangalezer en downloader.
+Geen externe servers. Geen tracking. Uw collectie blijft volledig onder uw controle.</value>
+  </data>
+  <data name="BackToPlatform" xml:space="preserve">
+    <value>Terug naar perron</value>
+  </data>
+  <data name="ReadingHistory" xml:space="preserve">
+    <value>Geschiedenis lezen</value>
+  </data>
+  <data name="Page" xml:space="preserve">
+    <value>Pagina</value>
+  </data>
+  <data name="ViewAllHistory" xml:space="preserve">
+    <value>Bekijk alle geschiedenis</value>
+  </data>
 </root>
