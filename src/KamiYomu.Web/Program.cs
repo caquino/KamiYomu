@@ -6,6 +6,8 @@ using Hangfire.Storage.SQLite;
 
 using KamiYomu.Web.AppOptions;
 using KamiYomu.Web.Areas.Reader.Data;
+using KamiYomu.Web.Areas.Reader.Repositories;
+using KamiYomu.Web.Areas.Reader.Repositories.Interfaces;
 using KamiYomu.Web.Endpoints;
 using KamiYomu.Web.Entities;
 using KamiYomu.Web.Filters;
@@ -101,6 +103,9 @@ builder.Services.AddKeyedScoped(ServiceLocator.ReadOnlyReadingDbContext, (sp, _)
 // Repositories
 builder.Services.AddTransient<ICrawlerAgentRepository, CrawlerAgentRepository>();
 builder.Services.AddTransient<IHangfireRepository, HangfireRepository>();
+
+builder.Services.AddTransient<IChapterProgressRepository, ChapterProgressRepository>();
+
 
 // Worker jobs
 builder.Services.AddTransient<IChapterDiscoveryJob, ChapterDiscoveryJob>();

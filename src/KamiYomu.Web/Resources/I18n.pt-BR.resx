@@ -1010,4 +1010,23 @@ para a configuração &lt;code&gt;WorkerCount&lt;/code&gt; do Hangfire para cont
   <data name="Page" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
   </data>
+  <data name="ViewAllHistory" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="WelcomeToKamiYomuDescription" xml:space="preserve">
+    <value>Um leitor e downloader de mangá totalmente auto-hospedado.
+Nenhum servidor externo. Sem rastreamento. Sua coleção permanece inteiramente sob seu controle.</value>
+  </data>
+  <data name="BackToPlatform" xml:space="preserve">
+    <value>De volta à plataforma</value>
+  </data>
+  <data name="ReadingHistory" xml:space="preserve">
+    <value>História de leitura</value>
+  </data>
+  <data name="Page" xml:space="preserve">
+    <value>Página</value>
+  </data>
+  <data name="ViewAllHistory" xml:space="preserve">
+    <value>Ver todo o histórico</value>
+  </data>
 </root>
