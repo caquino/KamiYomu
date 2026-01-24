@@ -30,3 +30,14 @@
     @(I18n.ResourceManager.GetString(Model.DownloadStatus.ToString())
         ?? Model.DownloadStatus.ToString())
 </span>
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+        popoverTriggerList.forEach(function (el) {
+            new bootstrap.Popover(el);
+        });
+    });
+</script>

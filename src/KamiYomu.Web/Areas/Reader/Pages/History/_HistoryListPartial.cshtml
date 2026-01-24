@@ -12,7 +12,7 @@
 @foreach (var dateGroup in Model.GroupedHistory)
 {
     <div class="date-label small fw-bold text-muted mb-2 mt-4 text-uppercase">
-        @dateGroup.Key.ToString("MMMM dd, yyyy")
+        @dateGroup.Key.ToLongDateString()
     </div>
 
     @foreach (var entry in dateGroup)
