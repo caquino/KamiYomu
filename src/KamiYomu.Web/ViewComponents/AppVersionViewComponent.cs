@@ -25,7 +25,18 @@ public class AppVersionViewComponent(IGitHubService gitHubService) : ViewCompone
         string? description = assembly.GetCustomAttribute<AssemblyDescriptionAttribute>()?.Description;
         bool updateAvailable = await gitHubService.CheckForUpdatesAsync(version, cancellationToken);
         string updateVersionAvailable = await gitHubService.GetLatestVersionAsync(cancellationToken);
-        return View(new AppVersionViewComponentModel(name, fullVersion, coreInformationalVersion, version, company, product, copyright, description, updateAvailable, updateVersionAvailable));
+
+        return View(new AppVersionViewComponentModel(
+            name,
+            fullVersion,
+            coreInformationalVersion,
+            version,
+            company,
+            product,
+            copyright,
+            description,
+            updateAvailable,
+            updateVersionAvailable));
     }
 }
 
