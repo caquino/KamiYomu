@@ -79,7 +79,5 @@ public class FamilySafeViewComponentTests
         UserPreference pref = new(CultureInfo.CurrentCulture);
         pref.SetFamilySafeMode(familySafe);
         _ = _realContext.UserPreferences.Insert(pref);
-
-        var result = _realContext.UserPreferences.FindAll().ToList();
     }
 }

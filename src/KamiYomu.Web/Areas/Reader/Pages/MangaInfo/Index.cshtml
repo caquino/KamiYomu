@@ -2,18 +2,8 @@
 @using KamiYomu.Web.Areas.Reader.Pages.MangaInfo
 @using KamiYomu.Web.Extensions
 @model IndexModel
-@{
-}
-<header class="reader-header p-2 border-bottom border-secondary d-flex justify-content-between align-items-center">
-    <div class="d-flex align-items-center gap-2">
-        <a asp-area="Reader"
-           asp-page="/MangaGallery/Index"
-           class="btn btn-sm btn-outline-secondary border-0">
-            <i class="bi bi-chevron-left"></i>
-        </a>
-    </div>
-</header>
 
+<vc:reader-header return-url="@Url.Page("MangaGallery/Index", new { area = "Reader" })"></vc:reader-header>
 
 <div class="row mt-4">
     <div class="col-lg-3 col-md-4 mb-4">
