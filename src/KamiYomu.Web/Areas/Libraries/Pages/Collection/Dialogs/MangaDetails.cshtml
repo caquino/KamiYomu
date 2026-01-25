@@ -1,4 +1,4 @@
-﻿@page
+@page
 @using KamiYomu.Web.Areas.Libraries.Pages.Collection.Dialogs
 @using KamiYomu.Web.Extensions
 @model MangaDetailsModel
@@ -10,7 +10,7 @@
     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
 <div class="modal-body">
-    <partial name="_MangaInfo" model="Model.Manga" />
+    <vc:manga-info manga="@Model.Manga" />
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@I18n.Close</button>

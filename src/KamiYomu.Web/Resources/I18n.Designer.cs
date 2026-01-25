@@ -682,6 +682,15 @@ namespace KamiYomu.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Date and Time.
+        /// </summary>
+        public static string DateAndTime {
+            get {
+                return ResourceManager.GetString("DateAndTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete.
         /// </summary>
         public static string Delete {
@@ -2015,6 +2024,15 @@ namespace KamiYomu.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Scroll To Top.
+        /// </summary>
+        public static string ScrollToTop {
+            get {
+                return ResourceManager.GetString("ScrollToTop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Search.
         /// </summary>
         public static string Search {
@@ -2452,6 +2470,15 @@ namespace KamiYomu.Web.Resources {
         public static string ToggleTheme {
             get {
                 return ResourceManager.GetString("ToggleTheme", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Top.
+        /// </summary>
+        public static string Top {
+            get {
+                return ResourceManager.GetString("Top", resourceCulture);
             }
         }
         

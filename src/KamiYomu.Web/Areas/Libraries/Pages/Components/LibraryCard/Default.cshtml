@@ -1,36 +1,27 @@
-﻿@using KamiYomu.Web.Entities
-@using KamiYomu.Web.Entities.Definitions
+@using KamiYomu.Web.Areas.Libraries.ViewComponents
 @using KamiYomu.Web.Extensions
-@model KamiYomu.Web.Entities.Library
+@model LibraryCardViewComponentModel
 
-@{
-    Layout = null;
-    using var crawlerInstance = Model.CrawlerAgent.GetCrawlerInstance();
-    var faviconUrl = await crawlerInstance.GetFaviconAsync(CancellationToken.None);
-    var isNew = Model.Id == Guid.Empty;
-    var cardId = $"library-card-{Model.Manga.Id}".Replace(".", "-");
-}
-
-<div class="col" id="@cardId">
+<div class="col" id="@Model.CardId">
     <div class="card h-100 bg-light-subtle">
-        <img src="@Model.Manga.CoverUrl.ToInternalImageUrl()" class="card-img-top" alt="@Model.Manga.Title" style="object-fit: cover; height: 300px;">
+        <img src="@Model.Library.Manga.CoverUrl.ToInternalImageUrl()" class="card-img-top" alt="@Model.Library.Manga.Title" style="object-fit: cover; height: 300px;">
         <div class="card-body d-flex flex-column">
-            <h5 class="card-title fw-bold">@Model.Manga.Title</h5>
+            <h5 class="card-title fw-bold">@Model.Library.Manga.Title</h5>
 
             <div class="mb-3">
                 <span class="fw-semibold">@I18n.Status:</span>
-                <span class="ms-1 text-muted">@Model.Manga.ReleaseStatus</span>
+                <span class="ms-1 text-muted">@Model.Library.Manga.ReleaseStatus</span>
             </div>
 
             <div class="mb-3 d-flex align-items-center">
                 <span class="fw-semibold me-2">@I18n.CrawlerAgent:</span>
-                <img src="@faviconUrl.ToInternalImageUrl()" width="20" class="me-2" alt="favicon" />
-                <span class="text-muted">@Model.CrawlerAgent.DisplayName</span>
+                <img src="@Model.FaviconUrl.ToInternalImageUrl()" width="20" class="me-2" alt="favicon" />
+                <span class="text-muted">@Model.Library.CrawlerAgent.DisplayName</span>
             </div>
 
-            @if (!isNew)
+            @if (!Model.IsNew)
             {
-                <partial name="_DownloadProgress" model="Model" />
+                <vc:download-progress library="@Model.Library" />
             }
 
 
@@ -45,7 +36,7 @@
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li>
                             <button class="dropdown-item"
-                                    hx-get="/Libraries/Collection/Dialogs/MangaDetails?crawlerAgentId=@Model.CrawlerAgent.Id&mangaId=@Model.Manga.Id"
+                                    hx-get="@Model.MangaDetailsUrl"
                                     hx-target="#modal-body"
                                     hx-swap="innerHTML"
                                     data-bs-toggle="modal"
@@ -53,11 +44,11 @@
                                 <i class="bi bi-info-circle me-2"></i> @I18n.Details
                             </button>
                         </li>
-                        @if (isNew)
+                        @if (Model.IsNew)
                         {
                             <li>
                                 <button class="dropdown-item bg-success text-light"
-                                        hx-get="/Libraries/Collection/Dialogs/AddToCollection?CrawlerAgentId=@Model.CrawlerAgent.Id&MangaId=@Model.Manga.Id&RefreshElementId=@cardId"
+                                        hx-get="@Model.AddToCollectionUrl"
                                         hx-target="#modal-body"
                                         hx-swap="innerHTML"
                                         data-bs-toggle="modal"
@@ -70,7 +61,7 @@
                         {
                             <li>
                                 <button class="dropdown-item"
-                                        hx-get="/Libraries/Collection/Dialogs/DownloadStatus?libraryId=@Model.Id"
+                                        hx-get="@Model.DownloadStatusUrl"
                                         hx-target="#modal-body"
                                         hx-swap="innerHTML"
                                         data-bs-toggle="modal"
@@ -80,7 +71,7 @@
                             </li>
                             <li>
                                 <button class="dropdown-item bg-danger text-light"
-                                        hx-get="/Libraries/Collection/Dialogs/RemoveFromCollection?LibraryId=@Model.Id&RefreshElementId=@cardId"
+                                        hx-get="@Model.RemoveFromCollectionUrl"
                                         hx-target="#modal-body"
                                         hx-swap="innerHTML"
                                         data-bs-toggle="modal"

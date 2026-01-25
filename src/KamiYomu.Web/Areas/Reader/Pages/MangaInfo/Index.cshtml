@@ -46,7 +46,7 @@
                 </p>
             </div>
             <div class="d-inline-block">
-                <vc:badge-manga-download-status manga-download-record="Model.MangaDownloadRecord"></vc:badge-manga-download-status>
+                <vc:badge-manga-download-status manga-download-record="Model.MangaDownloadRecord"/>
                 @if (!Model.Manga.IsFamilySafe)
                 {
                     <span class="badge bg-danger">@I18n.Content: 18+ </span>
@@ -142,7 +142,7 @@
                             <span class="fw-bold">Chapter @ch.Chapter.Number</span>
                             <span class="ms-2 text-secondary">@ch.Chapter.Title</span>
                         </div>
-                        <vc:badge-chapter-download-status chapter-download-record="@ch"></vc:badge-chapter-download-status>
+                        <vc:badge-chapter-download-status chapter-download-record="@ch" />
                     </a>
                 }
                 else
@@ -152,7 +152,7 @@
                             <span>Chapter @ch.Chapter.Number: @ch.Chapter.Title</span>
                             <small class="ms-2">(@I18n.NotDownloadedYet)</small>
                         </div>
-                        <vc:badge-chapter-download-status chapter-download-record="@ch"></vc:badge-chapter-download-status>
+                        <vc:badge-chapter-download-status chapter-download-record="@ch" />
                     </div>
                 }
             }
