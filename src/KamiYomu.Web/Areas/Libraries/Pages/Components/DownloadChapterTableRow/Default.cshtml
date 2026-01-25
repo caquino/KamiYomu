@@ -1,0 +1,110 @@
+@using KamiYomu.Web.Areas.Libraries.ViewComponents
+@using KamiYomu.Web.Entities
+@using KamiYomu.Web.Extensions
+@using System.Text
+@using KamiYomu.Web.Infrastructure.Services.Interfaces
+@model DownloadChapterTableRowViewComponentModel
+
+<tr id="@Model.RowId">
+    <td>
+        <div class="fw-semibold">
+            @Model.ChapterDownloadRecord.MangaDownload.Library.GetCbzFileName(Model.ChapterDownloadRecord.Chapter)
+        </div>
+
+        <div class="text-muted small mt-1">
+            <code>
+                @Html.Raw($"{Model.ChapterDownloadRecord.MangaDownload.Library.GetFilePathTemplateResolved(Model.ChapterDownloadRecord.Chapter)}.cbz")
+            </code>
+        </div>
+    </td>
+
+    <td>@Model.ChapterDownloadRecord.MangaDownload.Library.GetCbzFileSize(Model.ChapterDownloadRecord.Chapter)</td>
+    <td>
+        <vc:badge-chapter-download-status chapter-download-record="@Model.ChapterDownloadRecord" />
+    </td>@I18n.ChapterDownloaded
+    <td>@Model.StatusUpdateAt</td>
+    <td class="text-end">
+        <div class="btn-group">
+            <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-gear"></i> @I18n.Actions
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end text-end">
+                <!-- Reschedule -->
+                <li>
+                    <button type="button"
+                            class="dropdown-item d-flex align-items-center gap-2"
+                            hx-post="@Model.RescheduleUrl"
+                            hx-target="#@Model.RowId"
+                            hx-swap="outerHTML"
+                            @(Model.ChapterDownloadRecord.IsReschedulable() ? "" : "disabled")>
+                        <i class="bi bi-arrow-repeat"></i>
+                        @I18n.Reschedule
+                    </button>
+                </li>
+
+                <!-- Download -->
+                <!-- Download .Cbz -->
+                <li>
+                    <a class="dropdown-item d-flex align-items-center gap-2 @(Model.ChapterDownloadRecord.IsCompleted() ? "" : "disabled")"
+                       href="@Model.DownloadCbzUrl"
+                       target="_blank"
+                       aria-disabled="@(Model.ChapterDownloadRecord.IsCompleted() ? "false" : "true" )">
+                        <i class="bi bi-download"></i> @I18n.Download .Cbz <i class="bi bi-file-earmark-zip-fill"></i>
+                    </a>
+                </li>
+
+                <!-- Download .Zip -->
+                <li>
+                    <a class="dropdown-item d-flex align-items-center gap-2 @(Model.ChapterDownloadRecord.IsCompleted() ? "" : "disabled")"
+                       href="@Model.DownloadZipUrl"
+                       target="_blank"
+                       aria-disabled="@(Model.ChapterDownloadRecord.IsCompleted() ? "false" : "true")">
+                        <i class="bi bi-download"></i> @I18n.Download .Zip <i class="bi bi-file-zip-fill"></i>
+                    </a>
+                </li>
+
+                <!-- Download .Pdf -->
+                <li>
+                    <a class="dropdown-item d-flex align-items-center gap-2 @(Model.ChapterDownloadRecord.IsCompleted() ? "" : "disabled")"
+                       href="@Model.DownloadPdfUrl"
+                       target="_blank"
+                       aria-disabled="@(Model.ChapterDownloadRecord.IsCompleted() ? "false" : "true" )">
+                        <i class="bi bi-download"></i> @I18n.Download .Pdf <i class="bi bi-file-pdf-fill"></i>
+                    </a>
+                </li>
+
+                <li>
+                    <a class="dropdown-item d-flex align-items-center gap-2 @(Model.ChapterDownloadRecord.IsCompleted() ? "" : "disabled")"
+                       href="@Model.BuiltInReaderUrl"
+                       target="_blank"
+                       aria-disabled="@(Model.ChapterDownloadRecord.IsCompleted() ? "false" : "true")">
+                        <i class="bi bi-link-45deg"></i> @I18n.MangaReader <i class="bi bi-box-arrow-up-right"></i>
+                    </a>
+                </li>
+
+                <li>
+                    <a class="dropdown-item d-flex align-items-center gap-2"
+                       href="@Model.ChapterDownloadRecord.Chapter.Uri"
+                       target="_blank"
+                       aria-disabled="false">
+                        <i class="bi bi-link-45deg"></i> @I18n.ReadItOnline <i class="bi bi-box-arrow-up-right"></i>
+                    </a>
+                </li>
+
+                <!-- Cancel -->
+                <li>
+                    <button type="button"
+                            class="dropdown-item d-flex align-items-center gap-2"
+                            hx-post='@Model.CancelUrl'
+                            hx-target="#@Model.RowId"
+                            hx-swap="outerHTML"
+                            @(Model.ChapterDownloadRecord.IsInProgress() ? "" : "disabled")>
+                        <i class="bi bi-x-circle"></i>
+                        @I18n.Cancel
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </td>
+</tr>
