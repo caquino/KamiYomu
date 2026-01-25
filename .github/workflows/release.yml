@@ -221,7 +221,7 @@ jobs:
   release:
     name: Create GitHub Release
     runs-on: ubuntu-latest
-    needs: [build_platforms, build_docker]
+    needs: [build_platforms, publish_docker]
 
     steps:
       - name: Checkout code
