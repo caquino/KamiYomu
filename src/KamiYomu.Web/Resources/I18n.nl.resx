@@ -1035,4 +1035,16 @@ voor de &lt;code&gt;WorkerCount&lt;/code&gt;-instelling van Hangfire om te bepal
   <data name="YouHaveReachedTheEndOfTheChapter" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
   </data>
+  <data name="About" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="EndOfChapter" xml:space="preserve">
+    <value>Einde van hoofdstuk</value>
+  </data>
+  <data name="YouHaveReachedTheEndOfTheChapter" xml:space="preserve">
+    <value>Je hebt het einde van het hoofdstuk bereikt.</value>
+  </data>
+  <data name="About" xml:space="preserve">
+    <value>Over</value>
+  </data>
 </root>

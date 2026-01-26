@@ -21,11 +21,12 @@ public class DownloadProgressViewComponent : ViewComponent
         decimal total = downloadChapters.Count;
         decimal progress = total > 0 ? completed / total * 100 : 0;
 
-        return View(new DownloadProgressViewComponentModel(progress, total, completed));
+        return View(new DownloadProgressViewComponentModel(progress, total, completed, downloadManga));
     }
 }
 
 public record DownloadProgressViewComponentModel(
     decimal Progress,
     decimal Total,
-    decimal Completed);
+    decimal Completed,
+    MangaDownloadRecord DownloadManga);

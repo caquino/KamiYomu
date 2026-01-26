@@ -1035,4 +1035,16 @@ pour le paramètre &lt;code&gt;WorkerCount&lt;/code&gt; de Hangfire pour contrô
   <data name="YouHaveReachedTheEndOfTheChapter" type="System.Resources.ResXNullRef, System.Windows.Forms">
     <value />
   </data>
+  <data name="About" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="EndOfChapter" xml:space="preserve">
+    <value>Fin du chapitre</value>
+  </data>
+  <data name="YouHaveReachedTheEndOfTheChapter" xml:space="preserve">
+    <value>Vous avez atteint la fin du chapitre.</value>
+  </data>
+  <data name="About" xml:space="preserve">
+    <value>À propos</value>
+  </data>
 </root>
