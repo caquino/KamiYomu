@@ -221,7 +221,7 @@ public class DownloadChapterTableModel(DbContext dbContext,
         record.Scheduled(jobId);
         _ = db.ChapterDownloadRecords.Update(record);
         await notificationService.PushSuccessAsync($"{I18n.DownloadChapterSchedule}: {record.MangaDownload.Library.GetCbzFileName(record.Chapter)}", cancellationToken);
-        return Partial("_DownloadChapterTableRow", record);
+        return ViewComponent("DownloadChapterTableRow", record);
     }
 
     public async Task<IActionResult> OnPostCancelAsync(Guid libraryId, Guid recordId, CancellationToken cancellationToken)
@@ -245,6 +245,6 @@ public class DownloadChapterTableModel(DbContext dbContext,
         _ = db.ChapterDownloadRecords.Update(record);
         await notificationService.PushSuccessAsync($"{I18n.DownloadChapterHasBeenCancelled}: {library.GetCbzFileName(record.Chapter)}", cancellationToken);
 
-        return Partial("_DownloadChapterTableRow", record);
+        return ViewComponent("DownloadChapterTableRow", record);
     }
 }

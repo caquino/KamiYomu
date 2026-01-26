@@ -1019,4 +1019,22 @@ for Hangfire's &lt;code&gt;WorkerCount&lt;/code&gt; setting to control how many 
   <data name="Loading" xml:space="preserve">
     <value>Loading</value>
   </data>
+  <data name="Top" xml:space="preserve">
+    <value>Top</value>
+  </data>
+  <data name="ScrollToTop" xml:space="preserve">
+    <value>Scroll To Top</value>
+  </data>
+  <data name="DateAndTime" xml:space="preserve">
+    <value>Date and Time</value>
+  </data>
+  <data name="EndOfChapter" xml:space="preserve">
+    <value>End of Chapter</value>
+  </data>
+  <data name="YouHaveReachedTheEndOfTheChapter" xml:space="preserve">
+    <value>You've reached the end of the chapter.</value>
+  </data>
+  <data name="About" xml:space="preserve">
+    <value>About</value>
+  </data>
 </root>

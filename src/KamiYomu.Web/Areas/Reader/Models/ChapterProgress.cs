@@ -23,7 +23,7 @@ public class ChapterProgress
 
     public void SetAsCompleted(int totalPages)
     {
-        LastPageRead = 0;
+        LastPageRead = totalPages;
         TotalPages = totalPages;
         IsCompleted = true;
         LastReadAt = DateTimeOffset.UtcNow;

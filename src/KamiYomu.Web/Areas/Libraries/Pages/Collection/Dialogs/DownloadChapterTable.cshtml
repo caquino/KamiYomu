@@ -1,4 +1,4 @@
-﻿@page
+@page
 @using KamiYomu.Web.Entities
 @using KamiYomu.Web.Extensions
 @model KamiYomu.Web.Areas.Libraries.Pages.Collection.Dialogs.DownloadChapterTableModel
@@ -49,13 +49,13 @@
                         }
                     </a>
                 </th>
-                  <th scope="col"></th>
+                <th scope="col"></th>
             </tr>
         </thead>
         <tbody>
             @foreach (var record in Model.Records)
             {
-                <partial name="_DownloadChapterTableRow" model="record" />
+                <vc:download-chapter-table-row chapter-download-record="@record" />
             }
         </tbody>
     </table>

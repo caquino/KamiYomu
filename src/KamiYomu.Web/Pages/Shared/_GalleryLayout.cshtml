@@ -91,7 +91,7 @@
             </div>
 
             <div class="d-flex align-items-center gap-2">
-                <vc:family-safe has-mobile-mode="true"></vc:family-safe>
+                <vc:family-safe has-mobile-mode="true" />
                 <a href="@Url.Page("/Index")" class="btn btn-primary btn-sm rounded-pill px-3">
                     <span class="d-none d-sm-inline">@I18n.BackToPlatform</span>
                     <i class="bi bi-box-arrow-right ms-1"></i>
@@ -167,6 +167,13 @@
             popoverTriggerList.forEach(function (el) {
                 new bootstrap.Popover(el);
             });
+        });
+
+        document.body.addEventListener("htmx:configRequest", function (event) {
+            const token = document.querySelector('meta[name="csrf-token"]')?.content;
+            if (token) {
+                event.detail.headers['RequestVerificationToken'] = token;
+            }
         });
     </script>
 </body>

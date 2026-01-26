@@ -52,25 +52,10 @@
                 </div>
 
                 <div class="d-flex align-items-center gap-3 mb-3">
-
-                    <partial name="_FollowButton" model="Model.FollowButtonViewModel" />
-                    <div>
-                        <label class="form-label fw-semibold mb-0 me-2">
-                            @I18n.ChapterSearchStatus:
-                        </label>
-                        <span class="badge @badgeClass"
-                              title="@lastUpdateBuilder.ToString()"
-                              data-bs-toggle="popover"
-                              data-bs-trigger="hover focus"
-                              data-bs-placement="top"
-                              data-bs-content="@lastUpdateBuilder.ToString()">
-                            @(I18n.ResourceManager.GetString(Model.Record.DownloadStatus.ToString())
-                                                        ?? Model.Record.DownloadStatus.ToString())
-                        </span>
-                    </div>
+                    <vc:follow-button view-model="@Model.FollowButtonViewModel" />
                 </div>
                 <div class="mb-1 row align-items-center">
-                    <partial name="_DownloadProgress" model="Model.Library"/>
+                    <vc:download-progress library="@Model.Library"/>
                 </div>
 
                 <div class="mb-1 row">

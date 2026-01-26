@@ -32,7 +32,7 @@ public class SearchResultsModel([FromKeyedServices(ServiceLocator.ReadOnlyDbCont
             return new EmptyResult();
         }
 
-        Entities.UserPreference userPreference = dbContext.UserPreferences.FindOne(p => true);
+        Entities.UserPreference userPreference = dbContext.UserPreferences.Query().FirstOrDefault();
         PaginationOptions paginationOptions = !string.IsNullOrWhiteSpace(continuationToken) ? new PaginationOptions(continuationToken) : new PaginationOptions(offset, 30);
         PagedResult<Manga> queryResult = await agentCrawlerRepository.SearchAsync(crawlerAgent.Id, query, paginationOptions, cancellationToken);
         Results = queryResult.Data.Where(p => p.IsFamilySafe || p.IsFamilySafe == userPreference.FamilySafeMode).Select(p => new Entities.Library(crawlerAgent, p, null, null, null));
@@ -51,7 +51,7 @@ public class SearchResultsModel([FromKeyedServices(ServiceLocator.ReadOnlyDbCont
         int offset = 0,
         int limit = 30)
     {
-        Entities.UserPreference userPreference = dbContext.UserPreferences.FindOne(p => true);
+        Entities.UserPreference userPreference = dbContext.UserPreferences.Query().FirstOrDefault();
         Results = [.. dbContext.Libraries.Include(p => p.CrawlerAgent)
                                          .Find(p => (query == string.Empty || p.Manga.Title.Contains(query))
                                            && (p.Manga.IsFamilySafe || p.Manga.IsFamilySafe == userPreference.FamilySafeMode))
