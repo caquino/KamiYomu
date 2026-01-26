@@ -853,6 +853,15 @@ namespace KamiYomu.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to End of Chapter.
+        /// </summary>
+        public static string EndOfChapter {
+            get {
+                return ResourceManager.GetString("EndOfChapter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enjoy.
         /// </summary>
         public static string Enjoy {
@@ -2741,6 +2750,15 @@ namespace KamiYomu.Web.Resources {
         public static string YouAreNoLongerFollowingThisTitle {
             get {
                 return ResourceManager.GetString("YouAreNoLongerFollowingThisTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You&apos;ve reached the end of the chapter..
+        /// </summary>
+        public static string YouHaveReachedTheEndOfTheChapter {
+            get {
+                return ResourceManager.GetString("YouHaveReachedTheEndOfTheChapter", resourceCulture);
             }
         }
         

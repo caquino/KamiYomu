@@ -1028,4 +1028,10 @@ for Hangfire's &lt;code&gt;WorkerCount&lt;/code&gt; setting to control how many 
   <data name="DateAndTime" xml:space="preserve">
     <value>Date and Time</value>
   </data>
+  <data name="EndOfChapter" xml:space="preserve">
+    <value>End of Chapter</value>
+  </data>
+  <data name="YouHaveReachedTheEndOfTheChapter" xml:space="preserve">
+    <value>You've reached the end of the chapter.</value>
+  </data>
 </root>

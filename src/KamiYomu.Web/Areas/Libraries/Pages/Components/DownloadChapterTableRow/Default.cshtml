@@ -21,7 +21,7 @@
     <td>@Model.ChapterDownloadRecord.MangaDownload.Library.GetCbzFileSize(Model.ChapterDownloadRecord.Chapter)</td>
     <td>
         <vc:badge-chapter-download-status chapter-download-record="@Model.ChapterDownloadRecord" />
-    </td>@I18n.ChapterDownloaded
+    </td>
     <td>@Model.StatusUpdateAt</td>
     <td class="text-end">
         <div class="btn-group">
@@ -29,7 +29,7 @@
                     data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="bi bi-gear"></i> @I18n.Actions
             </button>
-            <ul class="dropdown-menu dropdown-menu-end text-end">
+            <ul class="dropdown-menu dropdown-menu-end text-end z-3">
                 <!-- Reschedule -->
                 <li>
                     <button type="button"

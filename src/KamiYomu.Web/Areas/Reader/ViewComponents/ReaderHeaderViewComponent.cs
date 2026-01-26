@@ -6,7 +6,7 @@ public class ReaderHeaderViewComponent : ViewComponent
 {
     public IViewComponentResult Invoke(string returnUrl)
     {
-        returnUrl = string.IsNullOrWhiteSpace(returnUrl) ? HttpContext.Request.Query["returnUrl"].ToString() : "";
+        returnUrl = string.IsNullOrWhiteSpace(returnUrl) ? HttpContext.Request.Query["returnUrl"].ToString() : returnUrl;
 
         return View(new ReaderHeaderComponentModel(returnUrl));
     }

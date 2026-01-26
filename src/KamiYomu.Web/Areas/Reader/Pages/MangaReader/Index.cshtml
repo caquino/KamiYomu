@@ -48,6 +48,50 @@
                          alt="Page @(i + 1)" />
                 </div>
             }
+
+
+            <div id="end-of-chapter-card" 
+                 class="manga-page-wrapper d-flex align-items-center justify-content-center"
+                 style="min-height: 100vh; background-color: #1a1a1a;"
+                 hx-post="@Url.Page("/MangaReader/Index", "PageViewed", new { Area = "Reader", ChapterId = Model.ChapterId, IsLastPage = true, PageNumber = Model.TotalPages })"
+                 hx-trigger="page-passed"
+                 hx-swap="none">
+        
+                <div class="text-center p-5 border border-secondary rounded bg-dark text-white shadow-lg mx-3" style="max-width: 500px;">
+                    <i class="bi bi-check2-circle display-1 text-success mb-3"></i>
+                    <h2 class="fw-bold text-uppercase">@I18n.EndOfChapter</h2>
+                    <p class="text-secondary mb-4">@I18n.YouHaveReachedTheEndOfTheChapter</p>
+            
+                    <div class="d-grid gap-2">
+                         @if (Model.NextChapterId != null)
+                        {
+                            <a asp-area="Reader"
+                               asp-page="/MangaReader/Index"
+                               asp-route-chapterId="@Model.NextChapterId"
+                               asp-route-libraryId="@Model.LibraryId" 
+                               class="btn btn-outline-light">
+                                 @I18n.NextChapter 
+                                 <i class="bi bi-chevron-right ms-2"></i>
+                            </a>
+                        }
+                        else
+                        {
+                            <button class="btn btn-outline-light"
+                                    disabled
+                                    aria-disabled="true">
+                                    @I18n.NextChapter 
+                                 <i class="bi bi-chevron-right ms-2"></i>
+                            </button>
+                        }
+                        
+                        <a asp-area="Reader"
+                           asp-page="/MangaGallery/Index" class="btn btn-outline-light">
+                            <i class="bi bi-grid-3x3-gap me-2"></i> Back to Library
+                        </a>
+                        
+                    </div>
+                </div>
+            </div>
         </div>
 
         <partial name="Partials/_ReaderFooter" model="Model" />
