@@ -1034,4 +1034,7 @@ for Hangfire's &lt;code&gt;WorkerCount&lt;/code&gt; setting to control how many 
   <data name="YouHaveReachedTheEndOfTheChapter" xml:space="preserve">
     <value>You've reached the end of the chapter.</value>
   </data>
+  <data name="About" xml:space="preserve">
+    <value>About</value>
+  </data>
 </root>
