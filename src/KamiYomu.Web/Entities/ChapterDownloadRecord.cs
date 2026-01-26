@@ -1,4 +1,6 @@
-﻿using KamiYomu.CrawlerAgents.Core.Catalog;
+using System.Reflection;
+
+using KamiYomu.CrawlerAgents.Core.Catalog;
 using KamiYomu.Web.Entities.Definitions;
 
 namespace KamiYomu.Web.Entities;
@@ -66,6 +68,11 @@ public class ChapterDownloadRecord
     public bool IsCancelled()
     {
         return DownloadStatus == DownloadStatus.Cancelled;
+    }
+
+    public bool IsReschedulable()
+    {
+        return IsCompleted() || IsCancelled();
     }
 
     public bool IsCompleted()

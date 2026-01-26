@@ -9,14 +9,14 @@ let startX, startY, scrollLeft, scrollTop;
 // add "page-passed" event
 (function () {
     const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
+        entries.forEach((entry, index) => {
             const el = entry.target;
 
             // Fire only once
             if (el.dataset.fired === "true") return;
 
             // Element is ABOVE viewport (user scrolled past it)
-            if (!entry.isIntersecting && entry.boundingClientRect.top < 0) {
+            if ((!entry.isIntersecting && entry.boundingClientRect.top < 0)) {
                 el.dataset.fired = "true";
                 htmx.trigger(el, "page-passed");
             }

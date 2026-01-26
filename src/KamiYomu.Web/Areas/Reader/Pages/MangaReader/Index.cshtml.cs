@@ -70,7 +70,8 @@ public class IndexModel(
                                                                p.ChapterId == chapterId)
                                                    .FirstOrDefault();
 
-        LastReadPage = progress?.LastPageRead ?? 0;
+        bool isFinished = progress?.IsCompleted == true;
+        LastReadPage = isFinished ? 0 : progress?.LastPageRead ?? 0;
 
         ChapterDownloadRecord previous = libDb.ChapterDownloadRecords.Query()
                                                         .Where(p => p.Chapter.Number == ChapterDownloaded.Chapter.Number - 1)

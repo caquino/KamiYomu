@@ -1,4 +1,4 @@
-﻿@page
+@page
 @using KamiYomu.Web.Areas.Libraries.Pages.Collection.Dialogs
 @using KamiYomu.Web.Extensions
 @model RemoveFromCollectionModel
@@ -21,7 +21,7 @@
     </fieldset>
 
     <fieldset class="mt-4 border rounded p-3">
-        <partial name="_MangaInfo" model="Model.Library.Manga" />
+        <vc:manga-info manga="@Model.Library.Manga" />
     </fieldset>
 </div>
 <div class="modal-footer">

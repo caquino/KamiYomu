@@ -2,6 +2,7 @@
 @using Microsoft.AspNetCore.Localization
 @using KamiYomu.Web.Infrastructure.Services.Interfaces
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
 
 @{
     var culture = HttpContextAccessor.HttpContext?.Features.Get<IRequestCultureFeature>()?.RequestCulture.Culture;
@@ -17,6 +18,7 @@
     <meta name="description" content="" />
     <meta name="author" content="KamiYomu" />
     <meta name="theme-color" content="#712cf9" />
+    <meta name="csrf-token" content="@Antiforgery.GetAndStoreTokens(HttpContextAccessor.HttpContext).RequestToken" />
     <title>KamiYomu - @(string.IsNullOrEmpty(ViewData["Title"]?.ToString()) ? "Manga Crawler Platform" : ViewData["Title"])</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -86,10 +88,10 @@
             </div>
             <main class="col-md-9 ms-sm-auto col-lg-10 flex-grow-1 h-100">
                 @RenderBody()
-                <vc:app-version></vc:app-version>
-                <vc:time-zone-check></vc:time-zone-check>
-                <vc:dialogs></vc:dialogs>
-                <vc:loading></vc:loading>
+                <vc:app-version />
+                <vc:time-zone-check />
+                <vc:dialogs />
+                <vc:loading />
             </main>
 
         </div>
@@ -106,6 +108,13 @@
             popoverTriggerList.forEach(function (el) {
                 new bootstrap.Popover(el);
             });
+        });
+
+        document.body.addEventListener("htmx:configRequest", function (event) {
+            const token = document.querySelector('meta[name="csrf-token"]')?.content;
+            if (token) {
+                event.detail.headers['RequestVerificationToken'] = token;
+            }
         });
     </script>
     @await RenderSectionAsync("Scripts", required: false)

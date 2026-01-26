@@ -85,7 +85,7 @@ public class IndexModel(
         }
 
 
-        return Partial("_LibraryCard", library);
+        return ViewComponent("LibraryCard", library);
     }
 
     public async Task<IActionResult> OnPostRemoveFromCollectionAsync(CancellationToken cancellationToken)
@@ -121,6 +121,6 @@ public class IndexModel(
 
         await notificationService.PushSuccessAsync($"{I18n.YourCollectionNoLongerIncludes}: {mangaTitle}.", cancellationToken);
 
-        return Partial("_LibraryCard", new Library(library.CrawlerAgent, library.Manga, null, null, null));
+        return ViewComponent("LibraryCard", new Library(library.CrawlerAgent, library.Manga, null, null, null));
     }
 }

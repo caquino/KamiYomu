@@ -72,7 +72,7 @@ public class DownloadStatusModel(IOptions<WorkerOptions> workerOptions,
 
         FollowButtonViewModel.IsFollowing = !FollowButtonViewModel.IsFollowing;
 
-        return Partial("_FollowButton", FollowButtonViewModel);
+        return ViewComponent("FollowButton", FollowButtonViewModel);
     }
 
 }

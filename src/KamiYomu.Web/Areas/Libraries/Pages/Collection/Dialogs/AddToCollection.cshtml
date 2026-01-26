@@ -23,7 +23,8 @@
     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
 <div class="modal-body" id="addToCollectionModal">
-    <partial name="_MangaInfo" model="Model.Manga" />
+    <vc:manga-info manga="@Model.Manga" />
+
     <form method="post"
           hx-post="/Libraries/Downloads/Index?handler=AddToCollection"
           hx-target="#@Model.RefreshElementId"
