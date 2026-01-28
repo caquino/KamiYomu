@@ -25,23 +25,45 @@
     flex-direction: column !important;
     height: 100vh !important;
     width: 100%;
-    overflow: hidden; /* This keeps the footer pinned */
+    overflow: hidden; 
 }
 
 #readerContainer {
-    cursor: grab; /* Shows the hand icon */
-    user-select: none; /* Prevents accidental text highlighting */
-    -webkit-user-drag: none; /* Prevents ghost images of the pages while dragging */
+    cursor: grab; 
+    user-select: none; 
+    -webkit-user-drag: none; 
 }
 
     #readerContainer.webtoon-mode {
         display: flex !important;
         flex-direction: column !important;
-        align-items: center !important; /* Forces images to horizontal center */
+        align-items: center !important; 
         padding: 20px 0;
     }
-.paged-mode {
-    display: flex !important;
-    overflow-x: auto !important;
-    overflow-y: hidden !important;
-}
+
+    #readerContainer.paged-mode {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        gap: 30px;
+        padding: 20px; 
+        align-items: center;
+        height: 100vh; 
+    }
+
+        #readerContainer.paged-mode .manga-page-wrapper {
+            flex: 0 0 auto;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #readerContainer.paged-mode img.reader-img {
+            height: 100%;
+            width: auto;
+            max-width: none; 
+            display: block;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+        }

@@ -198,6 +198,7 @@ function changeMode(mode) {
         initScrollObserver();
         updatePageDisplay(1);
         container.scrollTo(0, 0);
+
     }, 50);
 }
 

@@ -13,13 +13,16 @@
 
                 <input type="text" id="mangaSearch" name="search" class="form-control border-start-0 border-end-0"
                        placeholder="@I18n.SearchManga"
-                       hx-get="/Reader/MangaGallery?handler=Search"
+                       hx-get="@Url.Page("/MangaGallery/Index", new { area = "Reader", handler = "Search" })"
                        hx-target="#manga-grid"
+                       hx-push-url="true"
+                       value="@Model.Search"
                        hx-trigger="keyup changed delay:500ms">
 
                 <button class="btn btn-primary"
-                        hx-get="/Reader/MangaGallery?handler=Search"
+                        hx-get="@Url.Page("/MangaGallery/Index", new { area = "Reader", handler = "Search" })"
                         hx-target="#manga-grid"
+                        hx-push-url="true"
                         hx-include="#mangaSearch">
                     @I18n.Search
                 </button>
@@ -30,13 +33,12 @@
 
 <div class="row g-4">
     <div class="col-12 col-lg-8">
-        @if (Model.Libraries.Any())
-        {
-            <h5 class="mb-3 border-bottom pb-2">@I18n.Manga</h5>
-            <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6 g-3 mb-3" id="manga-grid">
-                <partial name="_MangaGrid" model="Model.Libraries" />
-            </div>
-        }
+
+        <h5 class="mb-3 border-bottom pb-2">@I18n.Manga</h5>
+        <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-4 row-cols-xl-5 g-3 mb-3" id="manga-grid">
+            <partial name="_MangaGrid" model="Model.Libraries" />
+        </div>
+
 
         <h5 class="mb-3 border-bottom pb-2">@I18n.RecentlyAdded</h5>
         <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-4 row-cols-xl-5 g-3 mb-3" id="recently-manga-grid">
