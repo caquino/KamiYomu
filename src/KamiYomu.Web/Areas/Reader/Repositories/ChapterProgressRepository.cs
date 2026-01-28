@@ -72,7 +72,7 @@ public class ChapterProgressRepository([FromKeyedServices(ServiceLocator.ReadOnl
 
                 if (chapterRecords.Any())
                 {
-                    IEnumerable<ChapterDownloadRecord> chapterDownloads = chapterRecords.Where(p => 
+                    IEnumerable<ChapterDownloadRecord> chapterDownloads = chapterRecords.Where(p =>
                                                                                         readingDbContext.ChapterProgress
                                                                                                         .Query()
                                                                                                         .Where(q =>
@@ -99,7 +99,7 @@ public class ChapterProgressRepository([FromKeyedServices(ServiceLocator.ReadOnl
             }
 
             return result;
-        }, TimeSpan.FromDays(1));
+        }, TimeSpan.FromMinutes(5));
 
     }
 }
