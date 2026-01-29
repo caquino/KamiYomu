@@ -47,6 +47,12 @@ public class IndexModel(
                                            && (p.Manga.IsFamilySafe || p.Manga.IsFamilySafe == userPreference.FamilySafeMode))
                                          .Skip(Offset)
                                          .Take(Limit)];
+        ViewData["ShowAddToLibrary"] = false;
+        ViewData["Handler"] = "Search";
+        ViewData[nameof(Query)] = Query;
+        ViewData[nameof(PaginationOptions.OffSet)] = Offset + Limit;
+        ViewData[nameof(PaginationOptions.Limit)] = Limit;
+        ViewData[nameof(PaginationOptions.ContinuationToken)] = string.Empty;
     }
 
     public IActionResult OnGetSearch()

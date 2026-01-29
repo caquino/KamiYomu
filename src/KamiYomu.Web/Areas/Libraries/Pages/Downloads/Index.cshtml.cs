@@ -47,16 +47,16 @@ public class IndexModel(
     public required bool MakeThisConfigurationDefault { get; set; } = false;
 
     [BindProperty(SupportsGet = true)]
-    public string Query { get; set; } = string.Empty;
+    public string? Query { get; set; } = string.Empty;
 
     [BindProperty(SupportsGet = true)]
     public Guid? SelectedAgent { get; set; }
 
     [BindProperty(SupportsGet = true)]
-    public int Offset { get; set; } = 0;
+    public int? Offset { get; set; } = 0;
 
     [BindProperty(SupportsGet = true)]
-    public int Limit { get; set; } = 30;
+    public int? Limit { get; set; } = 30;
 
     [BindProperty(SupportsGet = true)]
     public string? ContinuationToken { get; set; } = string.Empty;
@@ -96,7 +96,7 @@ public class IndexModel(
             return ViewComponent("SearchMangaResult", new
             {
                 libraries = Results,
-                searchUri = Url.Page("/Download/Index", new
+                searchUri = Url.Page("/Downloads/Index", new
                 {
                     Area = "Libraries",
                     Handler = "Search",
