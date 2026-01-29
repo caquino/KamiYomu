@@ -22,7 +22,12 @@
             </div>
 
             <div class="col-12 col-md-5">
-                <input type="text" asp-for="Search" class="form-control w-100" placeholder="@I18n.Search" />
+                <input type="text" 
+                       asp-for="Search" 
+                       class="form-control w-100" 
+                       placeholder="@I18n.Search" 
+                       hx-trigger="keyup[key=='Enter']"
+                       hx-on:keyup="if(event.key === 'Enter') document.getElementById('search-btn').click()" />
             </div>
 
             <div class="col-12 col-md-3">
@@ -32,6 +37,7 @@
                         hx-swap="innerHTML"
                         hx-include="closest .search-bar"
                         hx-push-url="true"
+                        id="search-btn"
                         class="btn btn-primary w-100">
                     <i class="bi bi-search me-2"></i>
                     @I18n.Search
