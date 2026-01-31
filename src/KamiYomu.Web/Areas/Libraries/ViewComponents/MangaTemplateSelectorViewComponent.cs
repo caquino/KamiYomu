@@ -24,7 +24,7 @@ public class MangaTemplateSelectorViewComponent(
 
         return View(new MangaTemplateSelectorViewModel
         {
-            Libraries = dbContext.Libraries.Query().ToList(),
+            Libraries = dbContext.Libraries.Query().Where(p => p.Manga.IsFamilySafe || p.Manga.IsFamilySafe == preferences.FamilySafeMode).ToList(),
             FilePathTemplateSelector = filePathTemplateSelector,
             ComicInfoTitleTemplateSelector = comicInfoTitleTemplateSelector,
             ComicInfoSeriesTemplateSelector = ComicInfoSeriesTemplateSelector,
