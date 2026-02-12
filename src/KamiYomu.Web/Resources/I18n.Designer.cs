@@ -1276,6 +1276,15 @@ namespace KamiYomu.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to KamiYomu&apos;s Catalog.
+        /// </summary>
+        public static string KamiYomuCatalog {
+            get {
+                return ResourceManager.GetString("KamiYomuCatalog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Kavita Integration Settings.
         /// </summary>
         public static string KavitaIntegrationSettings {

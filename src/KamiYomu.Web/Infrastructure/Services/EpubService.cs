@@ -141,7 +141,7 @@ public class EpubService([FromKeyedServices(ServiceLocator.ReadOnlyDbContext)] D
                                 </ncx>");
             }
         }
-
+        outputStream.Position = 0;
         string downloadFileName = $"{library.GetComicInfoTitleTemplateResolved(chapterDownloadRecord.Chapter)}.epub";
         return new DownloadResponse(outputStream, downloadFileName, "application/epub+zip");
     }

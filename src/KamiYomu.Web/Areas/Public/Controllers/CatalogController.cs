@@ -1,8 +1,10 @@
 using System.ComponentModel.DataAnnotations;
+using System.Net.Mime;
 
 using KamiYomu.Web.Areas.Public.Models;
 using KamiYomu.Web.Entities;
 using KamiYomu.Web.Entities.Definitions;
+using KamiYomu.Web.Extensions;
 using KamiYomu.Web.Infrastructure.Contexts;
 using KamiYomu.Web.Infrastructure.Services.Interfaces;
 using KamiYomu.Web.Models;
@@ -16,7 +18,7 @@ namespace KamiYomu.Web.Areas.Public.Controllers;
 [Area(nameof(Public))]
 [Route("[area]/api/v{version:apiVersion}/[controller]")]
 [ApiController]
-public class OpdsController(
+public class CatalogController(
     [FromKeyedServices(ServiceLocator.ReadOnlyDbContext)] DbContext dbContext) : ControllerBase
 {
     [HttpGet]
@@ -37,9 +39,23 @@ public class OpdsController(
 
         OpdsFeed feed = new()
         {
-            Id = $"urn:opds:manga:list:page:{page}",
-            Title = "Manga List",
-            Updated = DateTime.UtcNow
+            Id = $"urn:catalog:manga:list:page:{page}",
+            Title = I18n.KamiYomuCatalog,
+            Updated = DateTime.UtcNow,
+            Links = [
+                new OpdsLink
+                {
+                    Href = "/images/logo.svg", // URL to the cover image
+                    Rel = "http://opds-spec.org/image",
+                    Type = MediaTypeNames.Image.Svg
+                },
+                new OpdsLink
+                {
+                    Href = "/images/logo.svg",
+                    Rel = "http://opds-spec.org/image/thumbnail",
+                    Type = MediaTypeNames.Image.Svg
+                }
+            ]
         };
 
         foreach (Library library in libraries)
@@ -47,7 +63,7 @@ public class OpdsController(
             feed.Entries.Add(OpdsEntry.Create(library));
         }
 
-        string baseUrl = "/public/api/v1/opds";
+        string baseUrl = "/public/api/v1/Catalog";
 
         if (page > 1)
         {
@@ -89,9 +105,23 @@ public class OpdsController(
 
         OpdsFeed feed = new()
         {
-            Id = $"urn:opds:manga:{library.Id}",
+            Id = $"urn:catalog:manga:{library.Id}",
             Title = library.Manga.Title,
-            Updated = DateTime.UtcNow
+            Updated = DateTime.UtcNow,
+            Links = [
+                new OpdsLink
+                {
+                    Href = library.Manga.CoverUrl.ToInternalImageUrl().ToString(), // URL to the cover image
+                    Rel = "http://opds-spec.org/image",
+                    Type = MediaTypeNames.Image.Jpeg
+                },
+                new OpdsLink
+                {
+                    Href = library.Manga.CoverUrl.ToInternalImageUrl().ToString(),
+                    Rel = "http://opds-spec.org/image/thumbnail",
+                    Type = MediaTypeNames.Image.Jpeg
+                }
+            ]
         };
 
         feed.Entries.AddRange(OpdsEntry.CreateChapterEntries(library, chapterDownloadRecord));
@@ -127,7 +157,7 @@ public class OpdsController(
 
         OpdsFeed feed = new()
         {
-            Id = $"urn:opds:manga:{library.Id}:chapter:{chapterDownloadId}",
+            Id = $"urn:catalog:manga:{library.Id}:chapter:{chapterDownloadId}",
             Title = library.GetComicInfoTitleTemplateResolved(chapterDownloadRecord.Chapter),
             Updated = chapterDownloadRecord.StatusUpdateAt.Value.ToLocalTime().DateTime
         };
