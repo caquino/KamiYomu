@@ -6,6 +6,8 @@ using KamiYomu.Web.Infrastructure.Contexts;
 using KamiYomu.Web.Infrastructure.Services.Interfaces;
 using KamiYomu.Web.Models;
 
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+
 using static KamiYomu.Web.AppOptions.Defaults;
 
 namespace KamiYomu.Web.Infrastructure.Services;
@@ -14,19 +16,14 @@ public class EpubService([FromKeyedServices(ServiceLocator.ReadOnlyDbContext)] D
 {
     public DownloadResponse? GetDownloadResponse(Guid libraryId, Guid chapterDownloadId)
     {
-        Library library = dbContext.Libraries
-           .Query()
-           .Where(l => l.Id == libraryId)
-           .FirstOrDefault();
-
+        Library library = dbContext.Libraries.Query().Where(l => l.Id == libraryId).FirstOrDefault();
         if (library == null)
         {
             return null;
         }
 
         using LibraryDbContext libraryContext = library.GetReadOnlyDbContext();
-        ChapterDownloadRecord chapterDownloadRecord = libraryContext.ChapterDownloadRecords
-            .Query()
+        ChapterDownloadRecord chapterDownloadRecord = libraryContext.ChapterDownloadRecords.Query()
             .Where(r => r.Id == chapterDownloadId && (int)(object)r.DownloadStatus == (int)(object)DownloadStatus.Completed)
             .FirstOrDefault();
 
@@ -42,107 +39,106 @@ public class EpubService([FromKeyedServices(ServiceLocator.ReadOnlyDbContext)] D
         }
 
         MemoryStream outputStream = new();
-        List<string> pageNames = [];
 
-        // Create EPUB archive (leaveOpen: false so the ZIP is finalized when disposed)
+        // Tracking lists for the manifest/spine
+        List<(string id, string href, string type)> images = [];
+        List<(string id, string href)> pages = [];
+
         using (ZipArchive epubArchive = new(outputStream, ZipArchiveMode.Create, leaveOpen: true))
         {
-            // 1. Add mimetype file (must be first and uncompressed)
+            // 1. Mimetype (Must be first, uncompressed)
             ZipArchiveEntry mimeEntry = epubArchive.CreateEntry("mimetype", CompressionLevel.NoCompression);
             using (StreamWriter writer = new(mimeEntry.Open()))
             {
                 writer.Write("application/epub+zip");
             }
 
-            // 2. Add META-INF/container.xml
-            ZipArchiveEntry containerEntry = epubArchive.CreateEntry("META-INF/container.xml", CompressionLevel.Fastest);
+            // 2. Container
+            ZipArchiveEntry containerEntry = epubArchive.CreateEntry("META-INF/container.xml");
             using (StreamWriter writer = new(containerEntry.Open()))
             {
-                writer.Write(@"<?xml version=""1.0""?>
-                                <container version=""1.0"" xmlns=""urn:oasis:names:tc:opendocument:xmlns:container"">
-                                  <rootfiles>
-                                    <rootfile full-path=""OEBPS/content.opf"" media-type=""application/oebps-package+xml""/>
-                                  </rootfiles>
-                                </container>");
+                writer.Write(@"<?xml version=""1.0""?><container version=""1.0"" xmlns=""urn:oasis:names:tc:opendocument:xmlns:container""><rootfiles><rootfile full-path=""OEBPS/content.opf"" media-type=""application/oebps-package+xml""/></rootfiles></container>");
             }
 
-            // 3. Add images from CBZ to OEBPS/images
             using ZipArchive cbzArchive = ZipFile.OpenRead(cbzFilePath);
-            int pageNumber = 1;
-            string coverFileName = null;
+            List<ZipArchiveEntry> entries = [.. cbzArchive.Entries
+                .Where(e => new[] { ".jpg", ".jpeg", ".png", ".webp" }.Contains(Path.GetExtension(e.FullName).ToLower()))
+                .OrderBy(e => e.FullName)];
 
-            foreach (ZipArchiveEntry? entry in cbzArchive.Entries.OrderBy(p => p.FullName))
+            int i = 0;
+            foreach (ZipArchiveEntry? entry in entries)
             {
-                if (!entry.FullName.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase) &&
-                    !entry.FullName.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase) &&
-                    !entry.FullName.EndsWith(".png", StringComparison.OrdinalIgnoreCase) &&
-                    !entry.FullName.EndsWith(".webp", StringComparison.OrdinalIgnoreCase))
-                {
-                    continue;
-                }
-
-                bool isCover = entry.FullName.Contains("cover", StringComparison.OrdinalIgnoreCase);
                 string ext = Path.GetExtension(entry.FullName).ToLower();
-                string pageFileName = isCover ? "images/cover" + ext : $"images/page{pageNumber:D3}{ext}";
+                string imgId = $"img_{i}";
+                string imgHref = $"images/page_{i}{ext}";
+                string pageId = $"page_{i}";
+                string pageHref = $"text/page_{i}.xhtml";
 
-                if (!isCover)
+                // Add Image to Zip
+                ZipArchiveEntry imgEntry = epubArchive.CreateEntry($"OEBPS/{imgHref}", CompressionLevel.Fastest);
+                using (Stream s = entry.Open())
                 {
-                    pageNames.Add(pageFileName);
-                    pageNumber++;
-                }
-                else
-                {
-                    coverFileName = pageFileName;
+                    using Stream ds = imgEntry.Open();
+                    s.CopyTo(ds);
                 }
 
-                ZipArchiveEntry zipEntry = epubArchive.CreateEntry($"OEBPS/{pageFileName}", CompressionLevel.Fastest);
-                using Stream entryStream = entry.Open();
-                using Stream zipEntryStream = zipEntry.Open();
-                entryStream.CopyTo(zipEntryStream);
+                // Create XHTML wrapper for the image
+                ZipArchiveEntry htmlEntry = epubArchive.CreateEntry($"OEBPS/{pageHref}", CompressionLevel.Fastest);
+                using (StreamWriter writer = new(htmlEntry.Open()))
+                {
+                    writer.Write($@"<?xml version=""1.0"" encoding=""UTF-8""?>
+                                    <html xmlns=""http://www.w3.org/1999/xhtml"">
+                                    <head><title>Page {i}</title></head>
+                                    <body style=""margin:0;padding:0;background-color:#000;"">
+                                        <img src=""../{imgHref}"" style=""width:100%;height:auto;display:block;margin:0 auto;"" />
+                                    </body></html>");
+                }
+
+                images.Add((imgId, imgHref, $"image/{ext.TrimStart('.')}"));
+                pages.Add((pageId, pageHref));
+                i++;
             }
 
-            // 4. Create content.opf
-            ZipArchiveEntry contentOpfEntry = epubArchive.CreateEntry("OEBPS/content.opf", CompressionLevel.Fastest);
-            using (StreamWriter writer = new(contentOpfEntry.Open()))
+            // 4. content.opf
+            ZipArchiveEntry opfEntry = epubArchive.CreateEntry("OEBPS/content.opf");
+            using (StreamWriter writer = new(opfEntry.Open()))
             {
+                string title = library.GetComicInfoTitleTemplateResolved(chapterDownloadRecord.Chapter);
                 writer.Write($@"<?xml version=""1.0"" encoding=""UTF-8""?>
-                                <package xmlns=""http://www.idpf.org/2007/opf"" version=""2.0"" unique-identifier=""BookId"">
+                                <package xmlns=""http://www.idpf.org/2007/opf"" version=""3.0"" xml:lang=""en"" unique-identifier=""pub-id"" page-progression-direction=""rtl"">
                                   <metadata xmlns:dc=""http://purl.org/dc/elements/1.1/"">
-                                    <dc:title>{library.GetComicInfoTitleTemplateResolved(chapterDownloadRecord.Chapter)}</dc:title>
-                                    <dc:language>{library.Manga.OriginalLanguage}</dc:language>
-                                    <dc:identifier id=""BookId"">{chapterDownloadRecord.Id}</dc:identifier>
-                                    {(coverFileName != null ? $@"<meta name=""cover"" content=""cover-image""/>" : "")}
+                                    <dc:identifier id=""pub-id"">{chapterDownloadRecord.Id}</dc:identifier>
+                                    <dc:title>{title}</dc:title>
+                                    <dc:language>{library.Manga.OriginalLanguage ?? "ja"}</dc:language>
+                                    <meta name=""cover"" content=""img_0"" />
                                   </metadata>
                                   <manifest>
-                                    {(coverFileName != null ? $@"<item id=""cover-image"" href=""{coverFileName}"" media-type=""image/{Path.GetExtension(coverFileName).TrimStart('.')}""></item>" : "")}
-                                    {string.Join("\n", pageNames.Select(p => $@"<item id=""{Path.GetFileNameWithoutExtension(p)}"" href=""{p}"" media-type=""image/{Path.GetExtension(p).TrimStart('.')}""/>"))}
+                                    {string.Join("\n", images.Select(img => $@"<item id=""{img.id}"" href=""{img.href}"" media-type=""{img.type}"" {(img.id == "img_0" ? "properties=\"cover-image\"" : "")}/>"))}
+                                    {string.Join("\n", pages.Select(p => $@"<item id=""{p.id}"" href=""{p.href}"" media-type=""application/xhtml+xml""/>"))}
                                     <item id=""ncx"" href=""toc.ncx"" media-type=""application/x-dtbncx+xml""/>
                                   </manifest>
                                   <spine toc=""ncx"">
-                                    {(coverFileName != null ? $@"<itemref idref=""cover-image""/>" : "")}
-                                    {string.Join("\n", pageNames.Select(p => $@"<itemref idref=""{Path.GetFileNameWithoutExtension(p)}""/>"))}
+                                    {string.Join("\n", pages.Select(p => $@"<itemref idref=""{p.id}""/>"))}
                                   </spine>
                                 </package>");
             }
 
-            // 5. Create toc.ncx
-            ZipArchiveEntry tocEntry = epubArchive.CreateEntry("OEBPS/toc.ncx", CompressionLevel.Fastest);
-            using (StreamWriter writer = new(tocEntry.Open()))
+            // 5. toc.ncx (for legacy support)
+            ZipArchiveEntry ncxEntry = epubArchive.CreateEntry("OEBPS/toc.ncx");
+            using (StreamWriter writer = new(ncxEntry.Open()))
             {
                 writer.Write($@"<?xml version=""1.0"" encoding=""UTF-8""?>
                                 <ncx xmlns=""http://www.daisy.org/z3986/2005/ncx/"" version=""2005-1"">
-                                  <head>
-                                    <meta name=""dtb:uid"" content=""{chapterDownloadRecord.Id}""/>
-                                  </head>
+                                  <head><meta name=""dtb:uid"" content=""{chapterDownloadRecord.Id}""/></head>
                                   <docTitle><text>{library.GetComicInfoTitleTemplateResolved(chapterDownloadRecord.Chapter)}</text></docTitle>
                                   <navMap>
-                                    {string.Join("\n", pageNames.Select((p, i) => $@"<navPoint id=""navPoint-{i + 1}"" playOrder=""{i + 1}""><navLabel><text>Page {i + 1}</text></navLabel><content src=""{p}""/></navPoint>"))}
+                                    {string.Join("\n", pages.Select((p, idx) => $@"<navPoint id=""{p.id}"" playOrder=""{idx + 1}""><navLabel><text>Page {idx + 1}</text></navLabel><content src=""{p.href}""/></navPoint>"))}
                                   </navMap>
                                 </ncx>");
             }
         }
+
         outputStream.Position = 0;
-        string downloadFileName = $"{library.GetComicInfoTitleTemplateResolved(chapterDownloadRecord.Chapter)}.epub";
-        return new DownloadResponse(outputStream, downloadFileName, "application/epub+zip");
+        return new DownloadResponse(outputStream, $"{chapterDownloadRecord.Id}.epub", "application/epub+zip");
     }
 }
