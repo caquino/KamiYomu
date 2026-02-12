@@ -11,7 +11,7 @@ public class OpdsEntry
     {
         return new OpdsEntry
         {
-            Id = $"urn:catalog:manga:{library.Id}",
+            Id = $"urn:opds:manga:{library.Id}",
             Title = library.Manga.Title,
             Updated = library.CreatedDate.ToLocalTime().DateTime,
             Summary = library.Manga.Description,
@@ -20,7 +20,7 @@ public class OpdsEntry
             [
                 new OpdsLink
                 {
-                    Href = $"/public/api/v1/catalog/{library.Id}",
+                    Href = $"/public/api/v1/opds/{library.Id}",
                     Rel = "alternate",
                     Type = "application/atom+xml"
                 },
@@ -46,7 +46,7 @@ public class OpdsEntry
     {
         return new OpdsEntry
         {
-            Id = $"urn:catalog:manga:{library.Id}:chapters:{chapterDownloadRecord.Id}",
+            Id = $"urn:opds:manga:{library.Id}:chapters:{chapterDownloadRecord.Id}",
             Title = library.GetComicInfoTitleTemplateResolved(chapterDownloadRecord.Chapter),
             Updated = chapterDownloadRecord.StatusUpdateAt.Value.ToLocalTime().DateTime,
             Summary = library.Manga.Description,
@@ -73,7 +73,7 @@ public class OpdsEntry
     {
         return [.. chapterDownloadRecords.Select(record => new OpdsEntry
         {
-            Id = $"urn:catalog:manga:{library.Id}:chapters:{record.Id}",
+            Id = $"urn:opds:manga:{library.Id}:chapters:{record.Id}",
             Title = library.GetComicInfoTitleTemplateResolved(record.Chapter),
             Updated = record.StatusUpdateAt?.ToLocalTime().DateTime ?? DateTime.UtcNow,
             Summary = library.Manga.Description,
@@ -102,25 +102,25 @@ public class OpdsEntry
     {
         yield return new OpdsLink
         {
-            Href = $"/public/api/v1/catalog/{libraryId}/chapters/{chapterDownloadRecordId}/download/cbz",
+            Href = $"/public/api/v1/opds/{libraryId}/chapters/{chapterDownloadRecordId}/download/cbz",
             Rel = "http://opds-spec.org/acquisition",
             Type = "application/vnd.comicbook+zip"
         };
         yield return new OpdsLink
         {
-            Href = $"/public/api/v1/catalog/{libraryId}/chapters/{chapterDownloadRecordId}/download/zip",
+            Href = $"/public/api/v1/opds/{libraryId}/chapters/{chapterDownloadRecordId}/download/zip",
             Rel = "http://opds-spec.org/acquisition",
             Type = "application/zip"
         };
         yield return new OpdsLink
         {
-            Href = $"/public/api/v1/catalog/{libraryId}/chapters/{chapterDownloadRecordId}/download/epub",
+            Href = $"/public/api/v1/opds/{libraryId}/chapters/{chapterDownloadRecordId}/download/epub",
             Rel = "http://opds-spec.org/acquisition",
             Type = "application/epub+zip"
         };
         yield return new OpdsLink
         {
-            Href = $"/public/api/v1/catalog/{libraryId}/chapters/{chapterDownloadRecordId}/download/pdf",
+            Href = $"/public/api/v1/opds/{libraryId}/chapters/{chapterDownloadRecordId}/download/pdf",
             Rel = "http://opds-spec.org/acquisition",
             Type = "application/pdf"
         };

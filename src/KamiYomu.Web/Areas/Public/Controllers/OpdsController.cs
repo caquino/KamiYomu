@@ -18,7 +18,7 @@ namespace KamiYomu.Web.Areas.Public.Controllers;
 [Area(nameof(Public))]
 [Route("[area]/api/v{version:apiVersion}/[controller]")]
 [ApiController]
-public class CatalogController(
+public class OpdsController(
     [FromKeyedServices(ServiceLocator.ReadOnlyDbContext)] DbContext dbContext) : ControllerBase
 {
     [HttpGet]
@@ -39,9 +39,10 @@ public class CatalogController(
 
         OpdsFeed feed = new()
         {
-            Id = $"urn:catalog:manga:list:page:{page}",
+            Id = $"urn:opds:manga:list:page:{page}",
             Title = I18n.KamiYomuCatalog,
             Updated = DateTime.UtcNow,
+            Icon = "/images/favicon.png",
             Links = [
                 new OpdsLink
                 {
@@ -63,7 +64,7 @@ public class CatalogController(
             feed.Entries.Add(OpdsEntry.Create(library));
         }
 
-        string baseUrl = "/public/api/v1/Catalog";
+        string baseUrl = "/public/api/v1/opds";
 
         if (page > 1)
         {
@@ -105,8 +106,9 @@ public class CatalogController(
 
         OpdsFeed feed = new()
         {
-            Id = $"urn:catalog:manga:{library.Id}",
+            Id = $"urn:opds:manga:{library.Id}",
             Title = library.Manga.Title,
+            Icon = "/images/favicon.png",
             Updated = DateTime.UtcNow,
             Links = [
                 new OpdsLink
@@ -157,7 +159,7 @@ public class CatalogController(
 
         OpdsFeed feed = new()
         {
-            Id = $"urn:catalog:manga:{library.Id}:chapter:{chapterDownloadId}",
+            Id = $"urn:opds:manga:{library.Id}:chapter:{chapterDownloadId}",
             Title = library.GetComicInfoTitleTemplateResolved(chapterDownloadRecord.Chapter),
             Updated = chapterDownloadRecord.StatusUpdateAt.Value.ToLocalTime().DateTime
         };
