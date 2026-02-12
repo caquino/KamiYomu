@@ -10,7 +10,6 @@ using KamiYomu.Web.AppOptions;
 using KamiYomu.Web.Areas.Reader.Data;
 using KamiYomu.Web.Areas.Reader.Repositories;
 using KamiYomu.Web.Areas.Reader.Repositories.Interfaces;
-using KamiYomu.Web.Endpoints;
 using KamiYomu.Web.Entities;
 using KamiYomu.Web.Filters;
 using KamiYomu.Web.HealthCheckers;
@@ -124,6 +123,9 @@ builder.Services.AddTransient<IGitHubService, GitHubService>();
 builder.Services.AddTransient<IStatsService, StatsService>();
 builder.Services.AddTransient<IKavitaService, KavitaService>();
 builder.Services.AddTransient<IGotifyService, GotifyService>();
+builder.Services.AddTransient<IEpubService, EpubService>();
+builder.Services.AddTransient<IPdfService, PdfService>();
+builder.Services.AddTransient<IZipService, ZipService>();
 
 // HeathCheckers
 builder.Services.AddHealthChecks()

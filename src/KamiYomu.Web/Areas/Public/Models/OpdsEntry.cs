@@ -1,3 +1,4 @@
+using System.Net.Mime;
 using System.Xml.Serialization;
 
 using KamiYomu.Web.Entities;
@@ -10,7 +11,7 @@ public class OpdsEntry
     {
         return new OpdsEntry
         {
-            Id = $"urn:manga:{library.Id}",
+            Id = $"urn:opds:manga:{library.Id}",
             Title = library.Manga.Title,
             Updated = library.CreatedDate.ToLocalTime().DateTime,
             Summary = library.Manga.Description,
@@ -45,36 +46,25 @@ public class OpdsEntry
     {
         return new OpdsEntry
         {
-            Id = $"urn:manga:{library.Id}:chapters:{chapterDownloadRecord.Id}",
+            Id = $"urn:opds:manga:{library.Id}:chapters:{chapterDownloadRecord.Id}",
             Title = library.GetComicInfoTitleTemplateResolved(chapterDownloadRecord.Chapter),
             Updated = chapterDownloadRecord.StatusUpdateAt.Value.ToLocalTime().DateTime,
             Summary = library.Manga.Description,
             Categories = library.Manga.Tags?.Select(tag => new OpdsCategory { Term = tag }).ToList() ?? [],
             Links =
             [
-                new OpdsLink
-                {
-                    Href = $"/public/api/v1/opds/{library.Id}/chapters/{chapterDownloadRecord.Id}/download?format=comic",
-                    Rel = "http://opds-spec.org/acquisition",
-                    Type = "application/vnd.comicbook+zip"
-                },
-                new OpdsLink
-                {
-                    Href = $"/public/api/v1/opds/{library.Id}/chapters/{chapterDownloadRecord.Id}/download/epub",
-                    Rel = "http://opds-spec.org/acquisition",
-                    Type = "application/epub+zip"
-                },
+                .. GetOpdsLinks(library.Id, chapterDownloadRecord.Id),
                 new OpdsLink
                 {
                     Href = library.Manga.CoverUrl.ToInternalImageUrl().ToString(), // URL to the cover image
                     Rel = "http://opds-spec.org/image",
-                    Type = "image/jpeg"
+                    Type = MediaTypeNames.Image.Svg
                 },
                 new OpdsLink
                 {
                     Href = library.Manga.CoverUrl.ToInternalImageUrl().ToString(),
                     Rel = "http://opds-spec.org/image/thumbnail",
-                    Type = "image/jpeg"
+                    Type = MediaTypeNames.Image.Jpeg
                 }
             ]
         };
@@ -83,42 +73,59 @@ public class OpdsEntry
     {
         return [.. chapterDownloadRecords.Select(record => new OpdsEntry
         {
-            Id = $"urn:manga:{library.Id}:chapters:{record.Id}",
+            Id = $"urn:opds:manga:{library.Id}:chapters:{record.Id}",
             Title = library.GetComicInfoTitleTemplateResolved(record.Chapter),
             Updated = record.StatusUpdateAt?.ToLocalTime().DateTime ?? DateTime.UtcNow,
             Summary = library.Manga.Description,
             Categories = library.Manga.Tags?.Select(tag => new OpdsCategory { Term = tag }).ToList() ?? [],
             Links =
-        [
-            new OpdsLink
-            {
-                Href = $"/public/api/v1/opds/{library.Id}/chapters/{record.Id}/download?format=comic",
-                Rel = "http://opds-spec.org/acquisition",
-                Type = "application/vnd.comicbook+zip"
-            },
-            new OpdsLink
-            {
-                Href = $"/public/api/v1/opds/{library.Id}/chapters/{record.Id}/download/epub",
-                Rel = "http://opds-spec.org/acquisition",
-                Type = "application/epub+zip"
-            },
-             new OpdsLink
-            {
-                    Href = library.Manga.CoverUrl.ToInternalImageUrl().ToString(),
-                    Rel = "http://opds-spec.org/image",
-                    Type = "image/jpeg"
-            },
-            new OpdsLink
-            {
-                    Href = library.Manga.CoverUrl.ToInternalImageUrl().ToString(),
-                    Rel = "http://opds-spec.org/image/thumbnail",
-                    Type = "image/jpeg"
-            }
-        ]
+            [
+                .. GetOpdsLinks(library.Id, record.Id),
+                new OpdsLink
+                {
+                        Href = library.Manga.CoverUrl.ToInternalImageUrl().ToString(),
+                        Rel = "http://opds-spec.org/image",
+                        Type = MediaTypeNames.Image.Jpeg
+                },
+                new OpdsLink
+                {
+                        Href = library.Manga.CoverUrl.ToInternalImageUrl().ToString(),
+                        Rel = "http://opds-spec.org/image/thumbnail",
+                        Type = MediaTypeNames.Image.Jpeg
+                }
+            ]
         })];
     }
 
 
+    private static IEnumerable<OpdsLink> GetOpdsLinks(Guid libraryId, Guid chapterDownloadRecordId)
+    {
+        yield return new OpdsLink
+        {
+            Href = $"/public/api/v1/opds/{libraryId}/chapters/{chapterDownloadRecordId}/download/cbz",
+            Rel = "http://opds-spec.org/acquisition",
+            Type = "application/vnd.comicbook+zip"
+        };
+        yield return new OpdsLink
+        {
+            Href = $"/public/api/v1/opds/{libraryId}/chapters/{chapterDownloadRecordId}/download/zip",
+            Rel = "http://opds-spec.org/acquisition",
+            Type = "application/zip"
+        };
+        yield return new OpdsLink
+        {
+            Href = $"/public/api/v1/opds/{libraryId}/chapters/{chapterDownloadRecordId}/download/epub",
+            Rel = "http://opds-spec.org/acquisition",
+            Type = "application/epub+zip"
+        };
+        yield return new OpdsLink
+        {
+            Href = $"/public/api/v1/opds/{libraryId}/chapters/{chapterDownloadRecordId}/download/pdf",
+            Rel = "http://opds-spec.org/acquisition",
+            Type = "application/pdf"
+        };
+        yield break;
+    }
     [XmlElement("id")]
     public string Id { get; set; }
 

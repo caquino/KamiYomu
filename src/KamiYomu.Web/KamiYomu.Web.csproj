@@ -75,7 +75,6 @@
     <ItemGroup>
       <Folder Include="Areas\Public\Data\" />
       <Folder Include="Areas\Public\Views\" />
-      <Folder Include="Entities\Stats\" />
     </ItemGroup>
     
 	<Import Project="KamiYomu.Web.props" />

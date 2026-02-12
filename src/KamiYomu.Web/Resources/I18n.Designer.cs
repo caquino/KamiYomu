@@ -1276,6 +1276,15 @@ namespace KamiYomu.Web.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to KamiYomu&apos;s Catalog.
+        /// </summary>
+        public static string KamiYomuCatalog {
+            get {
+                return ResourceManager.GetString("KamiYomuCatalog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Kavita Integration Settings.
         /// </summary>
         public static string KavitaIntegrationSettings {
@@ -1452,6 +1461,15 @@ namespace KamiYomu.Web.Resources {
         public static string MangaCrawlerPlatform {
             get {
                 return ResourceManager.GetString("MangaCrawlerPlatform", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manga Gallery.
+        /// </summary>
+        public static string MangaGallery {
+            get {
+                return ResourceManager.GetString("MangaGallery", resourceCulture);
             }
         }
         

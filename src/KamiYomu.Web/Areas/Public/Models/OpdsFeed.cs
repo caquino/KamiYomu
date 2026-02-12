@@ -9,6 +9,8 @@ public class OpdsFeed
 
     [XmlElement("title")]
     public string Title { get; set; }
+    [XmlElement("icon")]
+    public string Icon { get; set; }
 
     [XmlElement("updated")]
     public DateTime Updated { get; set; }
