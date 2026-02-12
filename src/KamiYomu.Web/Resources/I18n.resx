@@ -1082,4 +1082,7 @@ for Hangfire's &lt;code&gt;WorkerCount&lt;/code&gt; setting to control how many 
   <data name="ViewNewChapters" xml:space="preserve">
     <value>View New Chapters</value>
   </data>
+  <data name="MangaGallery" xml:space="preserve">
+    <value>Manga Gallery</value>
+  </data>
 </root>
