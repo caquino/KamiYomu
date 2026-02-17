@@ -28,6 +28,15 @@ public class DeferredExecutionCoordinator(ILogger<DeferredExecutionCoordinator> 
 
         foreach (PastJobInfo? job in allPastJobs)
         {
+            var jobDetails = monitoring.JobDetails(job.JobId);
+            if (jobDetails?.Properties.ContainsKey("Re-enqueued") == true)
+            {
+                if (DateTime.TryParse(jobDetails.Properties["Re-enqueued"], out var reEnqueueTime) && (now - reEnqueueTime).TotalMinutes < 10)
+                {
+                    continue;
+                }
+            }
+
             job.EnqueueImmediately();
 
             logger.LogInformation(
@@ -38,7 +47,6 @@ public class DeferredExecutionCoordinator(ILogger<DeferredExecutionCoordinator> 
                 job.Type,
                 job.Time
             );
-
         }
 
         context.SetJobParameter($"{nameof(enqueued)}Found", enqueued.Count);

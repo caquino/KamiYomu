@@ -30,19 +30,16 @@ public static class HangfireExtensions
     public static void EnqueueImmediately(this PastJobInfo pastJobInfo)
     {
         using IStorageConnection connection = JobStorage.Current.GetConnection();
-
-        using IWriteOnlyTransaction transaction = connection.CreateWriteTransaction();
-
         IMonitoringApi monitoringApi = JobStorage.Current.GetMonitoringApi();
-
         Hangfire.Storage.Monitoring.JobDetailsDto jobDetails = monitoringApi.JobDetails(pastJobInfo.JobId);
 
-        Hangfire.Storage.Monitoring.StateHistoryDto? enqueuedState = jobDetails.History.FirstOrDefault(h => h.StateName == "Enqueued");
+        connection.SetJobParameter(pastJobInfo.JobId, "Re-enqueued", DateTime.UtcNow.ToString("o"));
 
+        using IWriteOnlyTransaction transaction = connection.CreateWriteTransaction();
+        Hangfire.Storage.Monitoring.StateHistoryDto? enqueuedState = jobDetails.History.FirstOrDefault(h => h.StateName == "Enqueued");
         string queue = enqueuedState?.Data["Queue"] ?? EnqueuedState.DefaultQueue;
 
-        transaction.AddToQueue(queue, pastJobInfo.JobId);
-
+        transaction.SetJobState(pastJobInfo.JobId, new EnqueuedState { Queue = queue });
         transaction.Commit();
     }
 }
