@@ -1,5 +1,6 @@
 using Hangfire;
 using Hangfire.Server;
+using Hangfire.Storage;
 using Hangfire.Storage.Monitoring;
 
 using KamiYomu.Web.AppOptions;
