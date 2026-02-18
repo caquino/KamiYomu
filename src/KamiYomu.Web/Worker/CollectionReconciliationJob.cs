@@ -1,8 +1,10 @@
 using Hangfire;
 using Hangfire.Server;
+using Hangfire.Storage.Monitoring;
 
 using KamiYomu.Web.AppOptions;
 using KamiYomu.Web.Entities;
+using KamiYomu.Web.Entities.Definitions;
 using KamiYomu.Web.Infrastructure.Contexts;
 using KamiYomu.Web.Worker.Interfaces;
 
@@ -19,9 +21,11 @@ public class CollectionReconciliationJob(
     {
         logger.LogInformation("Dispatch \"{title}\".", nameof(CollectionReconciliationJob));
 
+        IMonitoringApi monitoring = JobStorage.Current.GetMonitoringApi();
         IEnumerable<Library> libraries = dbContext.Libraries.FindAll();
         string mangaDiscoveryQueue = workerOptions.Value.DiscoveryNewChapterQueues.First();
         int reconciled = 0;
+        int reset = 0;
 
         foreach (Library library in libraries)
         {
@@ -33,7 +37,7 @@ public class CollectionReconciliationJob(
                 continue;
             }
 
-            using LibraryDbContext libDbContext = library.GetReadOnlyDbContext();
+            using LibraryDbContext libDbContext = library.GetReadWriteDbContext();
             MangaDownloadRecord? mangaDownloadRecord = libDbContext.MangaDownloadRecords.FindOne(p => true);
 
             if (mangaDownloadRecord is null)
@@ -42,10 +46,25 @@ public class CollectionReconciliationJob(
                 continue;
             }
 
-            if (mangaDownloadRecord.DownloadStatus is Entities.Definitions.DownloadStatus.Cancelled)
+            if (mangaDownloadRecord.DownloadStatus is DownloadStatus.Cancelled)
             {
                 logger.LogDebug("Skipping library {LibraryId} — MangaDownloadRecord is cancelled.", library.Id);
                 continue;
+            }
+
+            if (mangaDownloadRecord.DownloadStatus is DownloadStatus.InProgress or DownloadStatus.Scheduled
+                && !string.IsNullOrWhiteSpace(mangaDownloadRecord.BackgroundJobId))
+            {
+                JobDetailsDto? jobDetails = monitoring.JobDetails(mangaDownloadRecord.BackgroundJobId);
+
+                if (jobDetails is null)
+                {
+                    mangaDownloadRecord.Pending("Reset by reconciliation — background job no longer exists.");
+                    _ = libDbContext.MangaDownloadRecords.Update(mangaDownloadRecord);
+                    reset++;
+                    logger.LogInformation("Reset MangaDownloadRecord to ToBeRescheduled for \"{Title}\" (Library {LibraryId}) — job {JobId} no longer exists.",
+                        library.Manga.Title, library.Id, mangaDownloadRecord.BackgroundJobId);
+                }
             }
 
             RecurringJob.AddOrUpdate<IChapterDiscoveryJob>(
@@ -58,7 +77,9 @@ public class CollectionReconciliationJob(
         }
 
         context?.SetJobParameter("reconciledCount", reconciled);
-        logger.LogInformation("Dispatch \"{title}\" completed. Reconciled {Count} recurring jobs.", nameof(CollectionReconciliationJob), reconciled);
+        context?.SetJobParameter("resetCount", reset);
+        logger.LogInformation("Dispatch \"{title}\" completed. Reconciled {Reconciled} recurring jobs. Reset {Reset} stale records.",
+            nameof(CollectionReconciliationJob), reconciled, reset);
         return Task.CompletedTask;
     }
 }
