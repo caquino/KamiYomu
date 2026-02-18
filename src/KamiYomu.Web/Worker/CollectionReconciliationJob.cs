@@ -23,10 +23,13 @@ public class CollectionReconciliationJob(
         logger.LogInformation("Dispatch \"{title}\".", nameof(CollectionReconciliationJob));
 
         IMonitoringApi monitoring = JobStorage.Current.GetMonitoringApi();
+        using IStorageConnection connection = JobStorage.Current.GetConnection();
+        HashSet<string> existingRecurringJobIds = [.. connection.GetRecurringJobs().Select(j => j.Id)];
         IEnumerable<Library> libraries = dbContext.Libraries.FindAll();
         string mangaDiscoveryQueue = workerOptions.Value.DiscoveryNewChapterQueues.First();
         int reconciled = 0;
         int reset = 0;
+        int triggered = 0;
 
         foreach (Library library in libraries)
         {
@@ -68,10 +71,20 @@ public class CollectionReconciliationJob(
                 }
             }
 
+            string discoveryJobId = library.GetDiscovertyJobId();
+            bool isNewJob = !existingRecurringJobIds.Contains(discoveryJobId);
+
             RecurringJob.AddOrUpdate<IChapterDiscoveryJob>(
-                library.GetDiscovertyJobId(),
+                discoveryJobId,
                 (job) => job.DispatchAsync(mangaDiscoveryQueue, library.CrawlerAgent.Id, library.Id, null!, CancellationToken.None),
                 Cron.Daily());
+
+            if (isNewJob)
+            {
+                RecurringJob.TriggerJob(discoveryJobId);
+                triggered++;
+                logger.LogInformation("Triggered immediate execution of discovery job for \"{Title}\" (Library {LibraryId}).", library.Manga.Title, library.Id);
+            }
 
             reconciled++;
             logger.LogInformation("Reconciled recurring discovery job for \"{Title}\" (Library {LibraryId}).", library.Manga.Title, library.Id);
@@ -79,8 +92,9 @@ public class CollectionReconciliationJob(
 
         context?.SetJobParameter("reconciledCount", reconciled);
         context?.SetJobParameter("resetCount", reset);
-        logger.LogInformation("Dispatch \"{title}\" completed. Reconciled {Reconciled} recurring jobs. Reset {Reset} stale records.",
-            nameof(CollectionReconciliationJob), reconciled, reset);
+        context?.SetJobParameter("triggeredCount", triggered);
+        logger.LogInformation("Dispatch \"{title}\" completed. Reconciled {Reconciled} recurring jobs. Reset {Reset} stale records. Triggered {Triggered} immediate executions.",
+            nameof(CollectionReconciliationJob), reconciled, reset, triggered);
         return Task.CompletedTask;
     }
 }
