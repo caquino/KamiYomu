@@ -237,7 +237,7 @@ public class NugetService(DbContext dbContext) : INugetService
         {
             JsonArray array => [.. array.Select(t => t?.ToString()).Where(t => !string.IsNullOrWhiteSpace(t))],
             { } node when !string.IsNullOrWhiteSpace(node.ToString()) =>
-                node.ToString().Split([',', ';', ' '], StringSplitOptions.RemoveEmptyEntries),
+                node.ToString().Split(new[] { ',', ';', ' ' }, StringSplitOptions.RemoveEmptyEntries),
             _ => []
         };
     }

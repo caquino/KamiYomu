@@ -59,6 +59,8 @@ public partial class Defaults
         public const int DeferredExecutionInMinutes = 5;
         public const string NotificationQueue = "notification-queue";
         public const string DeferredExecutionQueue = "deferred-execution-queue";
+        public const string CollectionReconciliationQueue = "collection-reconciliation-queue";
+        public const int CollectionReconciliationInMinutes = 5;
         public const string DefaultQueue = "default";
         public const string NotifyKavitaJob = nameof(NotifyKavitaJob);
         public const string TempDirName = "kamiyomu-worker.tmp";

@@ -35,7 +35,7 @@
 		<PackageReference Include="Asp.Versioning.Mvc" Version="8.1.1" />
 		<PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.1" />
 		<PackageReference Include="Hangfire.AspNetCore" Version="1.8.22" />
-		<PackageReference Include="Hangfire.Storage.SQLite" Version="0.4.2" />
+		<PackageReference Include="Hangfire.InMemory" Version="1.0.0" />
 		<PackageReference Include="HarfBuzzSharp.NativeAssets.Linux" Version="8.3.1.2" />
 		<PackageReference Include="KamiYomu.CrawlerAgents.Core" Version="1.1.4" />
 		<PackageReference Include="LiteDB" Version="5.0.21" />

@@ -2,7 +2,7 @@ using System.Globalization;
 using System.Text.Json.Serialization;
 
 using Hangfire;
-using Hangfire.Storage.SQLite;
+using Hangfire.InMemory;
 
 using KamiYomu.Web.AppOptions;
 using KamiYomu.Web.Areas.Public;
@@ -35,8 +35,6 @@ using Polly.Extensions.Http;
 using QuestPDF.Fluent;
 
 using Serilog;
-
-using SQLite;
 
 using static KamiYomu.Web.AppOptions.Defaults;
 
@@ -108,6 +106,7 @@ builder.Services.AddTransient<IChapterDownloaderJob, ChapterDownloaderJob>();
 builder.Services.AddTransient<IMangaDownloaderJob, MangaDownloaderJob>();
 builder.Services.AddTransient<IDeferredExecutionCoordinator, DeferredExecutionCoordinator>();
 builder.Services.AddTransient<INotifyKavitaJob, NotifyKavitaJob>();
+builder.Services.AddTransient<ICollectionReconciliationJob, CollectionReconciliationJob>();
 
 // Services
 builder.Services.AddTransient<INugetService, NugetService>();
@@ -235,6 +234,11 @@ RecurringJob.AddOrUpdate<IDeferredExecutionCoordinator>(Worker.DeferredExecution
                                                         (job) => job.DispatchAsync(Worker.DeferredExecutionQueue, null!, CancellationToken.None),
                                                         Cron.MinuteInterval(Worker.DeferredExecutionInMinutes));
 
+RecurringJob.AddOrUpdate<ICollectionReconciliationJob>(Worker.CollectionReconciliationQueue,
+                                                       (job) => job.DispatchAsync(Worker.CollectionReconciliationQueue, null!, CancellationToken.None),
+                                                       Cron.MinuteInterval(Worker.CollectionReconciliationInMinutes));
+RecurringJob.TriggerJob(Worker.CollectionReconciliationQueue);
+
 app.UsePublicArea();
 app.MapControllers();
 app.MapRazorPages();
@@ -251,29 +255,7 @@ static void AddHangfireConfig(WebApplicationBuilder builder)
 
     _ = builder.Services.AddHangfire(configuration => configuration.UseSimpleAssemblyNameTypeSerializer()
                                                            .UseRecommendedSerializerSettings()
-                                                           .UseSQLiteStorage(new SQLiteDbConnectionFactory(() =>
-                                                           {
-                                                               SQLiteConnectionString connectionString = new(builder.Configuration.GetConnectionString("WorkerDb"),
-                                                                   SQLiteOpenFlags.Create
-                                                                   | SQLiteOpenFlags.ReadWrite
-                                                                   | SQLiteOpenFlags.PrivateCache
-                                                                   | SQLiteOpenFlags.FullMutex, true);
-                                                               SQLiteConnection connection = new(connectionString);
-
-                                                               string journalMode = connection.ExecuteScalar<string>("PRAGMA journal_mode=WAL;");
-
-
-                                                               string busyTimeout = connection.ExecuteScalar<string>("PRAGMA busy_timeout=5000;");
-
-                                                               return connection;
-                                                           }),
-                                                           new SQLiteStorageOptions
-                                                           {
-                                                               QueuePollInterval = TimeSpan.FromSeconds(15),
-                                                               DistributedLockLifetime = TimeSpan.FromMinutes(Worker.StaleLockTimeout),
-                                                               JobExpirationCheckInterval = TimeSpan.FromHours(1),
-                                                               CountersAggregateInterval = TimeSpan.FromMinutes(5)
-                                                           }));
+                                                           .UseInMemoryStorage());
 
     List<string> allQueues = [.. workerOptions.GetAllQueues()];
     List<List<string>> queuesPerServer = [.. allQueues
