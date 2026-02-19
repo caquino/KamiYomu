@@ -11,6 +11,6 @@ public interface IChapterDiscoveryJob
 {
     [Queue("{0}")]
     [DisplayName("Discovery New Chapter")]
-    [PerKeyConcurrency("crawlerId", KeyPrefix = "discovery")]
+    [PerKeyConcurrency("crawlerId")]
     Task DispatchAsync(string queue, Guid crawlerId, Guid libraryId, PerformContext context, CancellationToken cancellationToken);
 }
