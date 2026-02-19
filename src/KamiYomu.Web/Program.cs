@@ -104,7 +104,6 @@ builder.Services.AddTransient<IHangfireRepository, HangfireRepository>();
 builder.Services.AddTransient<IChapterDiscoveryJob, ChapterDiscoveryJob>();
 builder.Services.AddTransient<IChapterDownloaderJob, ChapterDownloaderJob>();
 builder.Services.AddTransient<IMangaDownloaderJob, MangaDownloaderJob>();
-builder.Services.AddTransient<IDeferredExecutionCoordinator, DeferredExecutionCoordinator>();
 builder.Services.AddTransient<INotifyKavitaJob, NotifyKavitaJob>();
 builder.Services.AddTransient<ICollectionReconciliationJob, CollectionReconciliationJob>();
 
@@ -229,10 +228,6 @@ app.UseHangfireDashboard("/worker", new DashboardOptions
     Authorization = [new AllowAllDashboardAuthorizationFilter()]
 });
 
-
-RecurringJob.AddOrUpdate<IDeferredExecutionCoordinator>(Worker.DeferredExecutionQueue,
-                                                        (job) => job.DispatchAsync(Worker.DeferredExecutionQueue, null!, CancellationToken.None),
-                                                        Cron.MinuteInterval(Worker.DeferredExecutionInMinutes));
 
 RecurringJob.AddOrUpdate<ICollectionReconciliationJob>(Worker.CollectionReconciliationQueue,
                                                        (job) => job.DispatchAsync(Worker.CollectionReconciliationQueue, null!, CancellationToken.None),

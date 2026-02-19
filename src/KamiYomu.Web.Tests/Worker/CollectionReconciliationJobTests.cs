@@ -74,7 +74,9 @@ public class CollectionReconciliationJobTests : IDisposable
             x => x.Log(
                 LogLevel.Information,
                 It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("Reconciled 0 recurring jobs")),
+                It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("Reconciled 0 recurring jobs")
+                                           && v.ToString()!.Contains("Reset 0 manga records")
+                                           && v.ToString()!.Contains("Reset 0 chapter records")),
                 null,
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
             Times.Once);

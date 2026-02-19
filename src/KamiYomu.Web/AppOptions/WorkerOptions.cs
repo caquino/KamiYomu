@@ -79,7 +79,6 @@ public class WorkerOptions
     {
         return [
         Defaults.Worker.DefaultQueue,
-        Defaults.Worker.DeferredExecutionQueue,
         Defaults.Worker.CollectionReconciliationQueue,
         Defaults.Worker.NotificationQueue,
         .. DownloadChapterQueues,

@@ -28,7 +28,8 @@ public class CollectionReconciliationJob(
         IEnumerable<Library> libraries = dbContext.Libraries.FindAll();
         string mangaDiscoveryQueue = workerOptions.Value.DiscoveryNewChapterQueues.First();
         int reconciled = 0;
-        int reset = 0;
+        int mangaReset = 0;
+        int chapterReset = 0;
         int triggered = 0;
 
         foreach (Library library in libraries)
@@ -65,9 +66,27 @@ public class CollectionReconciliationJob(
                 {
                     mangaDownloadRecord.Pending("Reset by reconciliation — background job no longer exists.");
                     _ = libDbContext.MangaDownloadRecords.Update(mangaDownloadRecord);
-                    reset++;
+                    mangaReset++;
                     logger.LogInformation("Reset MangaDownloadRecord to ToBeRescheduled for \"{Title}\" (Library {LibraryId}) — job {JobId} no longer exists.",
                         library.Manga.Title, library.Id, mangaDownloadRecord.BackgroundJobId);
+                }
+            }
+
+            IEnumerable<ChapterDownloadRecord> orphanedChapterRecords = libDbContext.ChapterDownloadRecords
+                .Find(r => (r.DownloadStatus == DownloadStatus.InProgress || r.DownloadStatus == DownloadStatus.Scheduled)
+                        && r.BackgroundJobId != null && r.BackgroundJobId != "");
+
+            foreach (ChapterDownloadRecord chapterRecord in orphanedChapterRecords)
+            {
+                JobDetailsDto? jobDetails = monitoring.JobDetails(chapterRecord.BackgroundJobId);
+
+                if (jobDetails is null)
+                {
+                    chapterRecord.ToBeRescheduled("Reset by reconciliation — background job no longer exists.");
+                    _ = libDbContext.ChapterDownloadRecords.Update(chapterRecord);
+                    chapterReset++;
+                    logger.LogInformation("Reset ChapterDownloadRecord to ToBeRescheduled for chapter \"{ChapterId}\" (Library {LibraryId}) — job {JobId} no longer exists.",
+                        chapterRecord.Chapter?.Id, library.Id, chapterRecord.BackgroundJobId);
                 }
             }
 
@@ -91,10 +110,11 @@ public class CollectionReconciliationJob(
         }
 
         context?.SetJobParameter("reconciledCount", reconciled);
-        context?.SetJobParameter("resetCount", reset);
+        context?.SetJobParameter("mangaResetCount", mangaReset);
+        context?.SetJobParameter("chapterResetCount", chapterReset);
         context?.SetJobParameter("triggeredCount", triggered);
-        logger.LogInformation("Dispatch \"{title}\" completed. Reconciled {Reconciled} recurring jobs. Reset {Reset} stale records. Triggered {Triggered} immediate executions.",
-            nameof(CollectionReconciliationJob), reconciled, reset, triggered);
+        logger.LogInformation("Dispatch \"{title}\" completed. Reconciled {Reconciled} recurring jobs. Reset {MangaReset} manga records. Reset {ChapterReset} chapter records. Triggered {Triggered} immediate executions.",
+            nameof(CollectionReconciliationJob), reconciled, mangaReset, chapterReset, triggered);
         return Task.CompletedTask;
     }
 }

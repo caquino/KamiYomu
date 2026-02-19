@@ -1,9 +1,9 @@
 ﻿namespace KamiYomu.Web.Worker.Attributes;
 
+using Hangfire;
 using Hangfire.Common;
 using Hangfire.Server;
 
-using KamiYomu.Web.Extensions;
 using KamiYomu.Web.Infrastructure.Services.Interfaces;
 
 using Microsoft.Extensions.Logging;
@@ -26,7 +26,7 @@ public class PerKeyConcurrencyAttribute : JobFilterAttribute, IServerFilter
 
     public PerKeyConcurrencyAttribute(
         string parameterName,
-        int rescheduleDelayMinutes = AppOptions.Defaults.Worker.DeferredExecutionInMinutes)
+        int rescheduleDelayMinutes = AppOptions.Defaults.Worker.ConcurrencyRescheduleInMinutes)
     {
         _parameterName = parameterName;
         _rescheduleDelayMinutes = rescheduleDelayMinutes;
@@ -66,7 +66,7 @@ public class PerKeyConcurrencyAttribute : JobFilterAttribute, IServerFilter
 
                 context.Canceled = true;
 
-                context.BackgroundJob.EnqueueAfterDelay(delay);
+                BackgroundJob.Reschedule(context.BackgroundJob.Id, delay);
 
                 return;
             }
