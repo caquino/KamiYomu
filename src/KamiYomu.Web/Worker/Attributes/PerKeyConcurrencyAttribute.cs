@@ -24,6 +24,13 @@ public class PerKeyConcurrencyAttribute : JobFilterAttribute, IServerFilter
 
     private readonly AsyncLocal<IDisposable?> _lockHandle = new();
 
+    /// <summary>
+    /// Optional prefix to namespace the lock key. When set, the lock key becomes
+    /// "{KeyPrefix}:{parameterValue}" — isolating lock pools between job types
+    /// that share the same concurrency parameter.
+    /// </summary>
+    public string? KeyPrefix { get; set; }
+
     public PerKeyConcurrencyAttribute(
         string parameterName,
         int rescheduleDelayMinutes = AppOptions.Defaults.Worker.ConcurrencyRescheduleInMinutes)
@@ -53,7 +60,8 @@ public class PerKeyConcurrencyAttribute : JobFilterAttribute, IServerFilter
                 return;
             }
 
-            string key = args[index]?.ToString() ?? "null";
+            string rawKey = args[index]?.ToString() ?? "null";
+            string key = KeyPrefix is not null ? $"{KeyPrefix}:{rawKey}" : rawKey;
 
             IDisposable? handle = _lockManager.TryAcquireAsync(key);
 

@@ -1,6 +1,8 @@
 ﻿using Hangfire;
 using Hangfire.Server;
 
+using KamiYomu.Web.Worker.Attributes;
+
 using System.ComponentModel;
 
 namespace KamiYomu.Web.Worker.Interfaces;
@@ -9,5 +11,6 @@ public interface IChapterDiscoveryJob
 {
     [Queue("{0}")]
     [DisplayName("Discovery New Chapter")]
+    [PerKeyConcurrency("crawlerId", KeyPrefix = "discovery")]
     Task DispatchAsync(string queue, Guid crawlerId, Guid libraryId, PerformContext context, CancellationToken cancellationToken);
 }
