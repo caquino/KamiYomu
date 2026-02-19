@@ -56,7 +56,7 @@ public partial class Defaults
         public const string HttpClientApp = $"{nameof(Worker)}.{nameof(HttpClientApp)}";
         public const int HttpTimeOutInSeconds = 60;
         public const int StaleLockTimeout = 20;
-        public const int ConcurrencyRescheduleInMinutes = 5;
+        public const int ConcurrencyRescheduleInMinutes = 1;
         public const string NotificationQueue = "notification-queue";
         public const string CollectionReconciliationQueue = "collection-reconciliation-queue";
         public const int CollectionReconciliationInMinutes = 5;
